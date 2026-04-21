@@ -1,0 +1,17 @@
+{
+  "stock_code": "2885",
+  "category": "balance_sheet",
+  "scraped_at": "2026-04-20T09:45:44.907641+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "stock_code": "2885",
+      "period": "",
+      "currency": "TWD",
+      "total_assets_raw": "",
+      "total_assets_numeric": null,
+      "investment_property_raw": "",
+      "investment_property_numeric": null
+    }
+  ]
+}

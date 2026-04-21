@@ -1,0 +1,23 @@
+{
+  "stock_code": "2801",
+  "category": "people_moves",
+  "records": [
+    {
+      "stock_code": "2801",
+      "announcement_date": "2026/01/13",
+      "subject": "Announcement on behalf of our subsidiary bank in China: Effective date of Appointment of the Chief Risk Officer and Board Secretary.",
+      "role_type": "spokesperson, acting\n  spokesperson, important personnel (CEO, COO, CMO, CSO, etc.)\n,financial officer, accounting officer, corporate governance officer,\nchief information security officer, research and development officer,\nchief internal auditor, or designated and non-designated representatives):\n(1) Chief Risk Officer\n(2) Board Secretary",
+      "change_date": "2026/01/13",
+      "previous_holder": "(1) Chief Risk Officer: Yu-Chi Hou/ Chief Risk Officer of Chang Hua\n    Commercial Bank, Ltd.\n(2) Board Secretary: Hui-Chuan Hsieh/ Board Secretary of Chang Hua\n    Commercial Bank, Ltd.",
+      "new_holder": "(1) Chief Risk Officer: Hui-Chuan Hsieh/ Board Secretary of Chang Hua\n    Commercial Bank, Ltd.\n(2) Board Secretary: Cheng Qiang/ Chief Compliance Officer of Chang Hua\n    Commercial Bank, Ltd.",
+      "change_type": "��resignation��, ��position\nadjustment��, ��retirement��, ��death��,��new\nreplacement�� or ��dismissal��):position adjustment",
+      "reason": "position adjustment",
+      "effective_date": "",
+      "narrative_en": "Chang Hwa Bank 's spokesperson, acting\n  spokesperson, important personnel (CEO, COO, CMO, CSO, etc.)\n,financial officer, accounting officer, corporate governance officer,\nchief information security officer, research and development officer,\nchief internal auditor, or designated and non-designated representatives):\n(1) Chief Risk Officer\n(2) Board Secretary, (1) Chief Risk Officer: Yu-Chi Hou/ Chief Risk Officer of Chang Hua\n    Commercial Bank, Ltd.\n(2) Board Secretary: Hui-Chuan Hsieh/ Board Secretary of Chang Hua\n    Commercial Bank, Ltd., has resigned.",
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=182614&spoke_date=20260113&co_id=2801",
+      "hash": "a9a1828e7ef493d788e9ca59f84f05b100d230f65665413798ad657940527d96",
+      "scraped_at": "2026-04-21T14:22:33.453277+00:00",
+      "status": "NEW"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "stock_code": "2317",
+  "category": "balance_sheet",
+  "scraped_at": "2026-04-19T20:17:19.215087+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "stock_code": "2317",
+      "period": "Financial Statement �w Balance Sheet",
+      "currency": "TWD",
+      "total_assets_raw": "",
+      "total_assets_numeric": null,
+      "investment_property_raw": "9,778,626",
+      "investment_property_numeric": 9778626.0
+    }
+  ]
+}

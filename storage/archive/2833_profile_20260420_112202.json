@@ -1,0 +1,18 @@
+{
+  "stock_code": "2833",
+  "category": "profile",
+  "records": [
+    {
+      "stock_code": "2833",
+      "company_name_en": "Taiwan Life Insurance Co., Ltd.",
+      "chairman": "Hsu,Shu-Po",
+      "general_manager": "Chuang, Chung-Ching",
+      "telephone": "(02)8170-9888",
+      "web_address": "http://www.taiwanlife.com",
+      "address": "",
+      "hash": "070444f4b7b4fc779a606997cb14b2d9e2561ad762adb217610b109fbd520bd1",
+      "scraped_at": "2026-04-20T11:22:02.749249+00:00",
+      "status": "NEW"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "stock_code": "2330",
+  "category": "company_profile",
+  "scraped_at": "2026-04-19T19:08:19.771036+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "stock_code": "2330",
+      "company_name_zh": "Taiwan Semiconductor Manufacturing Co., Ltd.",
+      "company_name_en": "",
+      "address": "C.C. WeiChief Executive Officer: C.C. WeiWendell Huang03-5636688https://www.tsmc.com",
+      "telephone": "03-5636688",
+      "web_address": "https://www.tsmc.com",
+      "company_name_zh_en": "Taiwan Semiconductor Manufacturing Co., Ltd.",
+      "address_en": "C.C. WeiChief Executive Officer: C.C. WeiWendell Huang03-5636688https://www.tsmc.com"
+    }
+  ]
+}

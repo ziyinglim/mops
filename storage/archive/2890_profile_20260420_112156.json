@@ -1,0 +1,18 @@
+{
+  "stock_code": "2890",
+  "category": "profile",
+  "records": [
+    {
+      "stock_code": "2890",
+      "company_name_en": "SINOPAC  FINANCIAL HOLDINGS COMPANY LIMITED",
+      "chairman": "Shi-Kuan CHEN",
+      "general_manager": "Stanley CHU",
+      "telephone": "(02)8161-8935",
+      "web_address": "https://www.sinopac.com/index.html",
+      "address": "3F�B5~13F.,No.306&6F-1�B6F-2.,No.308,Sec.2,Bade RoadTaipei 104,Taiwan",
+      "hash": "0b9b69f2e881fc2afedb8cb7062c15369ce9059cba24775fe471f0cdef0d7963",
+      "scraped_at": "2026-04-20T11:21:56.683248+00:00",
+      "status": "NEW"
+    }
+  ]
+}

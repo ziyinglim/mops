@@ -1,0 +1,18 @@
+{
+  "stock_code": "2317",
+  "category": "profile",
+  "records": [
+    {
+      "stock_code": "2317",
+      "company_name_en": "HON HAI PRECISION IND. CO., LTD.",
+      "chairman": "Liu, Young-Way",
+      "general_manager": "Liu, Young-Way",
+      "telephone": "(02)2268-3466",
+      "web_address": "https://www.honhai.com/zh-tw",
+      "address": "",
+      "hash": "1fb277387442cd77491dd23518ab6f548fc3656f4b050c79b036d5f77c2144d1",
+      "scraped_at": "2026-04-20T11:21:45.813861+00:00",
+      "status": "NEW"
+    }
+  ]
+}

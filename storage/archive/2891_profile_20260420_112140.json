@@ -1,0 +1,18 @@
+{
+  "stock_code": "2891",
+  "category": "profile",
+  "records": [
+    {
+      "stock_code": "2891",
+      "company_name_en": "CTBC FINANCIAL HOLDING CO., LTD.",
+      "chairman": "Wen-Long, Yen",
+      "general_manager": "Rachael Kao",
+      "telephone": "(02)3327-7777",
+      "web_address": "https://www.ctbcholding.com",
+      "address": "27F�B29F., No.168, Jingmao 2nd Rd., Nangang Dist.TAIPEI CITY 115, TAIWAN. R.O.C",
+      "hash": "9900ce0337f45cdfd14c84baf7465d37c07c55b0d21f8c6715c08c56b227b281",
+      "scraped_at": "2026-04-20T11:21:40.976053+00:00",
+      "status": "NEW"
+    }
+  ]
+}

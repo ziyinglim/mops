@@ -1,0 +1,18 @@
+{
+  "stock_code": "5876",
+  "category": "balance_sheet",
+  "records": [
+    {
+      "stock_code": "5876",
+      "period": "",
+      "currency": "TWD",
+      "total_assets_raw": "",
+      "total_assets_numeric": null,
+      "investment_property_raw": "",
+      "investment_property_numeric": null,
+      "hash": "c0a9d86c581d2b7e278c3db6795d72083f340e775592d3edfd7ba4e6079e4c4f",
+      "scraped_at": "2026-04-20T11:22:01.130844+00:00",
+      "status": "NEW"
+    }
+  ]
+}

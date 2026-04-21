@@ -1,0 +1,18 @@
+{
+  "stock_code": "2886",
+  "category": "company_profile",
+  "scraped_at": "2026-04-19T19:08:27.758682+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "stock_code": "2886",
+      "company_name_zh": "Mega Financial Holding Company Ltd.",
+      "company_name_en": "",
+      "address": "Ray-Beam DawnChuan-Chang ChangHan-Yin Ting2357-8888www.megaholdings.com.tw",
+      "telephone": "2357-8888",
+      "web_address": "www.megaholdings.com.tw",
+      "company_name_zh_en": "Mega Financial Holding Company Ltd.",
+      "address_en": "Ray-Beam DawnChuan-Chang ChangHan-Yin Ting2357-8888www.megaholdings.com.tw"
+    }
+  ]
+}

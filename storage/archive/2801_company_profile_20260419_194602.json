@@ -1,0 +1,18 @@
+{
+  "stock_code": "2801",
+  "category": "company_profile",
+  "scraped_at": "2026-04-19T19:46:02.037573+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "stock_code": "2801",
+      "company_name_zh": "CHANG HWA COMMERCIAL BANK, LTD.",
+      "company_name_en": "",
+      "address": "CHANG HWA COMMERCIAL BANK, LTD.",
+      "telephone": "02-25362951",
+      "web_address": "www.bankchb.com",
+      "company_name_zh_en": "CHANG HWA COMMERCIAL BANK, LTD.",
+      "address_en": "CHANG HWA COMMERCIAL BANK, LTD."
+    }
+  ]
+}

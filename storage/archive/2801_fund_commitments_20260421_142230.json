@@ -1,0 +1,97 @@
+{
+  "stock_code": "2801",
+  "category": "fund_commitments",
+  "records": [
+    {
+      "stock_code": "2801",
+      "announcement_date": "2025/12/03",
+      "subject": "Announces transfer of performing loan assets",
+      "fund_name": "Name and nature of the underlying assets (if preferred shares, the terms\nand conditions of issuance shall also be indicated, e.g., dividend yield,\netc.):Performing syndicated loan asset transfer.",
+      "fund_type": "",
+      "commitment_date": "2025/12/03",
+      "commitment_amount_raw": "Amount, unit price, and total monetary amount of the transaction:\nVolume: Not applicable.\nUnit Price: Not applicable.\nTotal Amount: USD10,000,000.00.",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=172215&spoke_date=20251203&co_id=2801",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2801",
+      "announcement_date": "2025/10/28",
+      "subject": "Announcement on behalf of subsidiary Chang Hwa Bank Venture Capital Co., Ltd. for the acquisition of the right-of-use assets from a related party.",
+      "fund_name": "Name and nature of the underlying asset (e.g., land located at Sublot XX,\nLot XX, North District, Taichung City):Part of the office space located in\n10th floor and 1 basement parking spaces at No. 57, Section 2, Zhongshan\nNorth Road, Zhongshan District, Taipei City.",
+      "fund_type": "",
+      "commitment_date": "2025/10/28",
+      "commitment_amount_raw": "Transaction unit amount (e.g.XX square meters, equivalent to XX ping),\nunit price, and total transaction price:\nThe lease agreement is 67.19 ping office space and 1 basement parking spaces.\nThe rent of the office is NT$2,843 per ping per month, amounting to\nNT$191,000 (tax included), and the monthly rent of each parking space is\nNT$11,500 (tax included). Thus, the monthly rent is NT$202,500 in total, and\nthe value of the right-of-use assets is NT$9,815,596.",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=184558&spoke_date=20251028&co_id=2801",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2801",
+      "announcement_date": "2025/10/22",
+      "subject": "Announces transfer of performing loan assets",
+      "fund_name": "Name and nature of the underlying assets (if preferred shares, the terms\nand conditions of issuance shall also be indicated, e.g., dividend yield,\netc.):Performing syndicated loan asset transfer.",
+      "fund_type": "",
+      "commitment_date": "2025/10/22",
+      "commitment_amount_raw": "Amount, unit price, and total monetary amount of the transaction:\nVolume: Not applicable.\nUnit Price: Not applicable.\nTotal Amount: USD10,000,000.00.",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=2&spoke_time=191113&spoke_date=20251022&co_id=2801",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2801",
+      "announcement_date": "2025/07/08",
+      "subject": "Supplement the announcement on 2024/08/12 sale of non-performing syndicated loan (The signing of Third Amendment to Loan Purchase and Sale Agreement).",
+      "fund_name": "Date of occurrence of the event:2025/07/08",
+      "fund_type": "",
+      "commitment_date": "2024/08/12",
+      "commitment_amount_raw": "Effect on the Company's finance and business after the change:NA",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=180252&spoke_date=20250708&co_id=2801",
+      "status": "HISTORICAL"
+    },
+    {
+      "stock_code": "2801",
+      "announcement_date": "2025/04/11",
+      "subject": "Supplement the announcement on 2024/08/12 sale of non-performing syndicated loan (The signing of  Second Amendment to Loan Purchase and Sale Agreement).",
+      "fund_name": "Date of occurrence of the event:2025/04/11",
+      "fund_type": "",
+      "commitment_date": "2024/08/12",
+      "commitment_amount_raw": "Effect on the Company's finance and business after the change:NA",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=2&spoke_time=171936&spoke_date=20250411&co_id=2801",
+      "status": "HISTORICAL"
+    },
+    {
+      "stock_code": "2801",
+      "announcement_date": "2025/03/14",
+      "subject": "Chang Hwa Bank announced the Board of Directors’ approved the purchase of Taipei Financial Center Corporation Common shares",
+      "fund_name": "Name and nature of the underlying assets (if preferred shares, the terms\nand conditions of issuance shall also be indicated, e.g., dividend yield,\netc.):Taipei Financial Center Corporation Common shares",
+      "fund_type": "",
+      "commitment_date": "2025/03/14",
+      "commitment_amount_raw": "Where the trading counterparty is a related party, announcement shall also\nbe made of the reason for choosing the related party as trading counterparty\nand the identity of the previous owner, its relationship with the Company\nand the trading counterparty, and the previous date and monetary amount of\ntransfer:N/A",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=172959&spoke_date=20250314&co_id=2801",
+      "status": "HISTORICAL"
+    },
+    {
+      "stock_code": "2801",
+      "announcement_date": "2025/02/20",
+      "subject": "Supplement the announcement on 2024/08/12 sale of non-performing syndicated loan (The signing of The First Amendment to Loan Purchase and Sale Agreement).",
+      "fund_name": "Date of occurrence of the event:2025/02/20",
+      "fund_type": "",
+      "commitment_date": "2024/08/12",
+      "commitment_amount_raw": "Effect on the Company's finance and business after the change:NA",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=2&spoke_time=183733&spoke_date=20250220&co_id=2801",
+      "status": "HISTORICAL"
+    }
+  ]
+}

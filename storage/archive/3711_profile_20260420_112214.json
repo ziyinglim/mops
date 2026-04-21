@@ -1,0 +1,18 @@
+{
+  "stock_code": "3711",
+  "category": "profile",
+  "records": [
+    {
+      "stock_code": "3711",
+      "company_name_en": "ASE Technology Holding Co., Ltd.",
+      "chairman": "Jason Chang",
+      "general_manager": "Richard Chang",
+      "telephone": "07-3617131",
+      "web_address": "www.aseglobal.com",
+      "address": "",
+      "hash": "6888287d52148403372dc9ea92e54b4cdb771fd44852df3724358437b7074a46",
+      "scraped_at": "2026-04-20T11:22:14.830076+00:00",
+      "status": "NEW"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "stock_code": "5857",
+  "category": "profile",
+  "records": [
+    {
+      "stock_code": "5857",
+      "company_name_en": "land bank of taiwan",
+      "chairman": "He, Ying-Ming",
+      "general_manager": "CHANG, CHIH-CHIEN",
+      "telephone": "02-23483456",
+      "web_address": "www.landbank.com.tw",
+      "address": "No.46,Guancian Rd.,Jhongjheng DistrictTaipei City.Taiwan",
+      "hash": "0b27038a4b51fbb875a6b76cdefa14a2af22c1941ccc4c0a13b62ec6fff78336",
+      "scraped_at": "2026-04-20T11:21:52.764102+00:00",
+      "status": "NEW"
+    }
+  ]
+}

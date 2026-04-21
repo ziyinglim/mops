@@ -1,0 +1,18 @@
+{
+  "stock_code": "2891",
+  "category": "company_profile",
+  "scraped_at": "2026-04-19T20:17:12.385277+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "stock_code": "2891",
+      "company_name_zh": "CTBC FINANCIAL HOLDING CO., LTD.",
+      "company_name_en": "",
+      "address": "CTBC FINANCIAL HOLDING CO., LTD.",
+      "telephone": "(02)3327-7777",
+      "web_address": "https://www.ctbcholding.com",
+      "company_name_zh_en": "CTBC FINANCIAL HOLDING CO., LTD.",
+      "address_en": "CTBC FINANCIAL HOLDING CO., LTD."
+    }
+  ]
+}

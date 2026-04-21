@@ -1,0 +1,18 @@
+{
+  "stock_code": "2888",
+  "category": "profile",
+  "records": [
+    {
+      "stock_code": "2888",
+      "company_name_en": "",
+      "chairman": "",
+      "general_manager": "",
+      "telephone": "",
+      "web_address": "",
+      "address": "",
+      "hash": "fa968d323cc3fbbafd22cbc5cbbd587f51b869c4f581dae8171feb306da5f851",
+      "scraped_at": "2026-04-20T11:21:54.332015+00:00",
+      "status": "NEW"
+    }
+  ]
+}

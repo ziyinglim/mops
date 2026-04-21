@@ -1,0 +1,18 @@
+{
+  "stock_code": "2882",
+  "category": "company_profile",
+  "scraped_at": "2026-04-19T19:53:15.730940+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "stock_code": "2882",
+      "company_name_zh": "CATHAY FINANCIAL HOLDING CO., LTD.",
+      "company_name_en": "",
+      "address": "CATHAY FINANCIAL HOLDING CO., LTD.",
+      "telephone": "27087698",
+      "web_address": "www.cathayholdings.com",
+      "company_name_zh_en": "CATHAY FINANCIAL HOLDING CO., LTD.",
+      "address_en": "CATHAY FINANCIAL HOLDING CO., LTD."
+    }
+  ]
+}

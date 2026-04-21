@@ -1,0 +1,19 @@
+{
+  "stock_code": "5876",
+  "category": "fund_commitments",
+  "records": [
+    {
+      "stock_code": "5876",
+      "announcement_date": "2026/04/20",
+      "subject": "Disclosure of signing of main contract by local construction of subsidiary company, Shanghai Commercial Bank Limited",
+      "fund_name": "Type of contract:Main Contract",
+      "fund_type": "",
+      "commitment_date": "2026/04/20",
+      "commitment_amount_raw": "Counterparty to the contract and relationship with the Company:\nCounterparty:Chevalier (Construction) Company Limited\nRelationship with the Company:Nil",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=164334&spoke_date=20260420&co_id=5876",
+      "status": "NEW"
+    }
+  ]
+}

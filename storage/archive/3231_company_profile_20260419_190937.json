@@ -1,0 +1,18 @@
+{
+  "stock_code": "3231",
+  "category": "company_profile",
+  "scraped_at": "2026-04-19T19:09:37.019963+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "stock_code": "3231",
+      "company_name_zh": "Wistron Corporation",
+      "company_name_en": "",
+      "address": "Simon LinJeff LinStone Shih(02)6616-9999www.wistron.com",
+      "telephone": "(02)6616-9999",
+      "web_address": "www.wistron.com",
+      "company_name_zh_en": "Wistron Corporation",
+      "address_en": "Simon LinJeff LinStone Shih(02)6616-9999www.wistron.com"
+    }
+  ]
+}

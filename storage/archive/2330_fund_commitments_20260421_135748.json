@@ -1,0 +1,84 @@
+{
+  "stock_code": "2330",
+  "category": "fund_commitments",
+  "records": [
+    {
+      "stock_code": "2330",
+      "announcement_date": "2025/10/27",
+      "subject": "Announcement for the acquisition of fixed income securities on behalf of TSMC Global Ltd., a subsidiary of TSMC",
+      "fund_name": "Name of the securities:\nCorporate Bonds.",
+      "fund_type": "",
+      "commitment_date": "2025/10/27",
+      "commitment_amount_raw": "Total amount: US$9.8 million.",
+      "commitment_currency": "",
+      "commitment_amount_numeric": 9.8,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=173420&spoke_date=20251027&co_id=2330",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2330",
+      "announcement_date": "2025/10/22",
+      "subject": "Announcement for the acquisition of fixed income securities on behalf of TSMC Global Ltd., a subsidiary of TSMC",
+      "fund_name": "Name of the securities:\nCorporate Bonds.",
+      "fund_type": "",
+      "commitment_date": "2025/10/22",
+      "commitment_amount_raw": "Total amount: US$9.9 million.",
+      "commitment_currency": "",
+      "commitment_amount_numeric": 9.9,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=185841&spoke_date=20251022&co_id=2330",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2330",
+      "announcement_date": "2025/10/21",
+      "subject": "Announcement for the acquisition of fixed income securities on behalf of TSMC Global Ltd., a subsidiary of TSMC",
+      "fund_name": "Name of the securities:\nCorporate Bonds.",
+      "fund_type": "",
+      "commitment_date": "2025/05/14",
+      "commitment_amount_raw": "Total amount: US$10.0 million.",
+      "commitment_currency": "",
+      "commitment_amount_numeric": 10.0,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=184309&spoke_date=20251021&co_id=2330",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2330",
+      "announcement_date": "2025/10/20",
+      "subject": "Announcement for the acquisition of fixed income securities on behalf of TSMC Global Ltd., a subsidiary of TSMC",
+      "fund_name": "Name of the securities:\nCorporate Bonds.",
+      "fund_type": "",
+      "commitment_date": "2025/05/14",
+      "commitment_amount_raw": "Total amount: US$10.6 million.",
+      "commitment_currency": "",
+      "commitment_amount_numeric": 10.6,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=172804&spoke_date=20251020&co_id=2330",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2330",
+      "announcement_date": "2025/10/17",
+      "subject": "Announcement for the acquisition of fixed income securities on behalf of TSMC Global Ltd., a subsidiary of TSMC",
+      "fund_name": "Name of the securities:\nCorporate Bonds.",
+      "fund_type": "",
+      "commitment_date": "2025/10/17",
+      "commitment_amount_raw": "Total amount: US$9.9 million.",
+      "commitment_currency": "",
+      "commitment_amount_numeric": 9.9,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=183347&spoke_date=20251017&co_id=2330",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2330",
+      "announcement_date": "2025/10/16",
+      "subject": "Announcement for the disposal of fixed income securities on behalf of TSMC Global Ltd., a subsidiary of TSMC",
+      "fund_name": "Name of the securities:\nAgency Mortgage-Backed Securitiess.",
+      "fund_type": "",
+      "commitment_date": "2025/10/16",
+      "commitment_amount_raw": "Total amount: US$10.3 million.",
+      "commitment_currency": "",
+      "commitment_amount_numeric": 10.3,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=3&spoke_time=174404&spoke_date=20251016&co_id=2330",
+      "status": "NEW"
+    }
+  ]
+}

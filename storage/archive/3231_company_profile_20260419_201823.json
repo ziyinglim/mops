@@ -1,0 +1,18 @@
+{
+  "stock_code": "3231",
+  "category": "company_profile",
+  "scraped_at": "2026-04-19T20:18:23.816248+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "stock_code": "3231",
+      "company_name_zh": "Wistron Corporation",
+      "company_name_en": "",
+      "address": "Wistron Corporation",
+      "telephone": "(02)6616-9999",
+      "web_address": "www.wistron.com",
+      "company_name_zh_en": "Wistron Corporation",
+      "address_en": "Wistron Corporation"
+    }
+  ]
+}

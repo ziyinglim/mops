@@ -1,0 +1,40 @@
+{
+  "stock_code": "2867",
+  "category": "people_moves",
+  "records": [
+    {
+      "stock_code": "2867",
+      "announcement_date": "2026/01/20",
+      "subject": "Announcement on the change of Chief Investment Officer",
+      "role_type": "spokesperson, acting\n  spokesperson, important personnel (CEO, COO, CMO, CSO, etc.)\n,financial officer, accounting officer, corporate governance officer,\nchief information security officer, research and development officer,\nchief internal auditor, or designated and non-designated representatives):\nChief Investment Officer",
+      "change_date": "2026/01/20",
+      "previous_holder": "Chen, Hung-Sheng; President (Acting Chief Investment\nOfficer)",
+      "new_holder": "Announcement to be made after the appointment is\napproved by the Board of Directors.",
+      "change_type": "��resignation��, ��position\nadjustment��, ��retirement��, ��death��,��new\nreplacement�� or ��dismissal��): position adjustment",
+      "reason": "position adjustment",
+      "effective_date": "2026/01/20",
+      "narrative_en": "Mercuries Life Insurance 's spokesperson, acting\n  spokesperson, important personnel (CEO, COO, CMO, CSO, etc.)\n,financial officer, accounting officer, corporate governance officer,\nchief information security officer, research and development officer,\nchief internal auditor, or designated and non-designated representatives):\nChief Investment Officer, Chen, Hung-Sheng; President (Acting Chief Investment\nOfficer), has resigned, effective 20 January 2026.",
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=2&spoke_time=180106&spoke_date=20260120&co_id=2867",
+      "hash": "029b199b94aedf42e9e366646c47666e109b778f9133c4e77cdc4edf6bc67c24",
+      "scraped_at": "2026-04-21T14:02:19.067077+00:00",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2867",
+      "announcement_date": "2026/01/20",
+      "subject": "Announcement on the change of Spokesperson, Chief Financial Officer (CFO),Financial Officer",
+      "role_type": "spokesperson, acting\n  spokesperson, important personnel (CEO, COO, CMO, CSO, etc.)\n,financial officer, accounting officer, corporate governance officer,\nchief information security officer, research and development officer,\nchief internal auditor, or designated and non-designated representatives):\nSpokesperson, Chief Financial Officer (CFO),\nFinancial Officer",
+      "change_date": "2026/01/20",
+      "previous_holder": "Lin, Pi-Hua, Senior Vice President of Mercuries Life\nInsurance Co., Ltd.(Spokesperson, Chief Financial\nOfficer (CFO), Financial Officer)",
+      "new_holder": "Announcement to be made after the appointment is\napproved by the Board of Directors.",
+      "change_type": "��resignation��, ��position\nadjustment��, ��retirement��, ��death��,��new\nreplacement�� or ��dismissal��): position adjustment",
+      "reason": "position adjustment",
+      "effective_date": "2026/01/20",
+      "narrative_en": "Mercuries Life Insurance 's spokesperson, acting\n  spokesperson, important personnel (CEO, COO, CMO, CSO, etc.)\n,financial officer, accounting officer, corporate governance officer,\nchief information security officer, research and development officer,\nchief internal auditor, or designated and non-designated representatives):\nSpokesperson, Chief Financial Officer (CFO),\nFinancial Officer, Lin, Pi-Hua, Senior Vice President of Mercuries Life\nInsurance Co., Ltd.(Spokesperson, Chief Financial\nOfficer (CFO), Financial Officer), has resigned, effective 20 January 2026.",
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=180050&spoke_date=20260120&co_id=2867",
+      "hash": "9b3a0a266f30ecea8f25777a8b5dba135c151f770aaaf7e49b7ec8bf99bcc33a",
+      "scraped_at": "2026-04-21T14:02:19.067077+00:00",
+      "status": "NEW"
+    }
+  ]
+}

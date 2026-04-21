@@ -1,0 +1,18 @@
+{
+  "stock_code": "2454",
+  "category": "balance_sheet",
+  "records": [
+    {
+      "stock_code": "2454",
+      "period": "2025/12/31",
+      "currency": "TWD",
+      "total_assets_raw": "743,784,805",
+      "total_assets_numeric": 743784805.0,
+      "investment_property_raw": "2,589,782",
+      "investment_property_numeric": 2589782.0,
+      "hash": "83507798863f478542a3e473d22f49b6ebea21675de4b585143729ec7189e205",
+      "scraped_at": "2026-04-20T11:22:27.747790+00:00",
+      "status": "NEW"
+    }
+  ]
+}

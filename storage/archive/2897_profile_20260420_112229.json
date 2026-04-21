@@ -1,0 +1,18 @@
+{
+  "stock_code": "2897",
+  "category": "profile",
+  "records": [
+    {
+      "stock_code": "2897",
+      "company_name_en": "O-Bank Co., Ltd.",
+      "chairman": "Lo, Tina Y.",
+      "general_manager": "Elton F.Y. Lee",
+      "telephone": "(02)87527000",
+      "web_address": "www.o-bank.com",
+      "address": "",
+      "hash": "d005baf85ac9ddc42fbe9ec7d0fd1fddb7f3d0342c1d384d39e2c8772056fac0",
+      "scraped_at": "2026-04-20T11:22:29.479959+00:00",
+      "status": "NEW"
+    }
+  ]
+}

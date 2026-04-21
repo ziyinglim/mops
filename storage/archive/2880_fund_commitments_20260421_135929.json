@@ -1,0 +1,58 @@
+{
+  "stock_code": "2880",
+  "category": "fund_commitments",
+  "records": [
+    {
+      "stock_code": "2880",
+      "announcement_date": "2026/04/08",
+      "subject": "Announcement on behalf of subsidiary Hua Nan Securities about the acquisition of the right-of-use assets",
+      "fund_name": "Name and nature of the underlying asset (e.g., land located at Sublot XX,\nLot XX, North District, Taichung City):\n2F., No. 270, Zhongming S. Rd., West Dist., Taichung City",
+      "fund_type": "",
+      "commitment_date": "2026/04/08",
+      "commitment_amount_raw": "Transaction unit amount (e.g.XX square meters, equivalent to XX ping),\nunit price, and total transaction price:\nLease area:About 85.66 pings\nUnit price:NT$550 per ping per month\nTotal rent:NT$47,113 per month\nTotal transaction price:NT$2,826,780",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=155541&spoke_date=20260408&co_id=2880",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2880",
+      "announcement_date": "2026/03/31",
+      "subject": "Announcement on behalf of subsidiary Hua Nan Securities about the acquisition of the right-of-use assets",
+      "fund_name": "Name and nature of the underlying asset (e.g., land located at Sublot XX,\nLot XX, North District, Taichung City):\n5F., No. 95, Xinyi St., Fengyuan Dist., Taichung City",
+      "fund_type": "",
+      "commitment_date": "2026/03/31",
+      "commitment_amount_raw": "Transaction unit amount (e.g.XX square meters, equivalent to XX ping),\nunit price, and total transaction price:\nLease area:About 104.4 pings and 1 parking space\nUnit price:NT$770 per ping per month plus NT$1,800 for parking spaces\nTotal rent:NT$82,188 per month\nTotal transaction price:NT$4,931,280",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=175732&spoke_date=20260331&co_id=2880",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2880",
+      "announcement_date": "2026/03/13",
+      "subject": "Announcement on behalf of subsidiary Hua Nan Securities about the acquisition of the right-of-use assets",
+      "fund_name": "Name and nature of the underlying asset (e.g., land located at Sublot XX,\nLot XX, North District, Taichung City):\n4F., No. 78, Liuhe 1st Rd., Xinxing Dist., Kaohsiung City",
+      "fund_type": "",
+      "commitment_date": "2026/03/13",
+      "commitment_amount_raw": "Transaction unit amount (e.g.XX square meters, equivalent to XX ping),\nunit price, and total transaction price:\nLease area:About 112.09 pings\nUnit price:NT$600 per ping per month\nTotal rent:NT$67,254 per month\nTotal transaction price:NT$4,035,240",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=153649&spoke_date=20260313&co_id=2880",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2880",
+      "announcement_date": "2026/03/06",
+      "subject": "Announcement on behalf of subsidiary Hua Nan Securities about the acquisition of the right-of-use assets",
+      "fund_name": "Name and nature of the underlying asset (e.g., land located at Sublot XX,\nLot XX, North District, Taichung City):\n3F., No. 46, Linkou Rd., Linkou Dist., New Taipei City",
+      "fund_type": "",
+      "commitment_date": "2026/03/06",
+      "commitment_amount_raw": "Transaction unit amount (e.g.XX square meters, equivalent to XX ping),\nunit price, and total transaction price:\nLease area:About 177.51 pings\nUnit price:NT$563.35 per ping per month\nTotal rent:NT$100,000 per month\nTotal transaction price:NT$6,000,000",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=2&spoke_time=191017&spoke_date=20260306&co_id=2880",
+      "status": "NEW"
+    }
+  ]
+}

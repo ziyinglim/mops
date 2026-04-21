@@ -1,0 +1,18 @@
+{
+  "stock_code": "2890",
+  "category": "company_profile",
+  "scraped_at": "2026-04-20T09:45:36.529031+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "stock_code": "2890",
+      "company_name_zh": "SINOPAC  FINANCIAL HOLDINGS COMPANY LIMITED",
+      "company_name_en": "",
+      "address": "SINOPAC  FINANCIAL HOLDINGS COMPANY LIMITED",
+      "telephone": "(02)8161-8935",
+      "web_address": "https://www.sinopac.com/index.html",
+      "company_name_zh_en": "SINOPAC  FINANCIAL HOLDINGS COMPANY LIMITED",
+      "address_en": "SINOPAC  FINANCIAL HOLDINGS COMPANY LIMITED"
+    }
+  ]
+}

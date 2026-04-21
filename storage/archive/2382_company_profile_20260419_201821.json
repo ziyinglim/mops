@@ -1,0 +1,18 @@
+{
+  "stock_code": "2382",
+  "category": "company_profile",
+  "scraped_at": "2026-04-19T20:18:21.318580+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "stock_code": "2382",
+      "company_name_zh": "QUANTA COMPUTER INC.",
+      "company_name_en": "",
+      "address": "QUANTA COMPUTER INC.",
+      "telephone": "03-3272345",
+      "web_address": "www.quantatw.com",
+      "company_name_zh_en": "QUANTA COMPUTER INC.",
+      "address_en": "QUANTA COMPUTER INC."
+    }
+  ]
+}

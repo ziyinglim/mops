@@ -1,0 +1,19 @@
+{
+  "stock_code": "2454",
+  "category": "fund_commitments",
+  "records": [
+    {
+      "stock_code": "2454",
+      "announcement_date": "2026/04/17",
+      "subject": "MEDIATEK INC. announces on behalf of MEDIATEK USA INC. for the acquisitions of the right-of-use asset",
+      "fund_name": "Accredited Member, American Society of Appraisers (ASA #106380)",
+      "fund_type": "",
+      "commitment_date": "",
+      "commitment_amount_raw": "Transaction unit amount (e.g.XX square meters, equivalent to XX ping),\nunit price, and total transaction price:\nNumber of trading units: 110,979 square feet,\nPrice per unit: Monthly rent of USD3.7 per square foot,\nMonthly rent: USD410,622.30,\nThe annual rent increase is 3%.\nTotal amount of right-of-use assets: USD41,559,651.94",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=4&spoke_time=172158&spoke_date=20260417&co_id=2454",
+      "status": "NEW"
+    }
+  ]
+}

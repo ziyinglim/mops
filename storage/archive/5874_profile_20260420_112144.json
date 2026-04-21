@@ -1,0 +1,18 @@
+{
+  "stock_code": "5874",
+  "category": "profile",
+  "records": [
+    {
+      "stock_code": "5874",
+      "company_name_en": "Nan Shan Life Insurance Co., Ltd.",
+      "chairman": "Chung Yao Yin",
+      "general_manager": "Alden Fan (President)",
+      "telephone": "(02)8758-8888",
+      "web_address": "http://www.nanshanlife.com.tw",
+      "address": "No. 168, Zhuangjing Rd., Xinyi Dist., Taipei CityTaipei, Taiwan",
+      "hash": "437e26ba14f6cf5dcb143cd77c338d0747c5d853422b1d41318c1bfcef6f6eec",
+      "scraped_at": "2026-04-20T11:21:44.186747+00:00",
+      "status": "NEW"
+    }
+  ]
+}

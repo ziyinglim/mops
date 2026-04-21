@@ -1,0 +1,18 @@
+{
+  "stock_code": "2882",
+  "category": "balance_sheet",
+  "records": [
+    {
+      "stock_code": "2882",
+      "period": "",
+      "currency": "TWD",
+      "total_assets_raw": "14,341,618,353",
+      "total_assets_numeric": 14341618353.0,
+      "investment_property_raw": "504,777,190",
+      "investment_property_numeric": 504777190.0,
+      "hash": "c74fc1745cb06dbb0ab786ed8a40edd427a4d89bbc31c48bf8d5d930933dde46",
+      "scraped_at": "2026-04-20T10:31:18.674787+00:00",
+      "status": "NEW"
+    }
+  ]
+}

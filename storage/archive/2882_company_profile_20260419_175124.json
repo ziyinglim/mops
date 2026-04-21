@@ -1,0 +1,13 @@
+{
+  "stock_code": "2882",
+  "category": "company_profile",
+  "scraped_at": "2026-04-19T17:51:24.899415+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "stock_code": "2882",
+      "error": "No response",
+      "status": "ERROR"
+    }
+  ]
+}

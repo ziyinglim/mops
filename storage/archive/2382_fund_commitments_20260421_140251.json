@@ -1,0 +1,110 @@
+{
+  "stock_code": "2382",
+  "category": "fund_commitments",
+  "records": [
+    {
+      "stock_code": "2382",
+      "announcement_date": "2026/04/01",
+      "subject": "Announcing Equipment Acquisition & Leased Property Renovation on Behalf of Subsidiary, QMN",
+      "fund_name": "Name and nature of the underlying asset (e.g., land located at Sublot XX,\nLot XX, North District, Taichung City):\n Acquisition of machinery and equipment for business use\n and leased property renovation for buildings\n located in Fremont, CA, USA",
+      "fund_type": "",
+      "commitment_date": "2026/04/01",
+      "commitment_amount_raw": "Transaction unit amount (e.g.XX square meters, equivalent to XX ping),\nunit price, and total transaction price:\n Transaction unit amount:\n Machinery and equipment, and leased property renovation\n (including design and engineering).\n Approximately USD $153,600,000\n (or approximately NT$4,827,648,000 at exchange rate of 31.43)",
+      "commitment_currency": "USD",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=160348&spoke_date=20260401&co_id=2382",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2382",
+      "announcement_date": "2026/03/10",
+      "subject": "Announcing Equipment Acquisition & Leased Property Renovation on Behalf of Subsidiary, QMN",
+      "fund_name": "Name and nature of the underlying asset (e.g., land located at Sublot XX,\nLot XX, North District, Taichung City):\n Acquisition of machinery and equipment for business use\n and leased property renovation for buildings\n located in Newark and Fremont, CA, USA",
+      "fund_type": "",
+      "commitment_date": "2026/03/10",
+      "commitment_amount_raw": "Transaction unit amount (e.g.XX square meters, equivalent to XX ping),\nunit price, and total transaction price:\n Transaction unit amount:\n Machinery and equipment, and leased property renovation\n (including design and engineering).\n Building located in Newark: approximately USD $156,857,000\n (or approximately NT$4,930,036,000 at exchange rate of 31.43)\n Building located in Fremont: approximately USD $90,870,000\n (or approximately NT$2,856,035,000)\n Total transaction amount�Gapproximately USD $247,727,000\n (or approximately NT$7,786,071,000).",
+      "commitment_currency": "USD",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=161906&spoke_date=20260310&co_id=2382",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2382",
+      "announcement_date": "2026/02/26",
+      "subject": "QCI Subscribes to Cash Capital Increase of 100% owned Subsidiary QMHP Co. Ltd",
+      "fund_name": "Name and nature of the underlying assets (if preferred shares, the terms\nand conditions of issuance shall also be indicated, e.g., dividend yield,\netc.):\n QMHP Co. Ltd\n Cash capital increase",
+      "fund_type": "",
+      "commitment_date": "2026/02/26",
+      "commitment_amount_raw": "Amount, unit price, and total monetary amount of the transaction:\n US$15,000,000 (or approximately NT$ 471,450,000\n at exchange rate of 31.43).",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=4&spoke_time=145904&spoke_date=20260226&co_id=2382",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2382",
+      "announcement_date": "2026/02/12",
+      "subject": "Announcing on Behalf of Subsidiary, QMB Co., Ltd., To Contract Out Mechanical, Electrical, and Plumbing (MEP) Engineering Project",
+      "fund_name": "Type of contract:\n MEP engineering project for production plant",
+      "fund_type": "",
+      "commitment_date": "2026/02/12",
+      "commitment_amount_raw": "Counterparty to the contract and relationship with the Company:\n Counterparty: China State Construction Engineering (Thailand) Co., Ltd.\n Relationship to the Company: not a related party",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=2&spoke_time=94628&spoke_date=20260212&co_id=2382",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2382",
+      "announcement_date": "2026/01/28",
+      "subject": "Announcing on Behalf of Subsidiary, QMB Co., Ltd., To Contract Out Production Plant Construction",
+      "fund_name": "Type of contract: New construction project for production plant",
+      "fund_type": "",
+      "commitment_date": "2026/01/28",
+      "commitment_amount_raw": "Counterparty to the contract and relationship with the Company:\n Counterparty: Cheer You Construction (Thailand) Co., Ltd.\n Relationship to the Company: not a related party",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=2&spoke_time=164414&spoke_date=20260128&co_id=2382",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2382",
+      "announcement_date": "2026/01/28",
+      "subject": "QCI Announces Subscription of Pasqal's Issuance of Series C Preferred Shares",
+      "fund_name": "Name and nature of the underlying assets (if preferred shares, the terms\nand conditions of issuance shall also be indicated, e.g., dividend yield,\netc.):\n QCI to subscribe to Series C preferred shares issued by Pasqal SAS",
+      "fund_type": "",
+      "commitment_date": "2026/01/28",
+      "commitment_amount_raw": "Amount, unit price, and total monetary amount of the transaction:\n Transaction amount: 179,160 shares\n Unit price: EUR$139.54 per share\n Total monetary amount:\n approximately EUR$ 25,000 thousand.\n (or approximately NT$ 894,250 thousand at exchange rate of 35.77)",
+      "commitment_currency": "EUR",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=164357&spoke_date=20260128&co_id=2382",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2382",
+      "announcement_date": "2025/12/30",
+      "subject": "Announcement of Machinery and Equipment Acquisition on Behalf of Subsidiary, QMN",
+      "fund_name": "Name and nature of the underlying asset (e.g., land located at Sublot XX,\nLot XX, North District, Taichung City):\n QCI's subsidiary, QMN, to acquire fuel cell microgrid system\n located in California, USA.",
+      "fund_type": "",
+      "commitment_date": "2025/12/30",
+      "commitment_amount_raw": "Transaction unit amount (e.g.XX square meters, equivalent to XX ping),\nunit price, and total transaction price:\n Transaction unit amount: 3 sets of systems, including\n installation and technical supports.\n Total transaction amount�Gapproximately USD $502,154,000\n (or approximately NT$15,288,078,000 at exchange rate of 30.445).\n Individual contract amount:\n - Plant B18: approximately USD $223,177,000\n - Plant B16: approximately USD $167,388,000\n - Plant B19: approximately USD $111,589,000",
+      "commitment_currency": "USD",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=2&spoke_time=142840&spoke_date=20251230&co_id=2382",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2382",
+      "announcement_date": "2025/12/23",
+      "subject": "Announcing the Acquisition of Machinery and Equipment on Behalf of Subsidiary, QMN",
+      "fund_name": "Name and nature of the underlying asset (e.g., land located at Sublot XX,\nLot XX, North District, Taichung City):\n A set of equipment located in Fremont, CA, USA\n For business operational use",
+      "fund_type": "",
+      "commitment_date": "2025/12/23",
+      "commitment_amount_raw": "Transaction unit amount (e.g.XX square meters, equivalent to XX ping),\nunit price, and total transaction price:\n Transaction unit amount: A set of equipment\n (including design and engineering).\n Total transaction amount�Gapproximately USD $47,427,000\n (or approximately NT$1,443,916,000 at exchange rate of 30.445).",
+      "commitment_currency": "USD",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=2&spoke_time=165559&spoke_date=20251223&co_id=2382",
+      "status": "NEW"
+    }
+  ]
+}

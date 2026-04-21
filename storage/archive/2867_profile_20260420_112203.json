@@ -1,0 +1,18 @@
+{
+  "stock_code": "2867",
+  "category": "profile",
+  "records": [
+    {
+      "stock_code": "2867",
+      "company_name_en": "",
+      "chairman": "",
+      "general_manager": "",
+      "telephone": "",
+      "web_address": "",
+      "address": "",
+      "hash": "c012cdb67c1dcb43834f64a174e06efab89269b7257fca8883ad30274364ddf2",
+      "scraped_at": "2026-04-20T11:22:03.566044+00:00",
+      "status": "NEW"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "stock_code": "2833",
+  "category": "balance_sheet",
+  "records": [
+    {
+      "stock_code": "2833",
+      "period": "",
+      "currency": "TWD",
+      "total_assets_raw": "",
+      "total_assets_numeric": null,
+      "investment_property_raw": "",
+      "investment_property_numeric": null,
+      "hash": "9ba2531b5707b13fe363bb29b593358babebb3e74438ad63158432f624d41c6f",
+      "scraped_at": "2026-04-20T11:22:03.158341+00:00",
+      "status": "NEW"
+    }
+  ]
+}

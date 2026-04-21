@@ -1,0 +1,97 @@
+{
+  "stock_code": "2880",
+  "category": "fund_commitments",
+  "records": [
+    {
+      "stock_code": "2880",
+      "announcement_date": "2025/05/27",
+      "subject": "Announcement on behalf of subsidiary HNAMC to invest in the Sanchong Urban Renewal Project according to the board resolution.",
+      "fund_name": "Type of contract:Joint construction and allocation of housing units",
+      "fund_type": "",
+      "commitment_date": "2025/05/27",
+      "commitment_amount_raw": "Name of the professional appraisal firm or company and its\nappraisal opinion:\n(1)G-Beam Real Estate Appraisers Firm\nResult of appraisal:Reasonable percentage to developer is 59.54%.\n(2)LinkU Real Estate Appraisal and Consuilting Services\nResult of appraisal:Reasonable percentage to developer is 59.22%.",
+      "commitment_currency": "",
+      "commitment_amount_numeric": 1.0,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=2&spoke_time=181140&spoke_date=20250527&co_id=2880",
+      "status": "HISTORICAL"
+    },
+    {
+      "stock_code": "2880",
+      "announcement_date": "2025/05/13",
+      "subject": "On behalf of subsidiary Hua Nan Commercial Bank to announce selling the syndicated loan supplementary explanation.",
+      "fund_name": "Date of occurrence of the event:2025/05/13",
+      "fund_type": "",
+      "commitment_date": "2025/03/21",
+      "commitment_amount_raw": "Effect on the Company's finance and business after the change:\nLoss from the disposal is around EUR2,600 thousand.",
+      "commitment_currency": "",
+      "commitment_amount_numeric": 2600.0,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=184313&spoke_date=20250513&co_id=2880",
+      "status": "HISTORICAL"
+    },
+    {
+      "stock_code": "2880",
+      "announcement_date": "2025/04/11",
+      "subject": "Announcement on behalf of subsidiary Hua Nan Commercial Bank about selling a non-performing syndicated loan supplementary explanation.",
+      "fund_name": "Date of occurrence of the event:2025/04/11",
+      "fund_type": "",
+      "commitment_date": "2024/08/10",
+      "commitment_amount_raw": "Effect on the Company's finance and business after the change:None.",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=155157&spoke_date=20250411&co_id=2880",
+      "status": "HISTORICAL"
+    },
+    {
+      "stock_code": "2880",
+      "announcement_date": "2025/03/21",
+      "subject": "On behalf of subsidiary Hua Nan Commercial Bank to announce selling the syndicated loan.",
+      "fund_name": "Name and nature of the underlying assets (if preferred shares, the terms\nand conditions of issuance shall also be indicated, e.g., dividend yield,\netc.):Transfer all of company's rights and obligations as a lender under Term\nLoan of EUR102,000,000 facility with Verbio SE as borrower.",
+      "fund_type": "",
+      "commitment_date": "2025/03/21",
+      "commitment_amount_raw": "Where the trading counterparty is a related party, announcement shall also\nbe made of the reason for choosing the related party as trading counterparty\nand the identity of the previous owner, its relationship with the Company\nand the trading counterparty, and the previous date and monetary amount of\ntransfer:Not applicable",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=170951&spoke_date=20250321&co_id=2880",
+      "status": "HISTORICAL"
+    },
+    {
+      "stock_code": "2880",
+      "announcement_date": "2025/03/14",
+      "subject": "HNFHC Board of Directors approved the acquisition of Taipei Financial Center Corporation Common shares",
+      "fund_name": "Name and nature of the underlying assets (if preferred shares, the terms\nand conditions of issuance shall also be indicated, e.g., dividend yield,\netc.):Taipei Financial Center Corporation Common shares",
+      "fund_type": "",
+      "commitment_date": "2025/03/14",
+      "commitment_amount_raw": "Where the trading counterparty is a related party, announcement shall also\nbe made of the reason for choosing the related party as trading counterparty\nand the identity of the previous owner, its relationship with the Company\nand the trading counterparty, and the previous date and monetary amount of\ntransfer:N/A",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=8&spoke_time=181752&spoke_date=20250314&co_id=2880",
+      "status": "HISTORICAL"
+    },
+    {
+      "stock_code": "2880",
+      "announcement_date": "2025/02/20",
+      "subject": "Announcement on behalf of subsidiary Hua Nan Commercial Bank about selling a non-performing syndicated loan supplementary explanation.",
+      "fund_name": "Date of occurrence of the event:2025/02/20",
+      "fund_type": "",
+      "commitment_date": "2024/08/10",
+      "commitment_amount_raw": "Effect on the Company's finance and business after the change:None.",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=180859&spoke_date=20250220&co_id=2880",
+      "status": "HISTORICAL"
+    },
+    {
+      "stock_code": "2880",
+      "announcement_date": "2025/02/14",
+      "subject": "On behalf of subsidiary Hua Nan Commercial Bank to announce selling the syndicated loan.",
+      "fund_name": "Name and nature of the underlying assets (if preferred shares, the terms\nand conditions of issuance shall also be indicated, e.g., dividend yield,\netc.):Transfer all of company's rights and obligations as a lender under Term\nLoan of EUR147,570,024.32 facility with Einstein Office Propco S.a r.l.\nas borrower.",
+      "fund_type": "",
+      "commitment_date": "2025/02/14",
+      "commitment_amount_raw": "Where the trading counterparty is a related party, announcement shall also\nbe made of the reason for choosing the related party as trading counterparty\nand the identity of the previous owner, its relationship with the Company\nand the trading counterparty, and the previous date and monetary amount of\ntransfer:Not applicable",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=2&spoke_time=150710&spoke_date=20250214&co_id=2880",
+      "status": "HISTORICAL"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "stock_code": "2886",
+  "category": "balance_sheet",
+  "scraped_at": "2026-04-19T19:08:29.579626+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "stock_code": "2886",
+      "period": "Financial Statement �w Balance Sheet",
+      "currency": "TWD",
+      "total_assets_raw": "",
+      "total_assets_numeric": null,
+      "investment_property_raw": "1,686,729",
+      "investment_property_numeric": 1686729.0
+    }
+  ]
+}

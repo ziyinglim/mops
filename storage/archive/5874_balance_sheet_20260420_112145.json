@@ -1,0 +1,18 @@
+{
+  "stock_code": "5874",
+  "category": "balance_sheet",
+  "records": [
+    {
+      "stock_code": "5874",
+      "period": "2025/12/31",
+      "currency": "TWD",
+      "total_assets_raw": "5,631,365,122",
+      "total_assets_numeric": 5631365122.0,
+      "investment_property_raw": "217,897,040",
+      "investment_property_numeric": 217897040.0,
+      "hash": "4b64d778829d96f76bd9d09efd8d38311dae9c8eed1cbc6b362f42d64a8607fb",
+      "scraped_at": "2026-04-20T11:21:45.028997+00:00",
+      "status": "NEW"
+    }
+  ]
+}

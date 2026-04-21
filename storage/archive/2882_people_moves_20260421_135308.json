@@ -1,0 +1,23 @@
+{
+  "stock_code": "2882",
+  "category": "people_moves",
+  "records": [
+    {
+      "stock_code": "2882",
+      "announcement_date": "2025/12/30",
+      "subject": "Announcement of the change of Chief Investment Officer",
+      "role_type": "spokesperson, acting\n  spokesperson, important personnel (CEO, COO, CMO, CSO, etc.)\n,financial officer, accounting officer, corporate governance officer,\nchief information security officer, research and development officer,\nchief internal auditor, or designated and non-designated representatives):\nChief Investment Officer",
+      "change_date": "2025/12/30",
+      "previous_holder": "Shu-Fen Cheng, Senior Executive VP of Cathay Financial Holdings Co.,Ltd",
+      "new_holder": "N/A",
+      "change_type": "��resignation��, ��position\nadjustment��, ��retirement��, ��death��,��new\nreplacement�� or ��dismissal��):position adjustment",
+      "reason": "Position adjustment",
+      "effective_date": "2026/01/01",
+      "narrative_en": "The TWD 14bn Cathay Life Insurance 's spokesperson, acting\n  spokesperson, important personnel (CEO, COO, CMO, CSO, etc.)\n,financial officer, accounting officer, corporate governance officer,\nchief information security officer, research and development officer,\nchief internal auditor, or designated and non-designated representatives):\nChief Investment Officer, Shu-Fen Cheng, Senior Executive VP of Cathay Financial Holdings Co.,Ltd, has resigned, effective 1 January 2026.",
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=190033&spoke_date=20251230&co_id=2882",
+      "hash": "15bd610c6330b4691feb5c8241a1d8d332c59c4c012d7e849768b55c5a0be9a8",
+      "scraped_at": "2026-04-21T13:53:08.774738+00:00",
+      "status": "NEW"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "stock_code": "2382",
+  "category": "balance_sheet",
+  "records": [
+    {
+      "stock_code": "2382",
+      "period": "2025/12/31",
+      "currency": "TWD",
+      "total_assets_raw": "1,343,111,743",
+      "total_assets_numeric": 1343111743.0,
+      "investment_property_raw": "66,617",
+      "investment_property_numeric": 66617.0,
+      "hash": "3192e02972b6ee68818a2d34f2bf3449a8509a66b761d15c81338daeec99fa3f",
+      "scraped_at": "2026-04-20T11:22:09.269903+00:00",
+      "status": "NEW"
+    }
+  ]
+}

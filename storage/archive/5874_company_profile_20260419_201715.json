@@ -1,0 +1,18 @@
+{
+  "stock_code": "5874",
+  "category": "company_profile",
+  "scraped_at": "2026-04-19T20:17:15.135501+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "stock_code": "5874",
+      "company_name_zh": "Nan Shan Life Insurance Co., Ltd.",
+      "company_name_en": "",
+      "address": "Nan Shan Life Insurance Co., Ltd.",
+      "telephone": "(02)8758-8888",
+      "web_address": "http://www.nanshanlife.com.tw",
+      "company_name_zh_en": "Nan Shan Life Insurance Co., Ltd.",
+      "address_en": "Nan Shan Life Insurance Co., Ltd."
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "stock_code": "5857",
+  "category": "company_profile",
+  "scraped_at": "2026-04-19T19:53:29.843800+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "stock_code": "5857",
+      "company_name_zh": "land bank of taiwan",
+      "company_name_en": "",
+      "address": "land bank of taiwan",
+      "telephone": "02-23483456",
+      "web_address": "www.landbank.com.tw",
+      "company_name_zh_en": "land bank of taiwan",
+      "address_en": "land bank of taiwan"
+    }
+  ]
+}

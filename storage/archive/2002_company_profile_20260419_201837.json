@@ -1,0 +1,18 @@
+{
+  "stock_code": "2002",
+  "category": "company_profile",
+  "scraped_at": "2026-04-19T20:18:37.119483+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "stock_code": "2002",
+      "company_name_zh": "China Steel Corporation",
+      "company_name_en": "",
+      "address": "China Steel Corporation",
+      "telephone": "07-8021111",
+      "web_address": "http://www.csc.com.tw",
+      "company_name_zh_en": "China Steel Corporation",
+      "address_en": "China Steel Corporation"
+    }
+  ]
+}

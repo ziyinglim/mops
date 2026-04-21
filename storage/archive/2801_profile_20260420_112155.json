@@ -1,0 +1,18 @@
+{
+  "stock_code": "2801",
+  "category": "profile",
+  "records": [
+    {
+      "stock_code": "2801",
+      "company_name_en": "CHANG HWA COMMERCIAL BANK, LTD.",
+      "chairman": "Kuang-Hua Hu",
+      "general_manager": "Chih-Kuang Chien",
+      "telephone": "02-25362951",
+      "web_address": "www.bankchb.com",
+      "address": "",
+      "hash": "ea3c909e8fd6ee917c35efbe6fb68e01a64adf98983bc0e7df82ffd824880594",
+      "scraped_at": "2026-04-20T11:21:55.695064+00:00",
+      "status": "NEW"
+    }
+  ]
+}

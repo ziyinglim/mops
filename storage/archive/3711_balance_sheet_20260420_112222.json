@@ -1,0 +1,18 @@
+{
+  "stock_code": "3711",
+  "category": "balance_sheet",
+  "records": [
+    {
+      "stock_code": "3711",
+      "period": "2025/12/31",
+      "currency": "TWD",
+      "total_assets_raw": "889,333,354",
+      "total_assets_numeric": 889333354.0,
+      "investment_property_raw": "18,736,891",
+      "investment_property_numeric": 18736891.0,
+      "hash": "3118ee2f5e71e66b132c9537616c93d430462f1ee8acf21e6453c52cc119c643",
+      "scraped_at": "2026-04-20T11:22:22.709377+00:00",
+      "status": "NEW"
+    }
+  ]
+}

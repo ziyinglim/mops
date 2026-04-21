@@ -1,0 +1,97 @@
+{
+  "stock_code": "2885",
+  "category": "fund_commitments",
+  "records": [
+    {
+      "stock_code": "2885",
+      "announcement_date": "2025/11/26",
+      "subject": "YFH announces on behalf of Yuanta Securities updated the total construction contract amount for participating in the Urban Renewal Project",
+      "fund_name": "Date of occurrence of the event:2025/11/26",
+      "fund_type": "",
+      "commitment_date": "2021/10/22",
+      "commitment_amount_raw": "Effect on the Company's finance and business after the change:\nNo significant impact",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=4&spoke_time=173549&spoke_date=20251126&co_id=2885",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2885",
+      "announcement_date": "2025/11/26",
+      "subject": "YFH announces on behalf of YSIT updated the total construction contract amount for participatin in the Urban Renewal Project",
+      "fund_name": "Date of occurrence of the event:2025/11/26",
+      "fund_type": "",
+      "commitment_date": "2021/10/22",
+      "commitment_amount_raw": "Effect on the Company's finance and business after the change:\nNo significant impact",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=2&spoke_time=173207&spoke_date=20251126&co_id=2885",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2885",
+      "announcement_date": "2025/11/26",
+      "subject": "YFH announces on behalf of Yuanta International Insurance Brokers rescind the contract with Yuanta Securities",
+      "fund_name": "Date of occurrence of the event:2025/11/26",
+      "fund_type": "",
+      "commitment_date": "2025/06/16",
+      "commitment_amount_raw": "Effect on the Company's finance and business after the change:\nNo significant impact",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=172703&spoke_date=20251126&co_id=2885",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2885",
+      "announcement_date": "2025/11/24",
+      "subject": "YFH announces on behalf of Yuanta Securities the acquisition of the right-of-use asset from Yuanta Bank.",
+      "fund_name": "Name and nature of the underlying asset (e.g., land located at Sublot XX,\nLot XX, North District, Taichung City):\nLease address:1F., No.66, Sec.1, Dunhua S. Rd., Songshan Dist.,\nTaipei City, Taiwan (including public facilities)",
+      "fund_type": "",
+      "commitment_date": "2025/11/24",
+      "commitment_amount_raw": "Transaction unit amount (e.g.XX square meters, equivalent to XX ping),\nunit price, and total transaction price:\nUnit area: 96.98 ping\nUnit price: NT$3,390 per ping per month (tax included)\nTotal amount of rents: NT$328,762 per month (tax included)\nTotal amount of right-of-use assets: NT$17,915,171",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=161422&spoke_date=20251124&co_id=2885",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2885",
+      "announcement_date": "2025/11/20",
+      "subject": "YFH announces on behalf of Yuanta Securities for the acquisition of Yuanta FHC 2nd Unsecured Corporate Bonds Issued in 2025",
+      "fund_name": "Name and nature of the underlying assets (if preferred shares, the terms\nand conditions of issuance shall also be indicated, e.g., dividend yield,\netc.):Yuanta FHC 2nd Unsecured Corporate Bonds Issued\nin 2025",
+      "fund_type": "",
+      "commitment_date": "2025/11/20",
+      "commitment_amount_raw": "Amount, unit price, and total monetary amount of the transaction:\nVolume:3,200units\nUnit price:NTD1,000,000\nTotal price:NTD3,200,000,000",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=2&spoke_time=160110&spoke_date=20251120&co_id=2885",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2885",
+      "announcement_date": "2025/11/12",
+      "subject": "YFH announces on behalf of YSF the submission to change Right Transfer Plan of the Urban Renewal of the self-owned real estate with related parties.",
+      "fund_name": "Name and nature of the underlying asset (e.g., land located at Sublot XX,\nLot XX, North District, Taichung City):\nThe Land located at Lot 764, 764-1, 1st Subsection, Changchun Section,\nZhongshan Dist., Taipei City as well as the building standing thereon.",
+      "fund_type": "",
+      "commitment_date": "2025/11/12",
+      "commitment_amount_raw": "Transaction unit amount (e.g.XX square meters, equivalent to XX ping),\nunit price, and total transaction price:\nThe value of the subject matter prior to the renewal: NT$ 171,459,158\n(value ratio equivalent to 2.04902%)\nThe estimated investment amount NT$ 100,755,507\nTotal transaction price: NT$ 272,214,665",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=164343&spoke_date=20251112&co_id=2885",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2885",
+      "announcement_date": "2025/11/11",
+      "subject": "YFH on behalf of Yuanta Securities announces the acquisition of the right-of-use asset from Yuanta Bank",
+      "fund_name": "Name and nature of the underlying asset (e.g., land located at Sublot XX,\nLot XX, North District, Taichung City):\n 6F(partial area), No.66, Section 1, Dunhua South Road, Taipei City, Taiwan",
+      "fund_type": "",
+      "commitment_date": "2025/11/11",
+      "commitment_amount_raw": "Transaction unit amount (e.g.XX square meters, equivalent to XX ping),\nunit price, and total transaction price:\nUnit area: approximately 123.27 ping\nUnit Price: NT$2,730 per ping per month (tax included)\nTotal amount of rents: NT$336,527 per month (tax included)\nTotal amount of right-of-use assets: NT$ 18,609,842",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=154616&spoke_date=20251111&co_id=2885",
+      "status": "NEW"
+    }
+  ]
+}

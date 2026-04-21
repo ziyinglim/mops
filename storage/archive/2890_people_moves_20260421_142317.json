@@ -1,0 +1,57 @@
+{
+  "stock_code": "2890",
+  "category": "people_moves",
+  "records": [
+    {
+      "stock_code": "2890",
+      "announcement_date": "2025/12/26",
+      "subject": "SinoPac Holdings announces the Board's approval of the appointment of a Chief Risk Officer for Bank SinoPac",
+      "role_type": "spokesperson, acting\n  spokesperson, important personnel (CEO, COO, CMO, CSO, etc.)\n,financial officer, accounting officer, corporate governance officer,\nchief information security officer, research and development officer,\nchief internal auditor, or designated and non-designated representatives):\nChief Risk Officer",
+      "change_date": "2025/12/26",
+      "previous_holder": "None",
+      "new_holder": "Benjamin TIEN/\nSenior Executive Vice President of Bank SinoPac\nDepartment of International Business, Tamkang University",
+      "change_type": "��resignation��, ��position\nadjustment��, ��retirement��, ��death��,��new\nreplacement�� or ��dismissal��):new replacement",
+      "reason": "new replacement",
+      "effective_date": "2026/01/01",
+      "narrative_en": "Bank SinoPac has appointed Benjamin TIEN/\nSenior Executive Vice President of Bank SinoPac\nDepartment of International Business, Tamkang University as its new spokesperson, acting\n  spokesperson, important personnel (CEO, COO, CMO, CSO, etc.)\n,financial officer, accounting officer, corporate governance officer,\nchief information security officer, research and development officer,\nchief internal auditor, or designated and non-designated representatives):\nChief Risk Officer, effective 1 January 2026.",
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=13&spoke_time=185408&spoke_date=20251226&co_id=2890",
+      "hash": "92676cb890487d161f47ec85359ec180b833a14332cfc01474cc2dcc1c2563a3",
+      "scraped_at": "2026-04-21T14:23:17.483228+00:00",
+      "status": "UNCHANGED"
+    },
+    {
+      "stock_code": "2890",
+      "announcement_date": "2025/05/29",
+      "subject": "Announced by SinoPac Holdings on behalf of AMRET PLC. for the Change of CFO",
+      "role_type": "spokesperson, acting\n  spokesperson, important personnel (CEO, COO, CMO, CSO, etc.)\n,financial officer, accounting officer, corporate governance officer,\nchief information security officer, research and development officer,\nchief internal auditor, or designated and non-designated representatives):CFO",
+      "change_date": "2025/05/29",
+      "previous_holder": "Winston Tan Kok Weng\nAMRET PLC. CFO",
+      "new_holder": "Chih-Po Yao\nVice President of Bank SinoPac\nMaster of International Finance, Curtin University, Australia",
+      "change_type": "��resignation��, ��position\nadjustment��, ��retirement��, ��death��,��new\nreplacement�� or ��dismissal��):position adjustment",
+      "reason": "position adjustment",
+      "effective_date": "2025/06/01",
+      "narrative_en": "Bank SinoPac 's spokesperson, acting\n  spokesperson, important personnel (CEO, COO, CMO, CSO, etc.)\n,financial officer, accounting officer, corporate governance officer,\nchief information security officer, research and development officer,\nchief internal auditor, or designated and non-designated representatives):CFO, Winston Tan Kok Weng\nAMRET PLC. CFO, has resigned, effective 1 June 2025.",
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=4&spoke_time=154853&spoke_date=20250529&co_id=2890",
+      "hash": "741e295e8c59f87bf9dfadcc5c97b92ddcac7ec8a63df7c1e1483d5af44b0116",
+      "scraped_at": "2026-04-21T14:23:17.483228+00:00",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2890",
+      "announcement_date": "2025/05/23",
+      "subject": "SinoPac Holdings announces the Board 's resolution on the change of COO of SinoPac Securities (Asia) Ltd.",
+      "role_type": "spokesperson, acting\n  spokesperson, important personnel (CEO, COO, CMO, CSO, etc.)\n,financial officer, accounting officer, corporate governance officer,\nchief information security officer, research and development officer,\nchief internal auditor, or designated and non-designated representatives):COO",
+      "change_date": "2025/05/23",
+      "previous_holder": "CHU Kuan-Hsun/\nManaging Director of SinoPac Securities (Asia) Ltd.",
+      "new_holder": "YU Chao-Yuan/\nExecutive Vice President of SinoPac Securities Corp.\nMBA for Business Administration, National Chung Hsing University",
+      "change_type": "��resignation��, ��position\nadjustment��, ��retirement��, ��death��,��new\nreplacement�� or ��dismissal��):position adjustment",
+      "reason": "position adjustment",
+      "effective_date": "",
+      "narrative_en": "Bank SinoPac 's spokesperson, acting\n  spokesperson, important personnel (CEO, COO, CMO, CSO, etc.)\n,financial officer, accounting officer, corporate governance officer,\nchief information security officer, research and development officer,\nchief internal auditor, or designated and non-designated representatives):COO, CHU Kuan-Hsun/\nManaging Director of SinoPac Securities (Asia) Ltd., has resigned.",
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=12&spoke_time=172115&spoke_date=20250523&co_id=2890",
+      "hash": "79a7716060580f1aa221994e267fcdd29858daa6871f041468d40d0f9c6d5af4",
+      "scraped_at": "2026-04-21T14:23:17.483228+00:00",
+      "status": "NEW"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "stock_code": "2882",
+  "category": "company_profile",
+  "scraped_at": "2026-04-19T18:49:33.507875+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "stock_code": "2882",
+      "company_name_zh": "CATHAY FINANCIAL HOLDING CO., LTD.",
+      "company_name_en": "",
+      "address": "Hong-tu TsaiChang-Ken LeeYEN-JU,CHEN27087698www.cathayholdings.com",
+      "telephone": "27087698",
+      "web_address": "www.cathayholdings.com",
+      "company_name_zh_en": "CATHAY FINANCIAL HOLDING CO., LTD.",
+      "address_en": "Hong-tu TsaiChang-Ken LeeYEN-JU,CHEN27087698www.cathayholdings.com"
+    }
+  ]
+}

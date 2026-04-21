@@ -1,0 +1,18 @@
+{
+  "stock_code": "5859",
+  "category": "company_profile",
+  "scraped_at": "2026-04-19T20:18:27.250093+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "stock_code": "5859",
+      "company_name_zh": "FARGLORY LIFE INSURANCE CO., LTD.",
+      "company_name_en": "",
+      "address": "FARGLORY LIFE INSURANCE CO., LTD.",
+      "telephone": "27583099",
+      "web_address": "www.fglife.com.tw",
+      "company_name_zh_en": "FARGLORY LIFE INSURANCE CO., LTD.",
+      "address_en": "FARGLORY LIFE INSURANCE CO., LTD."
+    }
+  ]
+}

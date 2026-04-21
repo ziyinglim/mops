@@ -1,0 +1,18 @@
+{
+  "stock_code": "2002",
+  "category": "profile",
+  "records": [
+    {
+      "stock_code": "2002",
+      "company_name_en": "China Steel Corporation",
+      "chairman": "Hwang, Chien-Chih",
+      "general_manager": "Chen, Shou-Tao",
+      "telephone": "07-8021111",
+      "web_address": "http://www.csc.com.tw",
+      "address": "No.1,Chung Kang RoadKaohsiung Taiwan",
+      "hash": "9c1e5c410ff70e72c45c87b73fd1605b8888fefc46486612e21d6f3773ad7f79",
+      "scraped_at": "2026-04-20T11:22:41.224060+00:00",
+      "status": "NEW"
+    }
+  ]
+}

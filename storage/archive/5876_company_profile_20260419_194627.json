@@ -1,0 +1,18 @@
+{
+  "stock_code": "5876",
+  "category": "company_profile",
+  "scraped_at": "2026-04-19T19:46:27.848950+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "stock_code": "5876",
+      "company_name_zh": "THE SHANGHAI COMMERCIAL & SAVINGS BANK, LTD.",
+      "company_name_en": "",
+      "address": "THE SHANGHAI COMMERCIAL & SAVINGS BANK, LTD.",
+      "telephone": "02-25817111",
+      "web_address": "www.scsb.com.tw",
+      "company_name_zh_en": "THE SHANGHAI COMMERCIAL & SAVINGS BANK, LTD.",
+      "address_en": "THE SHANGHAI COMMERCIAL & SAVINGS BANK, LTD."
+    }
+  ]
+}

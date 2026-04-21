@@ -1,0 +1,18 @@
+{
+  "stock_code": "2454",
+  "category": "profile",
+  "records": [
+    {
+      "stock_code": "2454",
+      "company_name_en": "MediaTek Inc.",
+      "chairman": "Ming-Kai Tsai",
+      "general_manager": "Joe Chen",
+      "telephone": "(03)5670766",
+      "web_address": "http://www.mediatek.com",
+      "address": "No.1, Dusing 1st Rd., Hsinchu Science Park,Hsinchu City 300, Taiwan",
+      "hash": "b2b1f7279c15f309cc1c579fe2256f756c4c94945b807723718457dfb4b0b382",
+      "scraped_at": "2026-04-20T11:22:26.037009+00:00",
+      "status": "NEW"
+    }
+  ]
+}

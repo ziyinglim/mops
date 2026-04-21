@@ -1,0 +1,18 @@
+{
+  "stock_code": "5873",
+  "category": "company_profile",
+  "scraped_at": "2026-04-19T20:18:18.851750+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "stock_code": "5873",
+      "company_name_zh": "TransGlobe Life Insurance Inc.",
+      "company_name_en": "",
+      "address": "TransGlobe Life Insurance Inc.",
+      "telephone": "0266399999",
+      "web_address": "http://www.transglobe.com.tw",
+      "company_name_zh_en": "TransGlobe Life Insurance Inc.",
+      "address_en": "TransGlobe Life Insurance Inc."
+    }
+  ]
+}

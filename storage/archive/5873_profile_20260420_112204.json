@@ -1,0 +1,18 @@
+{
+  "stock_code": "5873",
+  "category": "profile",
+  "records": [
+    {
+      "stock_code": "5873",
+      "company_name_en": "",
+      "chairman": "",
+      "general_manager": "",
+      "telephone": "",
+      "web_address": "",
+      "address": "",
+      "hash": "05071cd7432872e92c373e546cc8748105e275d647565d7c967f56e16d3ef872",
+      "scraped_at": "2026-04-20T11:22:04.379063+00:00",
+      "status": "NEW"
+    }
+  ]
+}

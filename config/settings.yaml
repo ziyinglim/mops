@@ -1,0 +1,43 @@
+urls:
+  emops_base: "https://emops.twse.com.tw/server-java/t58query"
+  emops_balance_sheet: "https://emops.twse.com.tw/server-java/t164sb03_e"
+  mopsov_search: "https://mopsov.twse.com.tw/mops/web/ezsearch"
+
+scraper:
+  headless: true
+  timeout_ms: 30000
+  retry_attempts: 3
+  retry_delay_s: 5
+  page_load_wait: "networkidle"
+
+categories:
+  fund_commitments:
+    enabled: false
+    category_code: "G00"
+    subcategory_code: "M20"
+    label: "Material Acquisition or Disposal of Assets"
+  people_moves:
+    enabled: false
+    category_code: "B00"
+    subcategory_codes: ["B02", "M08"]
+    label: "Change in Key Personnel"
+  company_profile:
+    enabled: true
+  balance_sheet:
+    enabled: true
+
+output:
+  excel_filename: "EMOPS_Monitor_{date}.xlsx"
+  archive_dir: "storage/archive"
+  state_dir: "storage/state"
+  sheets:
+    - Summary
+    - CompanyProfile
+    - BalanceSheet
+    - FundCommitments
+    - PeopleMoves
+    - JIRA_Upload
+
+schedule:
+  cron: "0 8 * * 1-5"   # 08:00 Mon-Fri Taipei time
+  timezone: "Asia/Taipei"

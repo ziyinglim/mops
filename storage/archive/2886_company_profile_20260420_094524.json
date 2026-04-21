@@ -1,0 +1,18 @@
+{
+  "stock_code": "2886",
+  "category": "company_profile",
+  "scraped_at": "2026-04-20T09:45:24.747998+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "stock_code": "2886",
+      "company_name_zh": "Mega Financial Holding Company Ltd.",
+      "company_name_en": "",
+      "address": "Mega Financial Holding Company Ltd.",
+      "telephone": "2357-8888",
+      "web_address": "www.megaholdings.com.tw",
+      "company_name_zh_en": "Mega Financial Holding Company Ltd.",
+      "address_en": "Mega Financial Holding Company Ltd."
+    }
+  ]
+}

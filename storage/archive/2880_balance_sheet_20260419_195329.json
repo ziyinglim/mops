@@ -1,0 +1,17 @@
+{
+  "stock_code": "2880",
+  "category": "balance_sheet",
+  "scraped_at": "2026-04-19T19:53:29.455790+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "stock_code": "2880",
+      "period": "Financial Statement �w Balance Sheet",
+      "currency": "TWD",
+      "total_assets_raw": "",
+      "total_assets_numeric": null,
+      "investment_property_raw": "13,889,856",
+      "investment_property_numeric": 13889856.0
+    }
+  ]
+}

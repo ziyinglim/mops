@@ -1,0 +1,38 @@
+fund_commitments:
+  include:
+    - fund
+    - acquisition
+    - Fund
+    - Acquisition
+    - LP
+    - buyout
+    - infrastructure
+    - private equity
+    - venture
+    - commitment
+
+people_moves:
+  include:
+    - Chief Executive Officer
+    - Chief Investment Officer
+    - Chief Financial Officer
+    - Chief Risk Officer
+    - Chief Operating Officer
+    - Chief Information Officer
+    - Chief Marketing Officer
+    - Chief Strategy Officer
+    - Chief Internal Auditor
+    - General Manager
+    - President
+    - CEO
+    - CIO
+    - CFO
+    - CRO
+    - COO
+    - CMO
+    - CSO
+    - 執行長
+    - 投資長
+    - 財務長
+    - 風控長
+    - 總經理

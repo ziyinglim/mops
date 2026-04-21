@@ -1,0 +1,18 @@
+{
+  "stock_code": "2002",
+  "category": "balance_sheet",
+  "records": [
+    {
+      "stock_code": "2002",
+      "period": "2025/12/31",
+      "currency": "TWD",
+      "total_assets_raw": "673,846,973",
+      "total_assets_numeric": 673846973.0,
+      "investment_property_raw": "9,787,924",
+      "investment_property_numeric": 9787924.0,
+      "hash": "989aec98b4895ea792f2ccbb7f4ed2c8f3965b2f5cc02aea2282b9cd57ec2a25",
+      "scraped_at": "2026-04-20T11:22:42.179168+00:00",
+      "status": "NEW"
+    }
+  ]
+}

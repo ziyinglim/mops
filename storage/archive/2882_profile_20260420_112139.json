@@ -1,0 +1,18 @@
+{
+  "stock_code": "2882",
+  "category": "profile",
+  "records": [
+    {
+      "stock_code": "2882",
+      "company_name_en": "CATHAY FINANCIAL HOLDING CO., LTD.",
+      "chairman": "Hong-tu Tsai",
+      "general_manager": "Chang-Ken Lee",
+      "telephone": "27087698",
+      "web_address": "www.cathayholdings.com",
+      "address": "296,Ren-Ai Road, Sec. 4Taipei,106 Taiwan",
+      "hash": "458746c5e4470c9e70f4be9c87cd45037ff71bf2b6cdc00cd3a35636281b0029",
+      "scraped_at": "2026-04-20T11:21:39.401013+00:00",
+      "status": "UNCHANGED"
+    }
+  ]
+}

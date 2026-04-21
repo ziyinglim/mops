@@ -1,0 +1,18 @@
+{
+  "stock_code": "2317",
+  "category": "company_profile",
+  "scraped_at": "2026-04-20T09:45:20.685086+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "stock_code": "2317",
+      "company_name_zh": "HON HAI PRECISION IND. CO., LTD.",
+      "company_name_en": "",
+      "address": "HON HAI PRECISION IND. CO., LTD.",
+      "telephone": "(02)2268-3466",
+      "web_address": "https://www.honhai.com/zh-tw",
+      "company_name_zh_en": "HON HAI PRECISION IND. CO., LTD.",
+      "address_en": "HON HAI PRECISION IND. CO., LTD."
+    }
+  ]
+}

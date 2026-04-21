@@ -1,0 +1,18 @@
+{
+  "stock_code": "2897",
+  "category": "company_profile",
+  "scraped_at": "2026-04-19T19:09:47.184425+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "stock_code": "2897",
+      "company_name_zh": "O-Bank Co., Ltd.",
+      "company_name_en": "",
+      "address": "Lo, Tina Y.Elton F.Y. LeeOphelia Chang(02)87527000www.o-bank.com",
+      "telephone": "(02)87527000",
+      "web_address": "www.o-bank.com",
+      "company_name_zh_en": "O-Bank Co., Ltd.",
+      "address_en": "Lo, Tina Y.Elton F.Y. LeeOphelia Chang(02)87527000www.o-bank.com"
+    }
+  ]
+}

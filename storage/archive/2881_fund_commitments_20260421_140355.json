@@ -1,0 +1,110 @@
+{
+  "stock_code": "2881",
+  "category": "fund_commitments",
+  "records": [
+    {
+      "stock_code": "2881",
+      "announcement_date": "2026/03/25",
+      "subject": "Announced by Fubon FHC on behalf of Fubon Securities Investment Services Co., Ltd. for obtaining the right-of-use asset of Fubon No.1 REITs",
+      "fund_name": "Name and nature of the underlying asset (e.g., land located at Sublot XX,\nLot XX, North District, Taichung City):Part of B2., No. 108, Sec. 1, Dunhua S.\nRd., Songshan Dist., Taipei City",
+      "fund_type": "",
+      "commitment_date": "2026/03/25",
+      "commitment_amount_raw": "Transaction unit amount (e.g.XX square meters, equivalent to XX ping),\nunit price, and total transaction price:\n(1)Transaction volume:39.14 square meters (equivalent to 11.84 ping)\n(2)Price per unit:Around NT$2,100 per ping per month (tax included)\n(3)Amount of rent:NT$24,864 per month (tax included)\n(4)The right-of-use assets:NT$844,128(tax included)",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=2&spoke_time=172610&spoke_date=20260325&co_id=2881",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2881",
+      "announcement_date": "2026/03/11",
+      "subject": "Announced by Fubon FHC on behalf of Fubon Securities Co.,Ltd. for obtaining the right-of-use asset of Ming Dong Co., Ltd.and Pao Chin Co., Ltd.",
+      "fund_name": "Name and nature of the underlying asset (e.g., land located at Sublot XX,\nLot XX, North District, Taichung City):\nB1F.,No.196, Sec.2,Jianguo N.Rd.,Taipei City",
+      "fund_type": "",
+      "commitment_date": "2026/03/11",
+      "commitment_amount_raw": "Transaction unit amount (e.g.XX square meters, equivalent to XX ping),\nunit price, and total transaction price:\n(1)B1F.,No.196, Sec.2,Jianguo N.Rd.,Taipei City\nTransaction volume:1,058.18 square meters(equivalent to 320.10 ping)\nPrice per unit: NT$2,260 per ping per month(tax included)\nTotal amount of rent :NT$723,450 per month(tax included)\n(2)Amount of right-of-use assets:NT$23,392,649(tax included)",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=7&spoke_time=173905&spoke_date=20260311&co_id=2881",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2881",
+      "announcement_date": "2026/03/10",
+      "subject": "Announced by Fubon FHC on behalf of Fubon Life Insurance for obtaining the right-of-use assets of \"Fubon No.1 Real Estate Investment Trust\"",
+      "fund_name": "Name and nature of the underlying asset (e.g., land located at Sublot XX,\nLot XX, North District, Taichung City):\n4F, No. 108, Sec. 1, Dunhua S. Rd., Songshan Dist., Taipei City\nParts of 6F and B2F, No. 108, Sec. 1, Dunhua S. Rd., Songshan Dist.,\nTaipei City",
+      "fund_type": "",
+      "commitment_date": "2026/03/10",
+      "commitment_amount_raw": "Transaction unit amount (e.g.XX square meters, equivalent to XX ping),\nunit price, and total transaction price:\nFollowing is the information of the right-of-use assets(tax included):\n(1)4F, No. 108, Sec. 1, Dunhua S. Rd., Songshan Dist., Taipei City\n384.66 ping,$2,910/ping,$1,119,300 per month\n(2)Part of 6F, No. 108, Sec. 1, Dunhua S. Rd., Songshan Dist., Taipei City\n167.93 ping,$2,910/ping,$488,650 per month\n(3)Part of B2F, No. 108, Sec. 1, Dunhua S. Rd., Songshan Dist., Taipei City\n126.98 ping,$2,100/ping,$266,658 per month\nTransaction volume�G2,246.52 square meters, equivalent to 679.57 ping\nTotal amount of rent : NT$1,874,608 per month (tax included)\nAmount of right-of-use assets: NT$65,452,465 (tax included)",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=8&spoke_time=175405&spoke_date=20260310&co_id=2881",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2881",
+      "announcement_date": "2026/03/10",
+      "subject": "Announced by Fubon FHC on behalf of Fubon Sports&Entertainment.for obtaining the right-of-use asset of”Fubon Insurance Co., Ltd.”",
+      "fund_name": "Name and nature of the underlying asset (e.g., land located at Sublot XX,\nLot XX, North District, Taichung City):\nNo.19,20 Ln. 39, Bashi 1st St., Tamsui Dist., New Taipei City\nand 10 ramp parking spaces on the first basement floor of No.20",
+      "fund_type": "",
+      "commitment_date": "2026/03/10",
+      "commitment_amount_raw": "Transaction unit amount (e.g.XX square meters, equivalent to XX ping),\nunit price, and total transaction price:\n(1)Transaction volume:6,036.37 square meters( equivalent to 1,826 ping)\nand 10 parking space\n(2)Price per unit:NT$750 per ping per month (tax included)�BNT$3,300 per\nspace per month (tax included)\n(3)Total amount of rent:NTD1,402,500 per month(tax included)\n(4)Amount of the right-of-use asset:NTD 47,396,380(tax included)",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=10&spoke_time=170842&spoke_date=20260310&co_id=2881",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2881",
+      "announcement_date": "2026/03/10",
+      "subject": "Announced by Fubon FHC on behalf of Fubon Sports & Entertainment for obtaining the right-of-use asset of”Fubon No.1 Real Estate Investment Trust”",
+      "fund_name": "Name and nature of the underlying asset (e.g., land located at Sublot XX,\nLot XX, North District, Taichung City):\nPart of 6F&B2F., No.108, Sec.1, Dunhua S. Rd.,Songshan Dist., Taipei City",
+      "fund_type": "",
+      "commitment_date": "2026/03/10",
+      "commitment_amount_raw": "Transaction unit amount (e.g.XX square meters, equivalent to XX ping),\nunit price, and total transaction price:\nPart of 6F., No. 108, Sec. 1, Dunhua S. Rd., Songshan Dist., Taipei City\n(1)Transaction volume:76.52 ping\n(2)Price per unit:NT$2,771 per ping per month (tax excluded)\n(3)Total amount of rent:\nNT$212,058 per month (tax excluded)/NT$2,544,696 per year (tax excluded)\n(4)Amount of the right-of-use assets:NT$7,199,241 (tax excluded)\nPart of B2F., No. 108, Sec. 1, Dunhua S. Rd., Songshan Dist., Taipei City\n(1)Transaction volume:5.37 ping\n(2)Price per unit:NT$2,000 per ping per month (tax excluded)\n(3)Total amount of rent :\nNT$10,740 per month (tax excluded)/NT$128,880 per year (tax excluded)\n(4)Amount of the right-of-use assets:NT$364,617 (tax excluded)",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=7&spoke_time=170717&spoke_date=20260310&co_id=2881",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2881",
+      "announcement_date": "2026/01/27",
+      "subject": "Announced by Fubon FHC on behalf of Fubon Securities Co.,Ltd. for obtaining the right-of-use asset of Taipei Fubon Commercial Bank Co., Ltd",
+      "fund_name": "Name and nature of the underlying asset (e.g., land located at Sublot XX,\nLot XX, North District, Taichung City):\nPart of 12F.,No.263,Siwei 3rd Rd.,Lingya Dist.,Kaohsiung City and\nNo.358,Zhongshan 2th Rd.,Lingya Dist.,Kaohsiung City",
+      "fund_type": "",
+      "commitment_date": "2026/01/27",
+      "commitment_amount_raw": "Transaction unit amount (e.g.XX square meters, equivalent to XX ping),\nunit price, and total transaction price:\n(1)No.358,Zhongshan 2th Rd.,Lingya Dist.,Kaohsiung City\nTransaction volume :163.57square meters(equivalent to 49.48 ping)\nPrice per unit: per ping per mouth\n2026/02/01 to 2029/01/31 :NT$446(tax included)\n2029/02/01 to 2031/01/31 :NT$460(tax included)\nTotal amount of rent :per month\n2026/02/01 to 2029/01/31 :NT$22,080(tax included)\n2029/02/01 to 2031/01/31 :NT$22,743(tax included)\n(2)Part of 12F.,No.263,Siwei 3rd Rd.,Lingya Dist.,Kaohsiung City\nTransaction volume :264.33 square meters(equivalent to 79.96 ping)\nPrice per unit: per ping per mouth\n2026/02/01 to 2029/01/31 :NT$551(tax included)\n2029/02/01 to 2031/01/31 :NT$568(tax included)\nTotal amount of rent :per month\n2026/02/01 to 2029/01/31 :NT$44,078(tax included)\n2029/02/01 to 2031/01/31 :NT$45,400(tax included)\n(3)Amount of right-of-use assets:NT$3,618,736(tax included)",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=173915&spoke_date=20260127&co_id=2881",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2881",
+      "announcement_date": "2026/01/22",
+      "subject": "FFHC on behalf of Fubon Insurance announced to obtain the right-of-use asset of Fubon No.2 Real Estate Investment Trust(Update)",
+      "fund_name": "Name and nature of the underlying asset (e.g., land located at Sublot XX,\nLot XX, North District, Taichung City):\nPart of 1F, 2F, 3F., No. 62, Ruihu St., Neihu Dist., Taipei City",
+      "fund_type": "",
+      "commitment_date": "2026/01/22",
+      "commitment_amount_raw": "Transaction unit amount (e.g.XX square meters, equivalent to XX ping),\nunit price, and total transaction price:\n(1)Transaction volume:1,540.36 square meters (equivalent to 465.96 ping)\n(Update)\n(2)Price per unit:Around NT$1,427 per ping per month (tax included)\n(3)Total amount of rent:NT$665,050 per month (tax included)(Update)\n(4)The right-of-use asset:NT$9,391,325 (tax included)(Update)",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=164444&spoke_date=20260122&co_id=2881",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2881",
+      "announcement_date": "2026/01/12",
+      "subject": "Fubon FHC announced to obtain right-of-use asset of”Fubon No.2 Real Estate Investment Trust”",
+      "fund_name": "Name and nature of the underlying asset (e.g., land located at Sublot XX,\nLot XX, North District, Taichung City):Part of 2F., No. 62, Ruihu St.,\nNeihu Dist., Taipei City",
+      "fund_type": "",
+      "commitment_date": "2026/01/12",
+      "commitment_amount_raw": "Transaction unit amount (e.g.XX square meters, equivalent to XX ping),\nunit price, and total transaction price:\n(1)Transaction volume:28 square meters (equivalent to 8.47 ping)\n(2)Price per unit:Around NT$1,384 per ping per month (tax included)\n(3)Amount of rent:NT$11,722 per month (tax included)\n(4)The right-of-use assets:NT$217,945 (tax included)",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=3&spoke_time=165234&spoke_date=20260112&co_id=2881",
+      "status": "NEW"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "stock_code": "2886",
+  "category": "fund_commitments",
+  "records": [
+    {
+      "stock_code": "2886",
+      "announcement_date": "2025/03/14",
+      "subject": "Announced by Mega FHC, on behalf of Mega International Commercial Bank's board of directors to approve the equity investment of Taipei Financial Center.",
+      "fund_name": "Name and nature of the underlying assets (if preferred shares, the terms\nand conditions of issuance shall also be indicated, e.g., dividend yield,\netc.): Taipei Financial Center's common equity",
+      "fund_type": "",
+      "commitment_date": "2025/03/14",
+      "commitment_amount_raw": "Where the trading counterparty is a related party, announcement shall also\nbe made of the reason for choosing the related party as trading counterparty\nand the identity of the previous owner, its relationship with the Company\nand the trading counterparty, and the previous date and monetary amount of\ntransfer: NA",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=3&spoke_time=172353&spoke_date=20250314&co_id=2886",
+      "status": "HISTORICAL"
+    },
+    {
+      "stock_code": "2886",
+      "announcement_date": "2025/03/03",
+      "subject": "Announced by Mega Financial Holdings Co., Ltd. on behalf of Mega International Commercial Bank Co., Ltd. the assignment of performing credit assets.",
+      "fund_name": "Name and nature of the underlying assets (if preferred shares, the terms\nand conditions of issuance shall also be indicated, e.g., dividend yield,\netc.):Transfer of the syndicated loan assets.",
+      "fund_type": "",
+      "commitment_date": "2025/03/03",
+      "commitment_amount_raw": "Where the trading counterparty is a related party, announcement shall also\nbe made of the reason for choosing the related party as trading counterparty\nand the identity of the previous owner, its relationship with the Company\nand the trading counterparty, and the previous date and monetary amount of\ntransfer:NA",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=163700&spoke_date=20250303&co_id=2886",
+      "status": "HISTORICAL"
+    },
+    {
+      "stock_code": "2886",
+      "announcement_date": "2025/02/24",
+      "subject": "Mega Financial Holdings announced,on behalf of Mega International Commercial Bank Co., Ltd., the sale of non-performing syndicated loan.",
+      "fund_name": "Name and nature of the underlying assets (if preferred shares, the terms\nand conditions of issuance shall also be indicated, e.g., dividend yield,\netc.):Non-performing syndicated loan.",
+      "fund_type": "",
+      "commitment_date": "2025/02/24",
+      "commitment_amount_raw": "Where the trading counterparty is a related party, announcement shall also\nbe made of the reason for choosing the related party as trading counterparty\nand the identity of the previous owner, its relationship with the Company\nand the trading counterparty, and the previous date and monetary amount of\ntransfer:NA",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=6&spoke_time=163124&spoke_date=20250224&co_id=2886",
+      "status": "HISTORICAL"
+    }
+  ]
+}

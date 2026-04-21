@@ -1,0 +1,18 @@
+{
+  "stock_code": "3711",
+  "category": "company_profile",
+  "scraped_at": "2026-04-19T19:09:38.645863+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "stock_code": "3711",
+      "company_name_zh": "ASE Technology Holding Co., Ltd.",
+      "company_name_en": "",
+      "address": "Jason ChangRichard ChangTien Wu07-3617131www.aseglobal.com",
+      "telephone": "07-3617131",
+      "web_address": "www.aseglobal.com",
+      "company_name_zh_en": "ASE Technology Holding Co., Ltd.",
+      "address_en": "Jason ChangRichard ChangTien Wu07-3617131www.aseglobal.com"
+    }
+  ]
+}

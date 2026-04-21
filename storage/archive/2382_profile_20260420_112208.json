@@ -1,0 +1,18 @@
+{
+  "stock_code": "2382",
+  "category": "profile",
+  "records": [
+    {
+      "stock_code": "2382",
+      "company_name_en": "QUANTA COMPUTER INC.",
+      "chairman": "Barry Lam",
+      "general_manager": "C. C. Leung",
+      "telephone": "03-3272345",
+      "web_address": "www.quantatw.com",
+      "address": "No.211, Wenhua 2nd Rd., Guishan Dist.,Taoyuan City 33377, Taiwan",
+      "hash": "de6cd37cf8c09640c69483406c0fdfc81b6c264436826518f5d105a06a1ae0f4",
+      "scraped_at": "2026-04-20T11:22:08.344153+00:00",
+      "status": "NEW"
+    }
+  ]
+}

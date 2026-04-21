@@ -1,0 +1,18 @@
+{
+  "stock_code": "2890",
+  "category": "balance_sheet",
+  "records": [
+    {
+      "stock_code": "2890",
+      "period": "",
+      "currency": "TWD",
+      "total_assets_raw": "",
+      "total_assets_numeric": null,
+      "investment_property_raw": "",
+      "investment_property_numeric": null,
+      "hash": "c6a605fe13fb23cdc5132677a4298351bca8677d568bc579a605d91b26a179f1",
+      "scraped_at": "2026-04-20T11:21:57.119892+00:00",
+      "status": "NEW"
+    }
+  ]
+}

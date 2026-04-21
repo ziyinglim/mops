@@ -1,0 +1,18 @@
+{
+  "stock_code": "2833",
+  "category": "company_profile",
+  "scraped_at": "2026-04-19T19:09:03.144923+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "stock_code": "2833",
+      "company_name_zh": "Taiwan Life Insurance Co., Ltd.",
+      "company_name_en": "",
+      "address": "Hsu,Shu-PoChuang, Chung-ChingYeh, Pai-Hung(02)8170-9888http://www.taiwanlife.com",
+      "telephone": "(02)8170-9888",
+      "web_address": "http://www.taiwanlife.com",
+      "company_name_zh_en": "Taiwan Life Insurance Co., Ltd.",
+      "address_en": "Hsu,Shu-PoChuang, Chung-ChingYeh, Pai-Hung(02)8170-9888http://www.taiwanlife.com"
+    }
+  ]
+}

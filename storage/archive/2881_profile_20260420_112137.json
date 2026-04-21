@@ -1,0 +1,18 @@
+{
+  "stock_code": "2881",
+  "category": "profile",
+  "records": [
+    {
+      "stock_code": "2881",
+      "company_name_en": "Fubon Financial Holding Co., Ltd.",
+      "chairman": "Richard M. Tsai",
+      "general_manager": "Jerry Harn",
+      "telephone": "6636-6636",
+      "web_address": "www.fubon.com",
+      "address": "15~16F., No. 179, Liaoning St., Zhongshan Dist., Taipei City104 , Taiwan",
+      "hash": "eead52fe6c8d5da55a5a5f488cd6f17dbbd9a63b4bc8fcdf2092ab6a659619eb",
+      "scraped_at": "2026-04-20T11:21:37.898454+00:00",
+      "status": "UNCHANGED"
+    }
+  ]
+}

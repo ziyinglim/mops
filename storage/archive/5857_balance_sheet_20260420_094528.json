@@ -1,0 +1,17 @@
+{
+  "stock_code": "5857",
+  "category": "balance_sheet",
+  "scraped_at": "2026-04-20T09:45:28.971314+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "stock_code": "5857",
+      "period": "Financial Statement �w Balance Sheet",
+      "currency": "TWD",
+      "total_assets_raw": "3,782,443,821",
+      "total_assets_numeric": 3782443821.0,
+      "investment_property_raw": "23,325,020",
+      "investment_property_numeric": 23325020.0
+    }
+  ]
+}

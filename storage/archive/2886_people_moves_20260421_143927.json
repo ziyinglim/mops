@@ -1,0 +1,40 @@
+{
+  "stock_code": "2886",
+  "category": "people_moves",
+  "records": [
+    {
+      "stock_code": "2886",
+      "announcement_date": "2025/04/11",
+      "subject": "Announced By Mega Holdings, on behalf of Mega Bank, the change of the COO of the Regional Bussiness Center (Taoyuan-Hsinchu-Miaoli)",
+      "role_type": "spokesperson, acting\n  spokesperson, important personnel (CEO, COO, CMO, CSO, etc.)\n,financial officer, accounting officer, corporate governance officer,\nchief information security officer, research and development officer,\nchief internal auditor, or designated and non-designated representatives):COO",
+      "change_date": "2025/04/11",
+      "previous_holder": "Chien-Chih Kuo,\nSenior Vice President & General Manager of the Regional Bussiness\nCenter(Taoyuan-Hsinchu-Miaoli)",
+      "new_holder": "Mao-Jung Chu,\nSenior Vice President & General Manager of Hsinchu Science Park\nChu-tsuen Branch",
+      "change_type": "��resignation��, ��position\nadjustment��, ��retirement��, ��death��,��new\nreplacement�� or ��dismissal��):retirement",
+      "reason": "retirement",
+      "effective_date": "",
+      "narrative_en": "The TWD 5bn Mega International Commercial Bank 's spokesperson, acting\n  spokesperson, important personnel (CEO, COO, CMO, CSO, etc.)\n,financial officer, accounting officer, corporate governance officer,\nchief information security officer, research and development officer,\nchief internal auditor, or designated and non-designated representatives):COO, Chien-Chih Kuo,\nSenior Vice President & General Manager of the Regional Bussiness\nCenter(Taoyuan-Hsinchu-Miaoli), has resigned.",
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=2&spoke_time=180812&spoke_date=20250411&co_id=2886",
+      "hash": "e99e7570b74d4e9abc073c1360bbe3b7e3e46dec0d6bb33755f99de4e1a5710f",
+      "scraped_at": "2026-04-21T14:39:27.749570+00:00",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2886",
+      "announcement_date": "2025/04/11",
+      "subject": "Announced By Mega Holdings, on behalf of Mega Bank, the change of the COO of the Regional Bussiness Center (Taoyuan-Hsinchu-Miaoli)",
+      "role_type": "spokesperson, acting\n  spokesperson, important personnel (CEO, COO, CMO, CSO, etc.)\n,financial officer, accounting officer, corporate governance officer,\nchief information security officer, research and development officer,\nchief internal auditor, or designated and non-designated representatives):COO",
+      "change_date": "2025/04/11",
+      "previous_holder": "Chien-Chih Kuo,\nSenior Vice President & General Manager of the Regional Bussiness\nCenter(Taoyuan-Hsinchu-Miaoli)",
+      "new_holder": "Mao-Jung Chu,\nSenior Vice President & General Manager of Hsinchu Science Park\nChu-tsuen Branch",
+      "change_type": "��resignation��, ��position\nadjustment��, ��retirement��, ��death��,��new\nreplacement�� or ��dismissal��):retirement",
+      "reason": "retirement",
+      "effective_date": "",
+      "narrative_en": "The TWD 5bn Mega International Commercial Bank 's spokesperson, acting\n  spokesperson, important personnel (CEO, COO, CMO, CSO, etc.)\n,financial officer, accounting officer, corporate governance officer,\nchief information security officer, research and development officer,\nchief internal auditor, or designated and non-designated representatives):COO, Chien-Chih Kuo,\nSenior Vice President & General Manager of the Regional Bussiness\nCenter(Taoyuan-Hsinchu-Miaoli), has resigned.",
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=2&spoke_time=180812&spoke_date=20250411&co_id=2886",
+      "hash": "e99e7570b74d4e9abc073c1360bbe3b7e3e46dec0d6bb33755f99de4e1a5710f",
+      "scraped_at": "2026-04-21T14:39:27.749570+00:00",
+      "status": "NEW"
+    }
+  ]
+}

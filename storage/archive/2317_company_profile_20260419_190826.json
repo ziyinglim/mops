@@ -1,0 +1,18 @@
+{
+  "stock_code": "2317",
+  "category": "company_profile",
+  "scraped_at": "2026-04-19T19:08:26.214983+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "stock_code": "2317",
+      "company_name_zh": "HON HAI PRECISION IND. CO., LTD.",
+      "company_name_en": "",
+      "address": "Liu, Young-WayLiu, Young-WayJames Wu(02)2268-3466https://www.honhai.com/zh-tw",
+      "telephone": "(02)2268-3466",
+      "web_address": "https://www.honhai.com/zh-tw",
+      "company_name_zh_en": "HON HAI PRECISION IND. CO., LTD.",
+      "address_en": "Liu, Young-WayLiu, Young-WayJames Wu(02)2268-3466https://www.honhai.com/zh-tw"
+    }
+  ]
+}

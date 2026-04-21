@@ -1,0 +1,18 @@
+{
+  "stock_code": "5859",
+  "category": "profile",
+  "records": [
+    {
+      "stock_code": "5859",
+      "company_name_en": "FARGLORY LIFE INSURANCE CO., LTD.",
+      "chairman": "Meng Chia Ren",
+      "general_manager": "Chao Hsueh Hsin",
+      "telephone": "27583099",
+      "web_address": "www.fglife.com.tw",
+      "address": "28F., No.1, Songgao RdTaipei, Taiwan",
+      "hash": "715f342fe234cd0a7b93834c97320d0c7a3a8abac45139821220faec23940531",
+      "scraped_at": "2026-04-20T11:22:23.528697+00:00",
+      "status": "NEW"
+    }
+  ]
+}

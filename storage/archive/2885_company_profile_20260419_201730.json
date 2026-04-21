@@ -1,0 +1,18 @@
+{
+  "stock_code": "2885",
+  "category": "company_profile",
+  "scraped_at": "2026-04-19T20:17:30.957156+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "stock_code": "2885",
+      "company_name_zh": "Yuanta Financial Holding Co., Ltd",
+      "company_name_en": "",
+      "address": "Yuanta Financial Holding Co., Ltd",
+      "telephone": "02-27811999",
+      "web_address": "http://www.yuanta.com",
+      "company_name_zh_en": "Yuanta Financial Holding Co., Ltd",
+      "address_en": "Yuanta Financial Holding Co., Ltd"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "stock_code": "5876",
+  "category": "profile",
+  "records": [
+    {
+      "stock_code": "5876",
+      "company_name_en": "THE SHANGHAI COMMERCIAL & SAVINGS BANK, LTD.",
+      "chairman": "Stephen, Ching-Yen Lee",
+      "general_manager": "Ching-Yi Kuo",
+      "telephone": "02-25817111",
+      "web_address": "www.scsb.com.tw",
+      "address": "No. 2, Sec. 1, Minquan E. Rd.,TAIPEI, TAIWAN, R.O.C",
+      "hash": "8b97349922a9aaa34532174bbcf91a2f84bdb76e9ca9670653c028efcff87c18",
+      "scraped_at": "2026-04-20T11:22:00.723865+00:00",
+      "status": "NEW"
+    }
+  ]
+}

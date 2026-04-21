@@ -1,0 +1,18 @@
+{
+  "stock_code": "2897",
+  "category": "company_profile",
+  "scraped_at": "2026-04-19T19:46:51.478120+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "stock_code": "2897",
+      "company_name_zh": "O-Bank Co., Ltd.",
+      "company_name_en": "",
+      "address": "O-Bank Co., Ltd.",
+      "telephone": "(02)87527000",
+      "web_address": "www.o-bank.com",
+      "company_name_zh_en": "O-Bank Co., Ltd.",
+      "address_en": "O-Bank Co., Ltd."
+    }
+  ]
+}

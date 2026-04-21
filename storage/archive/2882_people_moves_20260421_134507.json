@@ -1,0 +1,23 @@
+{
+  "stock_code": "2882",
+  "category": "people_moves",
+  "records": [
+    {
+      "stock_code": "2882",
+      "announcement_date": "2024/08/30",
+      "subject": "Announced by CFH, on behalf of Cathay Lujiazui Life Insurance Co., Ltd., the change of Chief Risk Officer",
+      "role_type": "spokesperson, acting\n  spokesperson, important personnel (CEO, COO, CMO, CSO, etc.)\n,financial officer, accounting officer, corporate governance officer,\nchief information security officer, research and development officer,\nchief internal auditor, or designated and non-designated representatives):\nimportant personnel(Chief Risk Officer)",
+      "change_date": "2024/08/30",
+      "previous_holder": "ZHOU HAO-BO,\nChief Actuary of Cathay Lujiazui Life Insurance Co., Ltd.",
+      "new_holder": "ZHENG ZHOU,\nBoard Secretary and Interim Chief Compliance Officer\nof Cathay Lujiazui Life Insurance Co., Ltd.",
+      "change_type": "��resignation��, ��position\nadjustment��, ��retirement��, ��death��,��new\nreplacement�� or ��dismissal��):position adjustment",
+      "reason": "position adjustment",
+      "effective_date": "2024/08/30",
+      "narrative_en": "The TWD 14bn Cathay Life Insurance 's spokesperson, acting\n  spokesperson, important personnel (CEO, COO, CMO, CSO, etc.)\n,financial officer, accounting officer, corporate governance officer,\nchief information security officer, research and development officer,\nchief internal auditor, or designated and non-designated representatives):\nimportant personnel(Chief Risk Officer), ZHOU HAO-BO,\nChief Actuary of Cathay Lujiazui Life Insurance Co., Ltd., has resigned, effective 30 August 2024.",
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=182248&spoke_date=20240830&co_id=2882",
+      "hash": "8af93e4fa95d02bafe4297e25b64ea6aef8398e2c4a371ea475f08086ee1f697",
+      "scraped_at": "2026-04-21T13:45:07.549796+00:00",
+      "status": "NEW"
+    }
+  ]
+}

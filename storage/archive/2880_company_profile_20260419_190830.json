@@ -1,0 +1,18 @@
+{
+  "stock_code": "2880",
+  "category": "company_profile",
+  "scraped_at": "2026-04-19T19:08:30.318548+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "stock_code": "2880",
+      "company_name_zh": "HUA NAN FINANCIAL HOLDINGS CO., LTD.",
+      "company_name_en": "",
+      "address": "Fen-Len ChenYu-Mei HsiaoPo-Hsun Chen23713111www.hnfhc.com.tw",
+      "telephone": "23713111",
+      "web_address": "www.hnfhc.com.tw",
+      "company_name_zh_en": "HUA NAN FINANCIAL HOLDINGS CO., LTD.",
+      "address_en": "Fen-Len ChenYu-Mei HsiaoPo-Hsun Chen23713111www.hnfhc.com.tw"
+    }
+  ]
+}

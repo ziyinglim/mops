@@ -1,0 +1,18 @@
+{
+  "stock_code": "2886",
+  "category": "balance_sheet",
+  "records": [
+    {
+      "stock_code": "2886",
+      "period": "2025/12/31",
+      "currency": "TWD",
+      "total_assets_raw": "5,111,255,144",
+      "total_assets_numeric": 5111255144.0,
+      "investment_property_raw": "1,686,729",
+      "investment_property_numeric": 1686729.0,
+      "hash": "d7a3ca3ac4ff0768e9f8d65b8bd0cdfce0c704bbd2993fe8059a4c685439b1b6",
+      "scraped_at": "2026-04-20T11:21:50.874622+00:00",
+      "status": "NEW"
+    }
+  ]
+}

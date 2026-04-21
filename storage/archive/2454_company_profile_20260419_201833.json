@@ -1,0 +1,18 @@
+{
+  "stock_code": "2454",
+  "category": "company_profile",
+  "scraped_at": "2026-04-19T20:18:33.254376+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "stock_code": "2454",
+      "company_name_zh": "MediaTek Inc.",
+      "company_name_en": "",
+      "address": "MediaTek Inc.",
+      "telephone": "(03)5670766",
+      "web_address": "http://www.mediatek.com",
+      "company_name_zh_en": "MediaTek Inc.",
+      "address_en": "MediaTek Inc."
+    }
+  ]
+}

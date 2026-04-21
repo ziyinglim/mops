@@ -1,0 +1,18 @@
+{
+  "stock_code": "2880",
+  "category": "profile",
+  "records": [
+    {
+      "stock_code": "2880",
+      "company_name_en": "HUA NAN FINANCIAL HOLDINGS CO., LTD.",
+      "chairman": "Fen-Len Chen",
+      "general_manager": "Yu-Mei Hsiao",
+      "telephone": "23713111",
+      "web_address": "www.hnfhc.com.tw",
+      "address": "No. 123, Songren Rd. Xinyi Dist, Taipei City 110, Taiwan",
+      "hash": "3e2139bd4b94a2591a1cbcb4c08b16944b329add7954ea75742e99a42d2d0f88",
+      "scraped_at": "2026-04-20T11:21:51.617780+00:00",
+      "status": "NEW"
+    }
+  ]
+}

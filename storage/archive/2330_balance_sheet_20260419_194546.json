@@ -1,0 +1,17 @@
+{
+  "stock_code": "2330",
+  "category": "balance_sheet",
+  "scraped_at": "2026-04-19T19:45:46.367089+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "stock_code": "2330",
+      "period": "Financial Statement �w Balance Sheet",
+      "currency": "TWD",
+      "total_assets_raw": "",
+      "total_assets_numeric": null,
+      "investment_property_raw": "",
+      "investment_property_numeric": null
+    }
+  ]
+}
