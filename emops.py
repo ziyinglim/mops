@@ -285,44 +285,28 @@ def write_excel(profiles: list[dict], balance_sheets: list[dict]) -> Path:
     wb = openpyxl.Workbook()
     wb.remove(wb.active)
 
-    # Summary sheet
-    ws = wb.create_sheet("Summary")
-    _header(ws, ["Run Date", "Companies", "Profiles OK", "Balance Sheets OK"])
-    ws.append([
-        datetime.now().strftime("%Y-%m-%d %H:%M"),
-        len(WATCHLIST),
-        sum(1 for p in profiles if not p.get("error")),
-        sum(1 for b in balance_sheets if not b.get("error")),
-    ])
-    _autofit(ws)
+    bs_map = {b["stock_code"]: b for b in balance_sheets}
 
-    # Company Profile sheet
-    ws = wb.create_sheet("CompanyProfile")
-    _header(ws, ["Stock Code", "Company Name (EN)", "Chairman", "General Manager",
-                 "Telephone", "Web Address", "Address", "Status", "Scraped At"])
-    for i, r in enumerate(profiles, 2):
-        ws.append([r.get("stock_code"), r.get("company_name_en"), r.get("chairman"),
-                   r.get("general_manager"), r.get("telephone"), r.get("web_address"),
-                   r.get("address"), r.get("status"), r.get("scraped_at")])
-        _status_fill(ws, i, r.get("status"))
-    _autofit(ws)
-
-    # Balance Sheet sheet
-    ws = wb.create_sheet("BalanceSheet")
-    _header(ws, ["Stock Code", "Period", "Currency",
-                 "Total Assets (Raw)", "Total Assets (Numeric)",
-                 "Investment Property (Raw)", "Investment Property (Numeric)",
-                 "AUM (bn)", "Status", "Scraped At"])
-    for i, r in enumerate(balance_sheets, 2):
-        aum = f"=IF(E{i}<>\"\",E{i}/1000000000,\"\")"
-        ws.append([r.get("stock_code"), r.get("period"), r.get("currency"),
-                   r.get("total_assets_raw"), r.get("total_assets_numeric"),
-                   r.get("investment_property_raw"), r.get("investment_property_numeric"),
-                   aum, r.get("status"), r.get("scraped_at")])
-        _status_fill(ws, i, r.get("status"))
-    for row in ws.iter_rows(min_row=2, min_col=5, max_col=7):
-        for cell in row:
-            cell.number_format = "#,##0"
+    ws = wb.create_sheet("EMOPS")
+    _header(ws, ["Stock Code", "Company Name (EN)", "Address", "Telephone", "Website",
+                 "Period", "Currency", "Total Assets", "Investment Property", "Status", "Scraped At"])
+    for i, p in enumerate(profiles, 2):
+        code = p.get("stock_code")
+        b = bs_map.get(code, {})
+        ws.append([
+            code,
+            p.get("company_name_en"),
+            p.get("address"),
+            p.get("telephone"),
+            p.get("web_address"),
+            b.get("period"),
+            b.get("currency"),
+            b.get("total_assets_raw"),
+            b.get("investment_property_raw"),
+            p.get("status"),
+            p.get("scraped_at"),
+        ])
+        _status_fill(ws, i, p.get("status"))
     _autofit(ws)
 
     wb.save(path)

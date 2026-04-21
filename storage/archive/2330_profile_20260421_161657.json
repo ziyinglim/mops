@@ -1,0 +1,18 @@
+{
+  "stock_code": "2330",
+  "category": "profile",
+  "records": [
+    {
+      "stock_code": "2330",
+      "company_name_en": "Taiwan Semiconductor Manufacturing Co., Ltd.",
+      "chairman": "C.C. Wei",
+      "general_manager": "Chief Executive Officer: C.C. Wei",
+      "telephone": "03-5636688",
+      "web_address": "https://www.tsmc.com",
+      "address": "No. 8, Li-Hsin Rd. 6, Hsinchu Science Park,Hsin-Chu 300096, Taiwan",
+      "hash": "88209521aedc3e32e72799c120a1ad8e7a8e1b6c0a8537deafc0f9af300f4b1d",
+      "scraped_at": "2026-04-21T16:16:57.083757+00:00",
+      "status": "UNCHANGED"
+    }
+  ]
+}

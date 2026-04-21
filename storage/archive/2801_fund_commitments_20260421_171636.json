@@ -1,0 +1,19 @@
+{
+  "stock_code": "2801",
+  "category": "fund_commitments",
+  "records": [
+    {
+      "stock_code": "2801",
+      "announcement_date": "2025/10/28",
+      "subject": "Announcement on behalf of subsidiary Chang Hwa Bank Venture Capital Co., Ltd. for the acquisition of the right-of-use assets from a related party.",
+      "fund_name": "Name and nature of the underlying asset (e.g., land located at Sublot XX,\nLot XX, North District, Taichung City):Part of the office space located in\n10th floor and 1 basement parking spaces at No. 57, Section 2, Zhongshan\nNorth Road, Zhongshan District, Taipei City.",
+      "fund_type": "",
+      "commitment_date": "2025/10/28",
+      "commitment_amount_raw": "Transaction unit amount (e.g.XX square meters, equivalent to XX ping),\nunit price, and total transaction price:\nThe lease agreement is 67.19 ping office space and 1 basement parking spaces.\nThe rent of the office is NT$2,843 per ping per month, amounting to\nNT$191,000 (tax included), and the monthly rent of each parking space is\nNT$11,500 (tax included). Thus, the monthly rent is NT$202,500 in total, and\nthe value of the right-of-use assets is NT$9,815,596.",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=184558&spoke_date=20251028&co_id=2801",
+      "status": "NEW"
+    }
+  ]
+}

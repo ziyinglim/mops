@@ -1,0 +1,110 @@
+{
+  "stock_code": "2891",
+  "category": "fund_commitments",
+  "records": [
+    {
+      "stock_code": "2891",
+      "announcement_date": "2026/01/28",
+      "subject": "Announcement for CTBC Bank Co., Ltd. joining urban renewal with its 3 land lots - No.296, Subsec 3, Zhengyi Sec, etc., Zhongshan Dist., Taipei City",
+      "fund_name": "Type of contract:Urban Renewal Project Plan Consent Form",
+      "fund_type": "",
+      "commitment_date": "2026/01/28",
+      "commitment_amount_raw": "Counterparty to the contract and relationship with the Company:\nSheng De Fu Construction Development Co.,Ltd.\nNon-related party of the Company.",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=5&spoke_time=164649&spoke_date=20260128&co_id=2891",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2891",
+      "announcement_date": "2025/12/31",
+      "subject": "Announcement on behalf of CTBC Lohas Co., Ltd. of the acquisition of the right-to-use assets from a related party",
+      "fund_name": "Name and nature of the underlying asset (e.g., land located at Sublot XX,\nLot XX, North District, Taichung City):\n8F, NO.188, JINGMAO 2ND ROAD, NANGANG DIST., TAIPEI 11568, TAIWAN",
+      "fund_type": "",
+      "commitment_date": "2025/12/31",
+      "commitment_amount_raw": "Total rental amount: NT$317,952",
+      "commitment_currency": "",
+      "commitment_amount_numeric": 317952.0,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=5&spoke_time=180746&spoke_date=20251231&co_id=2891",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2891",
+      "announcement_date": "2025/09/25",
+      "subject": "Annoucement of CTBC Finanical Holding Co. Ltd.,to dispose the right-of-use assets from related parties. (Supplement to the announcement on 2025/7/28)",
+      "fund_name": "Name and nature of the underlying asset (e.g., land located at Sublot XX,\nLot XX, North District, Taichung City):\nPart of the office space located in 4.5.7.12.19.20.21.22.25.26.27.28.29F,\nNo.168,Jingmao 2nd Rd., Nangang Dist., Taipei City, Taiwan\nPart of the office space located in 6F, No.188, Jingmao 2nd Rd., Nangang\nDist., Taipei City, Taiwan",
+      "fund_type": "",
+      "commitment_date": "2025/09/25",
+      "commitment_amount_raw": "Transaction unit amount (e.g.XX square meters, equivalent to XX ping),\nunit price, and total transaction price:\n(1)612.45 ping unit price:NTD 2,200/ping (office without facilities)\n(2)226.92 ping unit price:NTD 2,263/ping(office with facilities)\n(3)Change 164.11 ping unit price:NTD 2,320/ping to 130.97 ping unit price:\nNTD 2,320/ping(supervisor’s office with facilities)\nrental price per month: Change NTD 2,241,646 to NTD 2,164,762\ntotal transaction price: Change NTD 53,799,504 to NTD 51,954,288",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=5&spoke_time=181450&spoke_date=20250925&co_id=2891",
+      "status": "HISTORICAL"
+    },
+    {
+      "stock_code": "2891",
+      "announcement_date": "2025/08/19",
+      "subject": "Announced by CTBC FHC on behalf of Taiwan Life Insurance Company for the disposal of the real estate.",
+      "fund_name": "Name and nature of the underlying asset (e.g., land located at Sublot XX,\nLot XX, North District, Taichung City):\nLand: No.872,Sublot 1, Lot Sanxing, Xinyi District,Taipei City.\nBuilding: 4F,4F.-1,5F,5F.-1,No.456 and 4F,5F,No.458,",
+      "fund_type": "",
+      "commitment_date": "2025/08/19",
+      "commitment_amount_raw": "Transaction unit amount (e.g.XX square meters, equivalent to XX ping),\nunit price, and total transaction price:\nLand:188.18square meters, equal to 56.93 pings\nBuilding:2,589.44 square meters, equal to 783.31 pings\n(The actual area shall be based on the property registration transcript.)\nTotal transaction price:NT$868,6OO,OOO(including VAT)",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=6&spoke_time=173258&spoke_date=20250819&co_id=2891",
+      "status": "HISTORICAL"
+    },
+    {
+      "stock_code": "2891",
+      "announcement_date": "2025/08/18",
+      "subject": "Announcement on behalf of CTBC Venture Capital Co., Ltd., subscription of Lightspeed SPV-A2, LLC",
+      "fund_name": "42%",
+      "fund_type": "1.62%\nOperating capital:NA",
+      "commitment_date": "2025/08/18",
+      "commitment_amount_raw": "no more than 12,000,000 USD",
+      "commitment_currency": "USD",
+      "commitment_amount_numeric": 12000000.0,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=4&spoke_time=175744&spoke_date=20250818&co_id=2891",
+      "status": "HISTORICAL"
+    },
+    {
+      "stock_code": "2891",
+      "announcement_date": "2025/01/23",
+      "subject": "Announcement on behalf of LH Financial Group Public Company Limited (LHFG) to obtain the right- of-use assets from related parties.",
+      "fund_name": "Name and nature of the underlying asset (e.g., land located at Sublot XX,\nLot XX, North District, Taichung City):\n1 South Sathorn Road, Kwaeng Tungmahamek, Khet Sathorn, Bangkok 10120\n(5 Floor,504)",
+      "fund_type": "",
+      "commitment_date": "",
+      "commitment_amount_raw": "Where the trading counterparty is a related party, announcement shall also\nbe made of the reason for choosing the related party as trading counterparty\nand the identity of the previous owner, its relationship with the Company\nand the trading counterparty, and the previous date and monetary amount of\ntransfer:\nLHFG and its subsidiaries’ headquarters are all in Quality Houses Lumpini\nBuilding,consider its convenience to work together with the same group.",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=181159&spoke_date=20250123&co_id=2891",
+      "status": "HISTORICAL"
+    },
+    {
+      "stock_code": "2891",
+      "announcement_date": "2025/01/21",
+      "subject": "Annoucement of CTBC Finanical Holding Co. Ltd.,to dispose the right-of-use assets from related parties. (Supplement to the announcement on 2024/9/23)",
+      "fund_name": "Name and nature of the underlying asset (e.g., land located at Sublot XX,\nLot XX, North District, Taichung City):\nPart of the office space located in 22.28.29F,\n No.168,Jingmao 2nd Rd., Nangang Dist., Taipei City, Taiwan",
+      "fund_type": "",
+      "commitment_date": "2025/01/21",
+      "commitment_amount_raw": "Where the trading counterparty is a related party, announcement shall also\nbe made of the reason for choosing the related party as trading counterparty\nand the identity of the previous owner, its relationship with the Company\nand the trading counterparty, and the previous date and monetary amount of\ntransfer:\nThe reason for choosing the related party as trading counterpart:\nJoint office for the company group. The location, size of space and other\ncontains are aligned with business needs.\n(The identity of the previous owner:N/A)",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=4&spoke_time=165819&spoke_date=20250121&co_id=2891",
+      "status": "HISTORICAL"
+    },
+    {
+      "stock_code": "2891",
+      "announcement_date": "2025/01/21",
+      "subject": "Annoucement of CTBC Finanical Holding Co. Ltd.,to dispose the right-of-use assets from related parties. (Supplement to the announcement on 2024/9/23)",
+      "fund_name": "Name and nature of the underlying asset (e.g., land located at Sublot XX,\nLot XX, North District, Taichung City):\nPart of the office space located in 4.5.7.12.19.20.21.22.25.26.27.28.29F,\n No.168,Jingmao 2nd Rd., Nangang Dist., Taipei City, Taiwan\nPart of the office space located in 6F, No.188, Jingmao 2nd Rd., Nangang\nDist., Taipei City, Taiwan",
+      "fund_type": "",
+      "commitment_date": "2025/01/21",
+      "commitment_amount_raw": "Where the trading counterparty is a related party, announcement shall also\nbe made of the reason for choosing the related party as trading counterparty\nand the identity of the previous owner, its relationship with the Company\nand the trading counterparty, and the previous date and monetary amount of\ntransfer:\nThe reason for choosing the related party as trading counterpart:\nJoint office for the company group. The location, size of space and other\ncontains are aligned with business needs.\n(The identity of the previous owner:N/A)",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=2&spoke_time=165604&spoke_date=20250121&co_id=2891",
+      "status": "HISTORICAL"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "stock_code": "2330",
+  "category": "fund_commitments",
+  "records": [
+    {
+      "stock_code": "2330",
+      "announcement_date": "2026/02/10",
+      "subject": "TSMC Board of Directors approved capital appropriations - machinery equipment, real estate and capitalized leased assets",
+      "fund_name": "Name and nature of the underlying asset (e.g., land located at Sublot XX,\nLot XX, North District, Taichung City):\n(1) Machinery equipment for advanced technology capacity",
+      "fund_type": "(2) Machinery equipment for advanced packaging, mature and/or specialty\n    technology capacity",
+      "commitment_date": "2026/02/10",
+      "commitment_amount_raw": "(3) Real estate and capitalized leased assets: US$21,372 million.",
+      "commitment_currency": "",
+      "commitment_amount_numeric": 3.0,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=7&spoke_time=193946&spoke_date=20260210&co_id=2330",
+      "status": "NEW"
+    }
+  ]
+}

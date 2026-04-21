@@ -67,9 +67,9 @@ WATCHLIST = [
     {"stock_code": "2002", "name_en": "China Steel Corporation"},
 ]
 
-FUND_KEYWORDS = [
-    "fund", "acquisition", "LP", "buyout", "infrastructure",
-    "private equity", "venture", "commitment",
+FUND_TYPE_KEYWORDS = [
+    "private equity", "venture capital", "real estate", "infrastructure",
+    "private debt", "private credit", "natural resources", "hedge fund",
 ]
 
 PEOPLE_KEYWORDS = [
@@ -149,7 +149,12 @@ async def fetch_detail(url: str) -> str:
         try:
             resp = await client.get(url)
             resp.raise_for_status()
-            return resp.text
+            for enc in ("utf-8", "cp950", "big5"):
+                try:
+                    return resp.content.decode(enc)
+                except UnicodeDecodeError:
+                    continue
+            return resp.content.decode("utf-8", errors="replace")
         except Exception as exc:
             logger.error("Detail fetch failed [%s]: %s", url, exc)
             return ""
@@ -215,6 +220,10 @@ async def scrape_fund_commitments(stock_code: str, sdate: str = None) -> list[di
         amount_raw = next((p for p in reversed(amount_parts)
                            if p and p.upper() not in ("NA", "N/A", "")), f5)
         currency_match = re.search(r"\b(USD|EUR|GBP|JPY|TWD|HKD|SGD|AUD|CAD)\b", amount_raw)
+
+        searchable = (fund_name + " " + fund_type + " " + row["subject"] + " " + statement).lower()
+        if not any(k in searchable for k in FUND_TYPE_KEYWORDS):
+            continue
 
         results.append({
             "stock_code": stock_code,

@@ -1,0 +1,45 @@
+{
+  "stock_code": "2890",
+  "category": "fund_commitments",
+  "records": [
+    {
+      "stock_code": "2890",
+      "announcement_date": "2025/10/03",
+      "subject": "Announced by SinoPac Holdings on behalf of SinoPac Futures, rent real estate of SinoPac Securities.",
+      "fund_name": "Name and nature of the underlying asset (e.g., land located at Sublot XX,\nLot XX, North District, Taichung City):\nPartial Building at 8F, No. 2, Chongqiong South Road, Section 1,\nZhomgzheng District, Taipei City",
+      "fund_type": "",
+      "commitment_date": "2025/10/03",
+      "commitment_amount_raw": "Transaction unit amount (e.g.XX square meters, equivalent to XX ping),\nunit price, and total transaction price:\nTransaction volume: 311.73 ping\nTotal transaction price: NT$580,000 per month\nUnit price: NT$1,861 per month\nTotal transaction price: NT$34,800,000\nAmount of right-of-use asset: NT$32,667,355",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=2&spoke_time=164553&spoke_date=20251003&co_id=2890",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2890",
+      "announcement_date": "2025/10/03",
+      "subject": "Announced by SinoPac Holdings on behalf of SinoPac Securities, rent the offices to SinoPac Futures",
+      "fund_name": "Name and nature of the underlying asset (e.g., land located at Sublot XX,\nLot XX, North District, Taichung City):\nPartial Building at 8F, No. 2, Chongqiong South Road, Section 1,\nZhomgzheng District, Taipei City",
+      "fund_type": "",
+      "commitment_date": "2025/10/03",
+      "commitment_amount_raw": "Transaction unit amount (e.g.XX square meters, equivalent to XX ping),\nunit price, and total transaction price:\nTransaction volume: 311.73 ping\nTotal transaction price: NT$580,000 per month\nUnit price: NT$1,861 per month\nTotal transaction price: NT$34,800,000\nAmount of right-of-use asset: NT$31,460,078",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=164529&spoke_date=20251003&co_id=2890",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2890",
+      "announcement_date": "2025/09/26",
+      "subject": "Announced by SinoPac Holdings on behalf of SinoPac Securities, rent real estate of Bank SinoPac",
+      "fund_name": "Name and nature of the underlying asset (e.g., land located at Sublot XX,\nLot XX, North District, Taichung City):\n(1)3th Floor, No.110, Section 1,Nanchang Road, Zhongzheng District,\nTaipei City\n(2) parking space：2",
+      "fund_type": "",
+      "commitment_date": "2025/09/26",
+      "commitment_amount_raw": "Transaction unit amount (e.g.XX square meters, equivalent to XX ping),\nunit price, and total transaction price:\nTransaction volume: 103.69 ping\nTotal transaction price: NT$112,000 per month\nUnit price: NT$1,080 per month\nTotal transaction price: NT$6,720,000\n(2)parking space：2\nUnit price: NT$4,000 per month\nTotal transaction price: NT$8,000 per month\nTotal transaction price: NT$480,000\nAmount of right-of-use asset: NT$7,369,206",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=2&spoke_time=172524&spoke_date=20250926&co_id=2890",
+      "status": "HISTORICAL"
+    }
+  ]
+}

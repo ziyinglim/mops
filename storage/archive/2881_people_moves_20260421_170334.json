@@ -1,0 +1,23 @@
+{
+  "stock_code": "2881",
+  "category": "people_moves",
+  "records": [
+    {
+      "stock_code": "2881",
+      "announcement_date": "2026/03/16",
+      "subject": "Announced by Fubon FHC on behalf of Fubon Bank (China) Co.,Ltd. for the change of Assistant to the CEO",
+      "role_type": "spokesperson, acting\n  spokesperson, important personnel (CEO, COO, CMO, CSO, etc.)\n,financial officer, accounting officer, corporate governance officer,\nchief information security officer, research and development officer,\nchief internal auditor, or designated and non-designated representatives):\nAssistant to the CEO",
+      "change_date": "2026/03/16",
+      "previous_holder": "None",
+      "new_holder": "KUO,YAU-CHIAU/ Assistant to the CEO of Fubon bank (China) Co.,Ltd.、\nChief Risk Officer of Fubon bank (China) Co., Ltd.",
+      "change_type": "”resignation”, ”position\nadjustment”, ”retirement”, ”death”,”new\nreplacement” or ”dismissal”):position adjustment",
+      "reason": "position adjustment",
+      "effective_date": "",
+      "narrative_en": "The TWD 13bn Fubon Financial Holding 's spokesperson, acting\n  spokesperson, important personnel (CEO, COO, CMO, CSO, etc.)\n,financial officer, accounting officer, corporate governance officer,\nchief information security officer, research and development officer,\nchief internal auditor, or designated and non-designated representatives):\nAssistant to the CEO, None, has resigned.",
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=3&spoke_time=153741&spoke_date=20260316&co_id=2881",
+      "hash": "fba2107fe4ee1904f19669b985adf2735dc80525deb3a51298b1d053be3028ef",
+      "scraped_at": "2026-04-21T17:03:34.370034+00:00",
+      "status": "CHANGED"
+    }
+  ]
+}

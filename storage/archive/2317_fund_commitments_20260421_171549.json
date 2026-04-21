@@ -1,0 +1,58 @@
+{
+  "stock_code": "2317",
+  "category": "fund_commitments",
+  "records": [
+    {
+      "stock_code": "2317",
+      "announcement_date": "2026/03/10",
+      "subject": "Announcement on behalf of subsidiary Hyield Venture Capital Co., Ltd for its disposal of Innolux Corporation’s common shares",
+      "fund_name": "Name of the securities:Common shares of Innolux Corporation",
+      "fund_type": "",
+      "commitment_date": "2026/02/26",
+      "commitment_amount_raw": "Amount, unit price, and total monetary amount of the transaction:\nAmount: 86,957,000 shares\nAverage Unit price:approx NTD 28.46\nTotal monetary amount of the transaction: NTD 2,474,379,550",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=182143&spoke_date=20260310&co_id=2317",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2317",
+      "announcement_date": "2026/02/25",
+      "subject": "Announcement on behalf of subsidiary Hyield Venture Capital Co., Ltd for its disposal of Innolux Corporation’s common shares",
+      "fund_name": "Name of the securities:Common shares of Innolux Corporation",
+      "fund_type": "",
+      "commitment_date": "2025/12/30",
+      "commitment_amount_raw": "Amount, unit price, and total monetary amount of the transaction:\nAmount: 43,435,000 shares\nAverage Unit price: NTD23.89\nTotal monetary amount of the transaction: NTD1,037,701,250",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=191607&spoke_date=20260225&co_id=2317",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2317",
+      "announcement_date": "2025/12/31",
+      "subject": "Subsidiary, Q-Edge Corporation acquisition right- of-use assets of factory building",
+      "fund_name": "Name and nature of the underlying asset (e.g., land located at Sublot XX,\nLot XX, North District, Taichung City):\nLocated at 8702 and 8710 Fairbanks North Houston Road, Building A and\nBuilding B, Houston, TX 77064；The asset of usage rights in real estate",
+      "fund_type": "",
+      "commitment_date": "2025/12/31",
+      "commitment_amount_raw": "Transaction unit amount (e.g.XX square meters, equivalent to XX ping),\nunit price, and total transaction price:\nTransaction volume:426,203 square feet is equivalent to 11,977.65 pings\nMonthly rental price per unit: The average price is approximately USD 0.66\nper square foot\nTotal contract rent and management fee:USD 32,067,513.72\nRight-of-use asset amount: USD 24,905,861.55",
+      "commitment_currency": "USD",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=182240&spoke_date=20251231&co_id=2317",
+      "status": "NEW"
+    },
+    {
+      "stock_code": "2317",
+      "announcement_date": "2025/04/22",
+      "subject": "Announcement on Disposing of Equity in Shenzhen Hengdrive Electric Co.,Ltd. on behalf of Subsidiary Fulian Yuzhan Technology (Shenzhen) Co., Ltd.",
+      "fund_name": "Name and nature of the underlying assets (if preferred shares, the terms\nand conditions of issuance shall also be indicated, e.g., dividend yield,\netc.):Shenzhen Hengdrive Electric Co.,Ltd. shares",
+      "fund_type": "",
+      "commitment_date": "2025/04/22",
+      "commitment_amount_raw": "Where the trading counterparty is a related party, announcement shall also\nbe made of the reason for choosing the related party as trading counterparty\nand the identity of the previous owner, its relationship with the Company\nand the trading counterparty, and the previous date and monetary amount of\ntransfer:Na",
+      "commitment_currency": "",
+      "commitment_amount_numeric": null,
+      "url": "https://emops.twse.com.tw/server-java/t05sr01_1_e?&isNew=Y&seq_no=1&spoke_time=174245&spoke_date=20250422&co_id=2317",
+      "status": "HISTORICAL"
+    }
+  ]
+}
