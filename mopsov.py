@@ -835,7 +835,8 @@ function renderFC(rows){
     const nm=r.url?`<a href="${r.url}" target="_blank">${r.fund_name}</a>`:(r.fund_name||'');
     const amt=r.fx_url?`<a href="${r.fx_url}" target="_blank">${r.commitment_amount_raw}</a>`:(r.commitment_amount_raw||'—');
     const ck=`chk_fc_${r.stock_code}_${(r.fund_name||'').replace(/\W+/g,'_')}_${r.commitment_date}`;
-    return `<tr class="row-${st.toLowerCase()}" data-co="${r.stock_code}" data-ft="${(r.fund_type||'').toLowerCase()}" data-st="${st.toLowerCase()}" data-yr="${yr}" data-date="${normDate(r.announcement_date||'')}"><td>${r.stock_code}</td><td>${r.announcement_date}</td><td>${nm}</td><td>${r.fund_type||'—'}</td><td>${r.commitment_date}</td><td>${amt}</td><td class="headline">${r.headline}</td><td>${r.bs_date}</td><td>${badge(st)}</td><td>${r.scraped_at}</td><td>${chkBtn(ck)}</td></tr>`;
+    const firm=COMPANIES[r.stock_code]||r.stock_code;
+    return `<tr class="row-${st.toLowerCase()}" data-co="${r.stock_code}" data-ft="${(r.fund_type||'').toLowerCase()}" data-st="${st.toLowerCase()}" data-yr="${yr}" data-date="${normDate(r.announcement_date||'')}"><td>${r.stock_code}</td><td>${firm}</td><td>${r.announcement_date}</td><td>${nm}</td><td>${r.fund_type||'—'}</td><td>${r.commitment_date}</td><td>${amt}</td><td class="headline">${r.headline}</td><td>${r.bs_date}</td><td>${badge(st)}</td><td>${r.scraped_at}</td><td>${chkBtn(ck)}</td></tr>`;
   }).join('');
   document.getElementById('fc-count').textContent=rows.length+' records';
 }
@@ -999,7 +1000,7 @@ renderRun(0);
     <input type="text" placeholder="Search fund name…" oninput="filterFC()" style="width:180px;">
   </div>
   <div class="count" id="fc-count"></div>
-  <table id="fc-table"><thead><tr><th class="sortable" onclick="sortTable('fc-table',0)">Code</th><th class="sortable" onclick="sortTable('fc-table',1)">Ann. Date</th><th class="sortable" onclick="sortTable('fc-table',2)">Fund Name</th><th class="sortable" onclick="sortTable('fc-table',3)">Fund Type</th><th class="sortable" onclick="sortTable('fc-table',4)">Commit Date</th><th class="sortable" onclick="sortTable('fc-table',5)">Amount (Raw)</th><th>Headline</th><th class="sortable" onclick="sortTable('fc-table',7)">BS Date</th><th class="sortable" onclick="sortTable('fc-table',8)">Status</th><th class="sortable" onclick="sortTable('fc-table',9)">Scraped At</th><th>Action</th></tr></thead><tbody></tbody></table>
+  <table id="fc-table"><thead><tr><th class="sortable" onclick="sortTable('fc-table',0)">Code</th><th class="sortable" onclick="sortTable('fc-table',1)">Firm Name</th><th class="sortable" onclick="sortTable('fc-table',2)">Ann. Date</th><th class="sortable" onclick="sortTable('fc-table',3)">Fund Name</th><th class="sortable" onclick="sortTable('fc-table',4)">Fund Type</th><th class="sortable" onclick="sortTable('fc-table',5)">Commit Date</th><th class="sortable" onclick="sortTable('fc-table',6)">Amount (Raw)</th><th>Headline</th><th class="sortable" onclick="sortTable('fc-table',8)">BS Date</th><th class="sortable" onclick="sortTable('fc-table',9)">Status</th><th class="sortable" onclick="sortTable('fc-table',10)">Scraped At</th><th>Action</th></tr></thead><tbody></tbody></table>
 </div>
 <div id="pm" class="panel">
   <div class="filters">
@@ -1042,14 +1043,16 @@ def write_excel(fund_commitments, people_moves, emops_data=None, since=None, new
     _autofit(ws)
 
     # Fund Commitments — mirrors HTML FC table
+    _co_map = {w["stock_code"]: w["name_en"] for w in WATCHLIST}
     ws = wb.create_sheet("FundCommitments")
-    _FC_COLS = ["Stock Code", "Ann. Date", "Fund Name", "Fund Type",
+    _FC_COLS = ["Stock Code", "Firm Name", "Ann. Date", "Fund Name", "Fund Type",
                 "Commit Date", "Amount (Raw)", "Headline", "BS Date", "Status", "Scraped At"]
     _header(ws, _FC_COLS)
     _name_col = _FC_COLS.index("Fund Name") + 1
     _amt_col  = _FC_COLS.index("Amount (Raw)") + 1
     for i, r in enumerate(fund_commitments, 2):
-        ws.append([r.get("stock_code"), r.get("announcement_date"), r.get("fund_name"),
+        firm = _co_map.get(r.get("stock_code", ""), "")
+        ws.append([r.get("stock_code"), firm, r.get("announcement_date"), r.get("fund_name"),
                    r.get("fund_type"), r.get("commitment_date"), r.get("commitment_amount_raw"),
                    r.get("headline"), r.get("bs_date"), r.get("status"), r.get("scraped_at")])
         if r.get("url"):
