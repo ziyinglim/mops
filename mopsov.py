@@ -1183,18 +1183,13 @@ def _load_emops_data() -> list[dict]:
 
 
 async def run(companies=None, export_excel=True, funds_only=False, people_only=False,
-              since=None, new_since=None, run_emops=False):
+              since=None, new_since=None):
     watchlist = WATCHLIST if not companies else [w for w in WATCHLIST if w["stock_code"] in companies]
     logger.info("Running MOPSOV for %d companies", len(watchlist))
     if since:
         logger.info("Extracting fund commitments from %s", since)
     if new_since:
         logger.info("Last-run baseline date: %s (records seen before this run will be HISTORICAL)", new_since)
-
-    if run_emops:
-        import emops as _emops
-        logger.info("Running EMOPS scrape first...")
-        await _emops.run(companies=companies, export_excel=export_excel)
 
     all_funds, all_people = [], []
 
@@ -1232,9 +1227,8 @@ if __name__ == "__main__":
     parser.add_argument("--people-only", action="store_true", help="People moves only")
     parser.add_argument("--since", help="Extract data from this date e.g. 2025/01/01 (YYYY/MM/DD)")
     parser.add_argument("--new-since", dest="new_since", help="Flag as NEW (green) if on/after this date, else HISTORICAL (red) e.g. 2025/09/30")
-    parser.add_argument("--emops", action="store_true", help="Also run EMOPS scrape (company profiles + balance sheets) before exporting")
     args = parser.parse_args()
 
     asyncio.run(run(companies=args.companies, export_excel=not args.no_excel,
                     funds_only=args.funds_only, people_only=args.people_only,
-                    since=args.since, new_since=args.new_since, run_emops=args.emops))
+                    since=args.since, new_since=args.new_since))
