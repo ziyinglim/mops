@@ -1020,13 +1020,15 @@ renderRun(0);
     return report_path
 
 
-def write_excel(fund_commitments, people_moves, since=None, new_since=None):
+def write_excel(fund_commitments, people_moves, emops_data=None, since=None, new_since=None):
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     ts = datetime.now().strftime("%Y%m%d_%H%M")
     path = OUTPUT_DIR / f"MOPSOV_{ts}.xlsx"
     wb = openpyxl.Workbook()
     wb.remove(wb.active)
+    _link_font = Font(color="0563C1", underline="single", name="Calibri", size=10)
 
+    # Summary
     ws = wb.create_sheet("Summary")
     new_label = f"New Fund Commitments (from {new_since})" if new_since else "New Fund Commitments"
     his_label = f"Historical Fund Commitments (before {new_since})" if new_since else "Historical Fund Commitments"
@@ -1039,19 +1041,21 @@ def write_excel(fund_commitments, people_moves, since=None, new_since=None):
                sum(1 for r in people_moves if r.get("status") == "CHANGED")])
     _autofit(ws)
 
+    # Fund Commitments — mirrors HTML FC table
     ws = wb.create_sheet("FundCommitments")
-    _FUND_COLS = ["Stock Code", "Announcement Date", "Fund Name", "Fund Type",
-                  "Commitment Date", "Amount (Raw)", "Amount (Numeric)", "Currency",
-                  "Status", "Subject", "Headline", "Balance Sheet Date", "URL", "Scraped At"]
-    _header(ws, _FUND_COLS)
-    _amt_col = _FUND_COLS.index("Amount (Raw)") + 1
-    _link_font = Font(color="0563C1", underline="single", name="Calibri", size=10)
+    _FC_COLS = ["Stock Code", "Ann. Date", "Fund Name", "Fund Type",
+                "Commit Date", "Amount (Raw)", "Headline", "BS Date", "Status", "Scraped At"]
+    _header(ws, _FC_COLS)
+    _name_col = _FC_COLS.index("Fund Name") + 1
+    _amt_col  = _FC_COLS.index("Amount (Raw)") + 1
     for i, r in enumerate(fund_commitments, 2):
         ws.append([r.get("stock_code"), r.get("announcement_date"), r.get("fund_name"),
                    r.get("fund_type"), r.get("commitment_date"), r.get("commitment_amount_raw"),
-                   r.get("commitment_amount_numeric"), r.get("commitment_currency"),
-                   r.get("status"), r.get("subject"), r.get("headline"), r.get("bs_date"),
-                   r.get("url"), r.get("scraped_at")])
+                   r.get("headline"), r.get("bs_date"), r.get("status"), r.get("scraped_at")])
+        if r.get("url"):
+            cell = ws.cell(i, _name_col)
+            cell.hyperlink = r["url"]
+            cell.font = _link_font
         if r.get("fx_url"):
             cell = ws.cell(i, _amt_col)
             cell.hyperlink = r["fx_url"]
@@ -1059,17 +1063,48 @@ def write_excel(fund_commitments, people_moves, since=None, new_since=None):
         _status_fill(ws, i, r.get("status"))
     _autofit(ws)
 
+    # People Moves — mirrors HTML PM table
     ws = wb.create_sheet("PeopleMoves")
-    _header(ws, ["Stock Code", "Announcement Date", "Role", "New Holder", "Previous Holder",
-                 "Change Type", "Change Date", "Effective Date", "Reason",
-                 "Narrative (EN)", "Status", "URL", "Scraped At"])
+    _PM_COLS = ["Stock Code", "Ann. Date", "Role", "New Holder", "Previous Holder",
+                "Effective Date", "Narrative", "URL", "Status", "Scraped At"]
+    _header(ws, _PM_COLS)
+    _url_col = _PM_COLS.index("URL") + 1
     for i, r in enumerate(people_moves, 2):
-        ws.append([r.get("stock_code"), r.get("announcement_date"), r.get("role_type"),
-                   r.get("new_holder"), r.get("previous_holder"), r.get("change_type"),
-                   r.get("change_date"), r.get("effective_date"), r.get("reason"),
-                   r.get("narrative_en"), r.get("status"), r.get("url"), r.get("scraped_at")])
+        role = r.get("role_title") or r.get("role_type") or ""
+        ws.append([r.get("stock_code"), r.get("announcement_date"), role,
+                   r.get("new_holder"), r.get("previous_holder"),
+                   r.get("effective_date"), r.get("narrative_en"),
+                   r.get("url"), r.get("status"), r.get("scraped_at")])
+        if r.get("url"):
+            cell = ws.cell(i, _url_col)
+            cell.hyperlink = r["url"]
+            cell.font = _link_font
         _status_fill(ws, i, r.get("status"))
     _autofit(ws)
+
+    # Company Profiles — mirrors HTML EMOPS table
+    if emops_data:
+        ws = wb.create_sheet("CompanyProfiles")
+        _EM_COLS = ["Stock Code", "Company Name", "Type", "BS Period", "Currency",
+                    "Total Assets", "Inv. Property", "Telephone", "Website",
+                    "Address", "Status", "Changed Fields", "Scraped At"]
+        _header(ws, _EM_COLS)
+        _web_col = _EM_COLS.index("Website") + 1
+        for i, r in enumerate(emops_data, 2):
+            cf = ", ".join(r.get("changed_fields") or [])
+            ws.append([r.get("stock_code"), r.get("company_name_en") or r.get("name_en"),
+                       r.get("company_type"), r.get("period"), r.get("currency"),
+                       r.get("total_assets_raw"), r.get("inv_property_raw"),
+                       r.get("telephone"), r.get("web_address"),
+                       r.get("address"), r.get("profile_status"), cf, r.get("scraped_at")])
+            web = r.get("web_address", "")
+            if web:
+                url = web if web.startswith("http") else "https://" + web
+                cell = ws.cell(i, _web_col)
+                cell.hyperlink = url
+                cell.font = _link_font
+            _status_fill(ws, i, r.get("profile_status"))
+        _autofit(ws)
 
     wb.save(path)
     logger.info("Excel saved: %s", path)
@@ -1213,8 +1248,8 @@ async def run(companies=None, export_excel=True, funds_only=False, people_only=F
 
     print_results(all_funds, all_people)
     if export_excel:
-        write_excel(all_funds, all_people, since=since, new_since=new_since)
         emops_data = _load_emops_data()
+        write_excel(all_funds, all_people, emops_data, since=since, new_since=new_since)
         write_html_report(all_funds, all_people, emops_data, since=since, new_since=new_since)
 
 
