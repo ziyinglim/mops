@@ -9,9 +9,12 @@ import hashlib
 import json
 import logging
 import re
+import sys
 import warnings
 from datetime import datetime, timezone
 from pathlib import Path
+
+sys.stdout.reconfigure(encoding="utf-8")
 
 import httpx
 from bs4 import BeautifulSoup
