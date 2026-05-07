@@ -546,12 +546,6 @@ def _build_narrative(stock_code, role, new_holder, prev_holder, change_type,
     has_prev = bool(prev_holder and prev_holder.lower() not in ("none", "nil", "n/a", ""))
     ct = change_type or ""
 
-    reason_clean = reason.strip().rstrip(".") if reason else ""
-    # Capitalise and append as a closing sentence
-    reason_s = (f" {reason_clean[0].upper() + reason_clean[1:]}."
-                if reason_clean and reason_clean.lower() not in ("nil", "n/a", "none")
-                else "")
-
     if has_new:
         s1 = f"{company_ref} has appointed {new_holder} as {role}{eff}."
         if has_prev:
@@ -563,16 +557,15 @@ def _build_narrative(stock_code, role, new_holder, prev_holder, change_type,
         s1 = f"{company_ref}'s {role} position has been eliminated{eff}."
         s2 = f" {prev_holder} vacated the role." if has_prev else ""
     elif has_prev:
-        verb = ("has resigned" if "resignation" in ct
-                else "has retired" if "retirement" in ct
-                else "has stepped down")
-        s1 = f"{company_ref}'s {role}, {prev_holder}, {verb}{eff}."
+        if "retirement" in ct:
+            return f"{prev_holder} stepped down from {role} due to retirement{eff}."
+        s1 = f"{company_ref}'s {role}, {prev_holder}, has stepped down{eff}."
         s2 = ""
     else:
         s1 = f"{company_ref} has announced a change in its {role}{eff}."
         s2 = ""
 
-    return s1 + s2 + reason_s
+    return s1 + s2
 
 def _get_latest_aum(stock_code: str) -> tuple[str, str]:
     """Returns (aum_string, balance_sheet_period). Both empty string if unavailable."""
@@ -610,6 +603,15 @@ def _format_date(date_str: str) -> str:
     return date_str
 
 # ── Change Detection ──────────────────────────────────────────────────────────
+
+def _apply_date_status(records, new_since, date_field="announcement_date"):
+    if not new_since:
+        return records
+    ns = new_since.replace("/", "-")
+    for r in records:
+        d = (r.get(date_field) or "").replace("/", "-")[:10]
+        r["status"] = "NEW" if d >= ns else "HISTORICAL"
+    return records
 
 def detect_changes(records, state_path, key_fields):
     stored = _load_json(state_path) or {}
@@ -705,8 +707,7 @@ def _format_tw_phone(phone: str) -> str:
 # ── Excel Output ──────────────────────────────────────────────────────────────
 
 _HDR_FILL = PatternFill("solid", fgColor="1F3864")
-_NEW_FILL  = PatternFill("solid", fgColor="C6EFCE")   # green
-_HIS_FILL  = PatternFill("solid", fgColor="FFC7CE")   # red
+_NEW_FILL  = PatternFill("solid", fgColor="FFD28A")   # orange
 _CHG_FILL  = PatternFill("solid", fgColor="FFEB9C")   # yellow
 _HDR_FONT  = Font(bold=True, color="FFFFFF", name="Calibri", size=10)
 
@@ -825,7 +826,7 @@ function renderEM(rows){
     const rowCls=r.profile_status==='CHANGED'?'row-changed':'';
     const cfList=cf.length?`<span class="cf-list" title="${cf.join(', ')}">${cf.join(', ')}</span>`:'—';
     const ck=`chk_em_${r.stock_code}`;
-    return `<tr class="${rowCls}" data-co="${r.stock_code}" data-st="${(r.profile_status||'').toLowerCase()}" data-date="${normDate(r.scraped_at||'')}"><td>${r.stock_code}</td><td>${fv(r.company_name_en||r.name_en,cf.includes('company_name_en'))}</td><td>${r.company_type}</td><td>${fv(r.period,cf.includes('period'))}</td><td>${fv(r.currency,cf.includes('currency'))}</td><td>${fv(r.total_assets_raw,cf.includes('total_assets_raw'))}</td><td>${fv(r.inv_property_raw,cf.includes('inv_property_raw'))}</td><td>${fv(r.telephone,cf.includes('telephone'))}</td><td>${webCell}</td><td>${fv(r.address,cf.includes('address'))}</td><td>${badge(r.profile_status)}</td><td>${cfList}</td><td>${r.scraped_at||'—'}</td><td>${chkBtn(ck)}</td></tr>`;
+    return `<tr class="${rowCls}" data-co="${r.stock_code}" data-st="${(r.profile_status||'').toLowerCase()}" data-date="${normDate(r.scraped_at||'')}"><td>${r.stock_code}</td><td>${fv(r.company_name_en||r.name_en,cf.includes('company_name_en'))}</td><td>${r.company_type}</td><td>${fv(r.period,cf.includes('period'))}</td><td>${fv(r.currency,cf.includes('currency'))}</td><td>${fv(r.total_assets_raw,cf.includes('total_assets_raw'))}</td><td>${fv(r.inv_property_raw,cf.includes('inv_property_raw'))}</td><td>${fv(r.telephone,cf.includes('telephone'))}</td><td>${webCell}</td><td>${fv(r.address,cf.includes('address'))}</td><td>${badge(r.profile_status)}</td><td>${cfList}</td><td>${fmtScraped(r.scraped_at)}</td><td>${chkBtn(ck)}</td></tr>`;
   }).join('');
   document.getElementById('em-count').textContent=rows.length+' companies';
 }
@@ -836,7 +837,7 @@ function renderFC(rows){
     const amt=r.fx_url?`<a href="${r.fx_url}" target="_blank">${r.commitment_amount_raw}</a>`:(r.commitment_amount_raw||'—');
     const ck=`chk_fc_${r.stock_code}_${(r.fund_name||'').replace(/\W+/g,'_')}_${r.commitment_date}`;
     const firm=COMPANIES[r.stock_code]||r.stock_code;
-    return `<tr class="row-${st.toLowerCase()}" data-co="${r.stock_code}" data-ft="${(r.fund_type||'').toLowerCase()}" data-st="${st.toLowerCase()}" data-yr="${yr}" data-date="${normDate(r.announcement_date||'')}"><td>${r.stock_code}</td><td>${firm}</td><td>${r.announcement_date}</td><td>${nm}</td><td>${r.fund_type||'—'}</td><td>${r.commitment_date}</td><td>${amt}</td><td class="headline">${r.headline}</td><td>${r.bs_date}</td><td>${badge(st)}</td><td>${r.scraped_at}</td><td>${chkBtn(ck)}</td></tr>`;
+    return `<tr class="row-${st.toLowerCase()}" data-co="${r.stock_code}" data-ft="${(r.fund_type||'').toLowerCase()}" data-st="${st.toLowerCase()}" data-yr="${yr}" data-date="${normDate(r.announcement_date||'')}"><td>${r.stock_code}</td><td>${firm}</td><td>${r.announcement_date}</td><td>${nm}</td><td>${r.fund_type||'—'}</td><td>${r.commitment_date}</td><td>${amt}</td><td class="headline">${r.headline}</td><td>${r.bs_date}</td><td>${badge(st)}</td><td>${fmtScraped(r.scraped_at)}</td><td>${chkBtn(ck)}</td></tr>`;
   }).join('');
   document.getElementById('fc-count').textContent=rows.length+' records';
 }
@@ -846,13 +847,15 @@ function renderPM(rows){
     const role=r.role_title||r.role_type||'';
     const lnk=r.url?`<a href="${r.url}" target="_blank">View</a>`:'';
     const ck=`chk_pm_${r.stock_code}_${r.announcement_date}_${(r.new_holder||'').replace(/\W+/g,'_')}`;
-    return `<tr class="row-${st.toLowerCase()}" data-co="${r.stock_code}" data-st="${st.toLowerCase()}" data-yr="${yr}" data-date="${normDate(r.announcement_date||'')}"><td>${r.stock_code}</td><td>${r.announcement_date}</td><td>${role||'—'}</td><td>${r.new_holder||'—'}</td><td>${r.previous_holder||'—'}</td><td>${r.effective_date}</td><td class="headline">${r.narrative_en}</td><td>${lnk}</td><td>${chkBtn(ck)}</td></tr>`;
+    return `<tr class="row-${st.toLowerCase()}" data-co="${r.stock_code}" data-st="${st.toLowerCase()}" data-yr="${yr}" data-date="${normDate(r.announcement_date||'')}"><td>${r.stock_code}</td><td>${r.announcement_date}</td><td>${role||'—'}</td><td>${r.new_holder||'—'}</td><td>${r.previous_holder||'—'}</td><td>${r.effective_date}</td><td class="headline">${r.narrative_en}</td><td>${lnk}</td><td>${fmtScraped(r.scraped_at)}</td><td>${chkBtn(ck)}</td></tr>`;
   }).join('');
   document.getElementById('pm-count').textContent=rows.length+' records';
 }
 function showTab(id,el){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById(id).classList.add('active');el.classList.add('active');}
 function normDate(d){return d?d.replace(/\//g,'-'):'';}
 function inDateRange(rowDate,from,to){const d=normDate(rowDate);return(!from||d>=from)&&(!to||d<=to);}
+function fmtScraped(s){if(!s)return '—';return s.slice(0,10).replace(/-/g,'/');}
+
 function filterEM(){
   const sel=[...document.querySelectorAll('#em .filters select')].map(e=>e.value.toLowerCase());
   const dates=[...document.querySelectorAll('#em .filters input[type=date]')].map(e=>e.value);
@@ -942,7 +945,7 @@ renderRun(0);
   td{{padding:8px 11px;border-bottom:1px solid #f0f0f0;vertical-align:top;}}
   tr:last-child td{{border-bottom:none;}}
   tr:hover td{{background:rgba(0,0,0,.02);}}
-  .row-new td{{background:#f0fff4;}}.row-historical td{{background:#fff5f5;}}.row-changed td{{background:#fffbf0;}}
+  .row-new td{{background:#FFE0B2;}}.row-changed td{{background:#fffbf0;}}
   .headline{{max-width:380px;font-style:italic;color:#444;}}
   .badge{{padding:2px 7px;border-radius:4px;font-size:.73rem;font-weight:700;white-space:nowrap;}}
   .badge.new{{background:#C6EFCE;color:#276221;}}.badge.his{{background:#FFC7CE;color:#9C0006;}}.badge.chg{{background:#FFEB9C;color:#9C6500;}}
@@ -1000,7 +1003,7 @@ renderRun(0);
     <input type="text" placeholder="Search fund name…" oninput="filterFC()" style="width:180px;">
   </div>
   <div class="count" id="fc-count"></div>
-  <table id="fc-table"><thead><tr><th class="sortable" onclick="sortTable('fc-table',0)">Code</th><th class="sortable" onclick="sortTable('fc-table',1)">Firm Name</th><th class="sortable" onclick="sortTable('fc-table',2)">Ann. Date</th><th class="sortable" onclick="sortTable('fc-table',3)">Fund Name</th><th class="sortable" onclick="sortTable('fc-table',4)">Fund Type</th><th class="sortable" onclick="sortTable('fc-table',5)">Commit Date</th><th class="sortable" onclick="sortTable('fc-table',6)">Amount (Raw)</th><th>Headline</th><th class="sortable" onclick="sortTable('fc-table',8)">BS Date</th><th class="sortable" onclick="sortTable('fc-table',9)">Status</th><th class="sortable" onclick="sortTable('fc-table',10)">Scraped At</th><th>Action</th></tr></thead><tbody></tbody></table>
+  <table id="fc-table"><thead><tr><th class="sortable" onclick="sortTable('fc-table',0)">Code</th><th class="sortable" onclick="sortTable('fc-table',1)">Firm Name</th><th class="sortable" onclick="sortTable('fc-table',2)">Published Date</th><th class="sortable" onclick="sortTable('fc-table',3)">Fund Name</th><th class="sortable" onclick="sortTable('fc-table',4)">Fund Type</th><th class="sortable" onclick="sortTable('fc-table',5)">Commit Date</th><th class="sortable" onclick="sortTable('fc-table',6)">Amount (Raw)</th><th>Headline</th><th class="sortable" onclick="sortTable('fc-table',8)">BS Date</th><th class="sortable" onclick="sortTable('fc-table',9)">Status</th><th class="sortable" onclick="sortTable('fc-table',10)">Scraped At</th><th>Action</th></tr></thead><tbody></tbody></table>
 </div>
 <div id="pm" class="panel">
   <div class="filters">
@@ -1011,7 +1014,7 @@ renderRun(0);
     <input type="text" placeholder="Search name or role…" oninput="filterPM()" style="width:180px;">
   </div>
   <div class="count" id="pm-count"></div>
-  <table id="pm-table"><thead><tr><th class="sortable" onclick="sortTable('pm-table',0)">Code</th><th class="sortable" onclick="sortTable('pm-table',1)">Ann. Date</th><th class="sortable" onclick="sortTable('pm-table',2)">Role</th><th class="sortable" onclick="sortTable('pm-table',3)">New Holder</th><th class="sortable" onclick="sortTable('pm-table',4)">Previous Holder</th><th class="sortable" onclick="sortTable('pm-table',5)">Effective Date</th><th>Narrative</th><th>Link</th><th>Action</th></tr></thead><tbody></tbody></table>
+  <table id="pm-table"><thead><tr><th class="sortable" onclick="sortTable('pm-table',0)">Code</th><th class="sortable" onclick="sortTable('pm-table',1)">Published Date</th><th class="sortable" onclick="sortTable('pm-table',2)">Role</th><th class="sortable" onclick="sortTable('pm-table',3)">New Holder</th><th class="sortable" onclick="sortTable('pm-table',4)">Previous Holder</th><th class="sortable" onclick="sortTable('pm-table',5)">Effective Date</th><th>Narrative</th><th>Link</th><th class="sortable" onclick="sortTable('pm-table',8)">Scraped At</th><th>Action</th></tr></thead><tbody></tbody></table>
 </div>
 """ + js + "\n</body></html>"
 
@@ -1045,16 +1048,17 @@ def write_excel(fund_commitments, people_moves, emops_data=None, since=None, new
     # Fund Commitments — mirrors HTML FC table
     _co_map = {w["stock_code"]: w["name_en"] for w in WATCHLIST}
     ws = wb.create_sheet("FundCommitments")
-    _FC_COLS = ["Stock Code", "Firm Name", "Ann. Date", "Fund Name", "Fund Type",
+    _FC_COLS = ["Stock Code", "Firm Name", "Published Date", "Fund Name", "Fund Type",
                 "Commit Date", "Amount (Raw)", "Headline", "BS Date", "Status", "Scraped At"]
     _header(ws, _FC_COLS)
     _name_col = _FC_COLS.index("Fund Name") + 1
     _amt_col  = _FC_COLS.index("Amount (Raw)") + 1
     for i, r in enumerate(fund_commitments, 2):
         firm = _co_map.get(r.get("stock_code", ""), "")
+        scraped = (r.get("scraped_at") or "")[:10].replace("-", "/")
         ws.append([r.get("stock_code"), firm, r.get("announcement_date"), r.get("fund_name"),
                    r.get("fund_type"), r.get("commitment_date"), r.get("commitment_amount_raw"),
-                   r.get("headline"), r.get("bs_date"), r.get("status"), r.get("scraped_at")])
+                   r.get("headline"), r.get("bs_date"), r.get("status"), scraped])
         if r.get("url"):
             cell = ws.cell(i, _name_col)
             cell.hyperlink = r["url"]
@@ -1068,16 +1072,17 @@ def write_excel(fund_commitments, people_moves, emops_data=None, since=None, new
 
     # People Moves — mirrors HTML PM table
     ws = wb.create_sheet("PeopleMoves")
-    _PM_COLS = ["Stock Code", "Ann. Date", "Role", "New Holder", "Previous Holder",
+    _PM_COLS = ["Stock Code", "Published Date", "Role", "New Holder", "Previous Holder",
                 "Effective Date", "Narrative", "URL", "Status", "Scraped At"]
     _header(ws, _PM_COLS)
     _url_col = _PM_COLS.index("URL") + 1
     for i, r in enumerate(people_moves, 2):
         role = r.get("role_title") or r.get("role_type") or ""
+        scraped = (r.get("scraped_at") or "")[:10].replace("-", "/")
         ws.append([r.get("stock_code"), r.get("announcement_date"), role,
                    r.get("new_holder"), r.get("previous_holder"),
                    r.get("effective_date"), r.get("narrative_en"),
-                   r.get("url"), r.get("status"), r.get("scraped_at")])
+                   r.get("url"), r.get("status"), scraped])
         if r.get("url"):
             cell = ws.cell(i, _url_col)
             cell.hyperlink = r["url"]
@@ -1099,7 +1104,8 @@ def write_excel(fund_commitments, people_moves, emops_data=None, since=None, new
                        r.get("company_type"), r.get("period"), r.get("currency"),
                        r.get("total_assets_raw"), r.get("inv_property_raw"),
                        r.get("telephone"), r.get("web_address"),
-                       r.get("address"), r.get("profile_status"), cf, r.get("scraped_at")])
+                       r.get("address"), r.get("profile_status"), cf,
+                       (r.get("scraped_at") or "")[:10].replace("-", "/")])
             web = r.get("web_address", "")
             if web:
                 url = web if web.startswith("http") else "https://" + web
@@ -1123,8 +1129,6 @@ def _header(ws, cols):
 def _status_fill(ws, row, status):
     if status == "NEW":
         for cell in ws[row]: cell.fill = _NEW_FILL
-    elif status == "HISTORICAL":
-        for cell in ws[row]: cell.fill = _HIS_FILL
     elif status == "CHANGED":
         for cell in ws[row]: cell.fill = _CHG_FILL
 
@@ -1239,6 +1243,7 @@ async def run(companies=None, export_excel=True, funds_only=False, people_only=F
             funds = await scrape_fund_commitments(code, sdate=since)
             funds = detect_changes(funds, STATE_DIR / f"{code}_funds.json",
                                    ["stock_code", "fund_name", "commitment_date"])
+            funds = _apply_date_status(funds, new_since, "announcement_date")
             all_funds.extend(funds)
             archive(code, "fund_commitments", funds)
 
@@ -1246,6 +1251,7 @@ async def run(companies=None, export_excel=True, funds_only=False, people_only=F
             moves = await scrape_people_moves(code, sdate=since)
             moves = detect_changes(moves, STATE_DIR / f"{code}_people.json",
                                    ["stock_code", "role_type", "change_date"])
+            moves = _apply_date_status(moves, new_since, "announcement_date")
             all_people.extend(moves)
             archive(code, "people_moves", moves)
 
