@@ -815,20 +815,22 @@ function renderRun(idx){
   // Populate fund type dropdown
   const ftypes=[...new Set(run.funds.map(r=>r.fund_type||'').filter(Boolean))].sort();
   populateSel(document.getElementById('fc-ft-sel'),ftypes.map(t=>[t.toLowerCase(),t]));
-  renderEM(run.emops||[]);renderFC(run.funds||[]);renderPM(run.people||[]);
+  renderEM(run.emops||[]);renderFS(run.emops||[]);renderFC(run.funds||[]);renderPM(run.people||[]);
 }
 function renderEM(rows){
   document.querySelector('#em-table tbody').innerHTML=rows.map(r=>{
-    const cf=r.changed_fields||[];
     const webUrl=r.web_address?(r.web_address.match(/^https?:\/\//)?r.web_address:'https://'+r.web_address):'';
-    const webInner=webUrl?`<a href="${webUrl}" target="_blank">${r.web_address}</a>`:(r.web_address||'—');
-    const webCell=cf.includes('web_address')?`<span class="field-chg">${webInner}</span>`:webInner;
-    const rowCls=r.profile_status==='CHANGED'?'row-changed':'';
-    const cfList=cf.length?`<span class="cf-list" title="${cf.join(', ')}">${cf.join(', ')}</span>`:'—';
+    const webCell=webUrl?`<a href="${webUrl}" target="_blank">${r.web_address}</a>`:(r.web_address||'—');
     const ck=`chk_em_${r.stock_code}`;
-    return `<tr class="${rowCls}" data-co="${r.stock_code}" data-st="${(r.profile_status||'').toLowerCase()}" data-date="${normDate(r.scraped_at||'')}"><td>${r.stock_code}</td><td>${fv(r.company_name_en||r.name_en,cf.includes('company_name_en'))}</td><td>${r.company_type}</td><td>${fv(r.period,cf.includes('period'))}</td><td>${fv(r.currency,cf.includes('currency'))}</td><td>${fv(r.total_assets_raw,cf.includes('total_assets_raw'))}</td><td>${fv(r.inv_property_raw,cf.includes('inv_property_raw'))}</td><td>${fv(r.telephone,cf.includes('telephone'))}</td><td>${webCell}</td><td>${fv(r.address,cf.includes('address'))}</td><td>${badge(r.profile_status)}</td><td>${cfList}</td><td>${fmtScraped(r.scraped_at)}</td><td>${chkBtn(ck)}</td></tr>`;
+    return `<tr data-co="${r.stock_code}" data-date="${normDate(r.scraped_at||'')}"><td>${r.stock_code}</td><td>${r.company_name_en||r.name_en||'—'}</td><td>${r.company_type||'—'}</td><td>${r.period||'—'}</td><td>${r.currency||'—'}</td><td>${r.telephone||'—'}</td><td>${webCell}</td><td>${r.address||'—'}</td><td>${fmtScraped(r.scraped_at)}</td><td>${chkBtn(ck)}</td></tr>`;
   }).join('');
   document.getElementById('em-count').textContent=rows.length+' companies';
+}
+function renderFS(rows){
+  document.querySelector('#fs-table tbody').innerHTML=rows.map(r=>{
+    return `<tr data-co="${r.stock_code}" data-date="${normDate(r.scraped_at||'')}"><td>${r.stock_code}</td><td>${r.company_name_en||r.name_en||'—'}</td><td>${r.period||'—'}</td><td>${r.currency||'—'}</td><td>${r.total_assets_raw||'—'}</td><td>${r.inv_property_raw||'—'}</td><td>${fmtScraped(r.scraped_at)}</td></tr>`;
+  }).join('');
+  document.getElementById('fs-count').textContent=rows.length+' companies';
 }
 function renderFC(rows){
   document.querySelector('#fc-table tbody').innerHTML=rows.map(r=>{
@@ -857,14 +859,22 @@ function inDateRange(rowDate,from,to){const d=normDate(rowDate);return(!from||d>
 function fmtScraped(s){if(!s)return '—';return s.slice(0,10).replace(/-/g,'/');}
 
 function filterEM(){
-  const sel=[...document.querySelectorAll('#em .filters select')].map(e=>e.value.toLowerCase());
+  const co=document.querySelector('#em .filters select').value.toLowerCase();
   const dates=[...document.querySelectorAll('#em .filters input[type=date]')].map(e=>e.value);
   const q=document.querySelector('#em .filters input[type=text]').value.toLowerCase();
-  const [co,st]=[sel[0],sel[1]];const [df,dt]=dates;
+  const [df,dt]=dates;
   let v=0;document.querySelectorAll('#em-table tbody tr').forEach(r=>{
-    const s=(!co||r.dataset.co===co)&&(!st||r.dataset.st===st)&&inDateRange(r.dataset.date,df,dt)&&(!q||r.textContent.toLowerCase().includes(q));
+    const s=(!co||r.dataset.co===co)&&inDateRange(r.dataset.date,df,dt)&&(!q||r.textContent.toLowerCase().includes(q));
     r.style.display=s?'':'none';if(s)v++;});
   document.getElementById('em-count').textContent=v+' companies';
+}
+function filterFS(){
+  const co=document.querySelector('#fs .filters select').value.toLowerCase();
+  const q=document.querySelector('#fs .filters input[type=text]').value.toLowerCase();
+  let v=0;document.querySelectorAll('#fs-table tbody tr').forEach(r=>{
+    const s=(!co||r.dataset.co===co)&&(!q||r.textContent.toLowerCase().includes(q));
+    r.style.display=s?'':'none';if(s)v++;});
+  document.getElementById('fs-count').textContent=v+' companies';
 }
 function filterFC(){
   const sel=[...document.querySelectorAll('#fc .filters select')].map(e=>e.value.toLowerCase());
@@ -979,19 +989,27 @@ renderRun(0);
 </div>
 <div class="tabs">
   <div class="tab active" onclick="showTab('em',this)">🏢 Company Profiles</div>
+  <div class="tab"        onclick="showTab('fs',this)">📊 Financial Statements</div>
   <div class="tab"        onclick="showTab('fc',this)">💼 Fund Commitments</div>
   <div class="tab"        onclick="showTab('pm',this)">👤 People Moves</div>
 </div>
 <div id="em" class="panel active">
   <div class="filters">
     <label>Company</label><select class="co-filter" onchange="filterEM()"><option value="">All</option></select>
-    <label>Status</label><select onchange="filterEM()"><option value="">All</option><option value="new">NEW</option><option value="changed">CHANGED</option><option value="unchanged">UNCHANGED</option></select>
     <label>Scraped from</label><input type="date" onchange="filterEM()" style="width:140px;">
     <label>to</label><input type="date" onchange="filterEM()" style="width:140px;">
     <input type="text" placeholder="Search…" oninput="filterEM()" style="width:180px;">
   </div>
   <div class="count" id="em-count"></div>
-  <table id="em-table"><thead><tr><th class="sortable" onclick="sortTable('em-table',0)">Code</th><th class="sortable" onclick="sortTable('em-table',1)">Company Name</th><th class="sortable" onclick="sortTable('em-table',2)">Type</th><th class="sortable" onclick="sortTable('em-table',3)">BS Period</th><th class="sortable" onclick="sortTable('em-table',4)">Currency</th><th class="sortable" onclick="sortTable('em-table',5)">Total Assets</th><th class="sortable" onclick="sortTable('em-table',6)">Inv. Property</th><th>Telephone</th><th>Website</th><th>Address</th><th class="sortable" onclick="sortTable('em-table',10)">Status</th><th>Changed Fields</th><th class="sortable" onclick="sortTable('em-table',12)">Scraped At</th><th>Action</th></tr></thead><tbody></tbody></table>
+  <table id="em-table"><thead><tr><th class="sortable" onclick="sortTable('em-table',0)">Code</th><th class="sortable" onclick="sortTable('em-table',1)">Company Name</th><th class="sortable" onclick="sortTable('em-table',2)">Type</th><th class="sortable" onclick="sortTable('em-table',3)">BS Period</th><th class="sortable" onclick="sortTable('em-table',4)">Currency</th><th>Telephone</th><th>Website</th><th>Address</th><th class="sortable" onclick="sortTable('em-table',8)">Scraped At</th><th>Action</th></tr></thead><tbody></tbody></table>
+</div>
+<div id="fs" class="panel">
+  <div class="filters">
+    <label>Company</label><select class="co-filter" onchange="filterFS()"><option value="">All</option></select>
+    <input type="text" placeholder="Search…" oninput="filterFS()" style="width:180px;">
+  </div>
+  <div class="count" id="fs-count"></div>
+  <table id="fs-table"><thead><tr><th class="sortable" onclick="sortTable('fs-table',0)">Code</th><th class="sortable" onclick="sortTable('fs-table',1)">Company Name</th><th class="sortable" onclick="sortTable('fs-table',2)">BS Period</th><th class="sortable" onclick="sortTable('fs-table',3)">Currency</th><th class="sortable" onclick="sortTable('fs-table',4)">Total Assets</th><th class="sortable" onclick="sortTable('fs-table',5)">Inv. Property</th><th class="sortable" onclick="sortTable('fs-table',6)">Scraped At</th></tr></thead><tbody></tbody></table>
 </div>
 <div id="fc" class="panel">
   <div class="filters">
@@ -1090,29 +1108,37 @@ def write_excel(fund_commitments, people_moves, emops_data=None, since=None, new
         _status_fill(ws, i, r.get("status"))
     _autofit(ws)
 
-    # Company Profiles — mirrors HTML EMOPS table
+    # Company Profiles — Code, Name, Type, BS Period, Currency, Telephone, Website, Address
     if emops_data:
         ws = wb.create_sheet("CompanyProfiles")
         _EM_COLS = ["Stock Code", "Company Name", "Type", "BS Period", "Currency",
-                    "Total Assets", "Inv. Property", "Telephone", "Website",
-                    "Address", "Status", "Changed Fields", "Scraped At"]
+                    "Telephone", "Website", "Address", "Scraped At"]
         _header(ws, _EM_COLS)
         _web_col = _EM_COLS.index("Website") + 1
         for i, r in enumerate(emops_data, 2):
-            cf = ", ".join(r.get("changed_fields") or [])
+            scraped = (r.get("scraped_at") or "")[:10].replace("-", "/")
             ws.append([r.get("stock_code"), r.get("company_name_en") or r.get("name_en"),
                        r.get("company_type"), r.get("period"), r.get("currency"),
-                       r.get("total_assets_raw"), r.get("inv_property_raw"),
                        r.get("telephone"), r.get("web_address"),
-                       r.get("address"), r.get("profile_status"), cf,
-                       (r.get("scraped_at") or "")[:10].replace("-", "/")])
+                       r.get("address"), scraped])
             web = r.get("web_address", "")
             if web:
                 url = web if web.startswith("http") else "https://" + web
                 cell = ws.cell(i, _web_col)
                 cell.hyperlink = url
                 cell.font = _link_font
-            _status_fill(ws, i, r.get("profile_status"))
+        _autofit(ws)
+
+        # Financial Statements — BS Period, Currency, Total Assets, Inv. Property
+        ws = wb.create_sheet("FinancialStatements")
+        _FS_COLS = ["Stock Code", "Company Name", "BS Period", "Currency",
+                    "Total Assets", "Inv. Property", "Scraped At"]
+        _header(ws, _FS_COLS)
+        for i, r in enumerate(emops_data, 2):
+            scraped = (r.get("scraped_at") or "")[:10].replace("-", "/")
+            ws.append([r.get("stock_code"), r.get("company_name_en") or r.get("name_en"),
+                       r.get("period"), r.get("currency"),
+                       r.get("total_assets_raw"), r.get("inv_property_raw"), scraped])
         _autofit(ws)
 
     wb.save(path)
