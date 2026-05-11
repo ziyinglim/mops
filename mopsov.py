@@ -1004,27 +1004,36 @@ def _parse_e02_period(subject: str, date_str: str) -> tuple[int | None, int | No
     return None, None
 
 
-def _pick_ai_link(links: list[tuple], season: int) -> tuple | None:
+def _pick_ai_link(links: list[tuple], season: int,
+                  prefer_consolidated: bool = False) -> tuple | None:
     """Select the best AI link for the given season.
-    Always prefers AI3 (individual/unconsolidated).
-    Q4 (season 4) only: falls back to AI1 (consolidated) if no AI3 is available."""
-    ai3 = [t for t in links if t[4] == season and t[5] == "AI3"]
-    if ai3:
-        return ai3[0]
-    if season == 4:
-        ai1 = [t for t in links if t[4] == season and t[5] == "AI1"]
-        if ai1:
-            return ai1[0]
+    prefer_consolidated=True  (Financial Holdings): prefer AI1; fall back to AI3.
+    prefer_consolidated=False (all others):         prefer AI3; fall back to AI1 for Q4 only."""
+    if prefer_consolidated:
+        for rt in ("AI1", "AI3"):
+            hit = [t for t in links if t[4] == season and t[5] == rt]
+            if hit:
+                return hit[0]
+    else:
+        ai3 = [t for t in links if t[4] == season and t[5] == "AI3"]
+        if ai3:
+            return ai3[0]
+        if season == 4:
+            ai1 = [t for t in links if t[4] == season and t[5] == "AI1"]
+            if ai1:
+                return ai1[0]
     return None
 
 
 async def _get_ai3_for_period(
     client, stock_code: str, roc_year: int, season: int,
     target_display_code: str | None = None,
+    prefer_consolidated: bool = False,
 ) -> tuple[str, str, str] | None:
     """Steps 2–4: Navigate t57sb01, find subsidiary if needed, locate AI PDF, get temp download URL.
     Returns (pdf_url, pdf_filename, subsidiary_internal_co_id) or None.
-    Always prefers AI3 (individual); falls back to AI1 (consolidated) only for Q4 (season 4).
+    prefer_consolidated=True → Financial Holdings: prefer AI1 (consolidated) for all seasons.
+    prefer_consolidated=False → others: prefer AI3 (individual); AI1 fallback for Q4 only.
     """
     t57sb01_year = roc_year
 
@@ -1038,7 +1047,7 @@ async def _get_ai3_for_period(
     # Try to find AI links directly (company IS the reporting entity)
     ai_links = _extract_ai3_links(soup1)
     if ai_links:
-        hit = _pick_ai_link(ai_links, season)
+        hit = _pick_ai_link(ai_links, season, prefer_consolidated=prefer_consolidated)
         if not hit:
             return None
         filename, kind, co_id = hit[0], hit[1], hit[2]
@@ -1060,7 +1069,7 @@ async def _get_ai3_for_period(
     ai_links = _extract_ai3_links(soup2)
     if not ai_links:
         return None
-    hit = _pick_ai_link(ai_links, season)
+    hit = _pick_ai_link(ai_links, season, prefer_consolidated=prefer_consolidated)
     if not hit:
         return None
     filename, kind, co_id = hit[0], hit[1], hit[2]
@@ -1069,7 +1078,8 @@ async def _get_ai3_for_period(
 
 
 async def scrape_quarterly_reports(stock_code: str, roc_years: int = 2,
-                                   subsidiary_name_en: str = "") -> list[dict]:
+                                   subsidiary_name_en: str = "",
+                                   use_consolidated: bool = False) -> list[dict]:
     """Quarterly AUM extraction — follows the 7-step flow:
     1. Search PRO_ITEM=E02 (lang=TW) to discover available filing periods
     2. Navigate doc.twse.com.tw/t57sb01 for the parent company
@@ -1121,11 +1131,12 @@ async def scrape_quarterly_reports(stock_code: str, roc_years: int = 2,
                     sub_co_id = prev.get("subsidiary_code", stock_code)
                     logger.info("Re-trying extraction from cached PDF: %s", pdf_dest.name)
                 else:
-                    # Steps 2–4: navigate t57sb01, find subsidiary, get AI3 PDF info
+                    # Steps 2–4: navigate t57sb01, find subsidiary, get AI PDF info
                     result = await _get_ai3_for_period(client, stock_code, roc_year, season,
-                                                        target_display_code=target_display_code)
+                                                        target_display_code=target_display_code,
+                                                        prefer_consolidated=use_consolidated)
                     if not result:
-                        logger.info("No AI3 PDF found [%s] %s", stock_code, period_label)
+                        logger.info("No AI PDF found [%s] %s", stock_code, period_label)
                         continue
                     pdf_url, orig_filename, sub_co_id = result
 
@@ -1140,6 +1151,10 @@ async def scrape_quarterly_reports(stock_code: str, roc_years: int = 2,
                     pdf_dest.write_bytes(pr.content)
                     logger.info("PDF saved: %s", pdf_dest.name)
 
+                # Detect report type from filename (AI1 = consolidated, AI3 = individual)
+                _ai_m = re.search(r"_(AI[13])\.", pdf_dest.name, re.I)
+                is_consolidated = bool(_ai_m and _ai_m.group(1).upper() == "AI1")
+
                 # Step 6: extract 資産總計
                 total_assets = _extract_total_assets_from_pdf(pdf_dest)
                 if total_assets is None:
@@ -1151,6 +1166,7 @@ async def scrape_quarterly_reports(stock_code: str, roc_years: int = 2,
                         "period":                     period_label,
                         "roc_year":                   roc_year,
                         "season":                     season,
+                        "is_consolidated":            is_consolidated,
                         "currency":                   "TWD (thousands)",
                         "total_assets_raw":           "",
                         "total_assets_numeric":       None,
@@ -1170,6 +1186,7 @@ async def scrape_quarterly_reports(stock_code: str, roc_years: int = 2,
                     "period":                     period_label,
                     "roc_year":                   roc_year,
                     "season":                     season,
+                    "is_consolidated":            is_consolidated,
                     "currency":                   "TWD (thousands)",
                     "total_assets_raw":           f"NT${total_assets:,}K",
                     "total_assets_numeric":       total_assets,
@@ -1640,7 +1657,7 @@ function renderFS(rows){
   document.querySelector('#fs-table tbody').innerHTML=rows.map(r=>{
     const base=r.name_en||COMPANIES[r.stock_code]||r.stock_code;
     const co=r.delisted?`${base} <span style="color:#c0392b;font-weight:600">(Delisted)</span>`:base;
-    const src=r.source==='quarterly'?'PDFs - Unconsolidated FS':'Balance Sheet';
+    const src=r.source==='quarterly'?'PDFs - Unconsolidated FS':r.source==='quarterly_consolidated'?'PDFs - Consolidated FS':'Balance Sheet';
     const ck=`chk_fs_${r.stock_code}_${(r.period||'').replace(/\W+/g,'_')}`;
     const filing=r.filing_url?`<a href="${r.filing_url}" target="_blank">View ↗</a>`:'—';
     const taCell=r.extraction_failed
@@ -1975,7 +1992,7 @@ def write_excel(fund_commitments, people_moves, emops_data=None, balance_history
                        "",
                        co_name,
                        r.get("period"),
-                       "Balance Sheet" if r.get("source") == "annual" else "PDFs - Unconsolidated FS",
+                       "Balance Sheet" if r.get("source") == "annual" else "PDFs - Consolidated FS" if r.get("source") == "quarterly_consolidated" else "PDFs - Unconsolidated FS",
                        ta_val,
                        r.get("investment_property_raw"),
                        (r.get("scraped_at") or "")[:10].replace("-", "/"),
@@ -2192,9 +2209,7 @@ def _build_fs_data(emops_data: list[dict], balance_history: list[dict],
                     or r.get("subsidiary_name_en")
                     or entry.get("f26_name_en")
                     or _name_map.get(display_code, display_code))
-        # Financial holdings always use BS rows — skip any PDF row that resolves to a holding company
-        if _HOLDING_RE.search(sub_name or ""):
-            continue
+        source = "quarterly_consolidated" if r.get("is_consolidated") else "quarterly"
         rows.append({
             "stock_code":              display_code,
             "name_en":                 sub_name,
@@ -2204,7 +2219,7 @@ def _build_fs_data(emops_data: list[dict], balance_history: list[dict],
             "investment_property_raw": _fmt_millions(r.get("investment_property_numeric")),
             "scraped_at":              (r.get("scraped_at") or "")[:10],
             "delisted":                entry.get("delisted", False),
-            "source":                  "quarterly",
+            "source":                  source,
             "filing_url":              "",
             "extraction_failed":       r.get("extraction_failed", False),
         })
@@ -2251,8 +2266,11 @@ async def run(companies=None, export_excel=True, mode="full", since=None, new_si
                         code, profile.get("address") or "—", bs.get("period") or "—",
                         bs.get("total_assets_raw") or "—")
 
-            bs_history = await scrape_quarterly_reports(code,
-                                                      subsidiary_name_en=entry.get("f26_name_en", ""))
+            bs_history = await scrape_quarterly_reports(
+                code,
+                subsidiary_name_en=entry.get("f26_name_en", ""),
+                use_consolidated=bool(_HOLDING_RE.search(entry.get("name_en", ""))),
+            )
             all_balance_history.extend(bs_history)
 
         if scrape_fc_pm:
