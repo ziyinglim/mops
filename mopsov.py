@@ -2192,6 +2192,9 @@ def _build_fs_data(emops_data: list[dict], balance_history: list[dict],
                     or r.get("subsidiary_name_en")
                     or entry.get("f26_name_en")
                     or _name_map.get(display_code, display_code))
+        # Financial holdings always use BS rows — skip any PDF row that resolves to a holding company
+        if _HOLDING_RE.search(sub_name or ""):
+            continue
         rows.append({
             "stock_code":              display_code,
             "name_en":                 sub_name,
