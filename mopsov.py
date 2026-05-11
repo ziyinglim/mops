@@ -29,32 +29,45 @@ logger = logging.getLogger("mopsov")
 
 # ── Config ────────────────────────────────────────────────────────────────────
 
-MOPSOV_SEARCH_URL = "https://mopsov.twse.com.tw/mops/web/ezsearch_query"
-EMOPS_DETAIL_HOST = "https://emops.twse.com.tw"
+MOPSOV_SEARCH_URL  = "https://mopsov.twse.com.tw/mops/web/ezsearch_query"
+EMOPS_HOST         = "https://emops.twse.com.tw"
+TWSE_DOC_URL       = "https://doc.twse.com.tw/server-java/t57sb01"
+_TYPEK_OPTIONS     = ["sii", "otc", "rotc", "co"]
+_EMOPS_PROFILE_HEADERS = {
+    "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                   "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"),
+    "Referer":      f"https://emops.twse.com.tw/server-java/t58query",
+    "Origin":       "https://emops.twse.com.tw",
+    "Content-Type": "application/x-www-form-urlencoded",
+}
 
 OUTPUT_DIR  = Path("output")
 ARCHIVE_DIR = Path("storage/archive")
 STATE_DIR   = Path("storage/state")
+PDF_DIR     = Path("storage/pdfs")
 
 # Default date range — 2 years back to today
 SDATE = (datetime.now() - timedelta(days=730)).strftime("%Y/%m/%d")
 EDATE = datetime.now().strftime("%Y/%m/%d")
 
+_SEASON_LABEL   = {1: "Q1", 2: "H1", 3: "Q3", 4: "Q4"}
+_FS_SEASON_DATE = {1: "03/31", 2: "06/30", 3: "09/30", 4: "12/31"}
+
 WATCHLIST = [
-    {"stock_code": "2881", "name_en": "Fubon Financial Holding",                "company_type": "financial holding company"},
-    {"stock_code": "2882", "name_en": "Cathay Life Insurance",                   "company_type": "insurance company"},
-    {"stock_code": "2891", "name_en": "CBC Financial Holding",                   "company_type": "financial holding company"},
+    {"stock_code": "2881", "name_en": "Fubon Financial Holding",                "company_type": "financial holding company", "f26_name_en": "Fubon Life Insurance", "f26_display_code": "28810012"},
+    {"stock_code": "2882", "name_en": "Cathay Financial Holdings",               "company_type": "financial holding company"},
+    {"stock_code": "2891", "name_en": "CTBC Financial Holdings",                 "company_type": "financial holding company", "f26_name_en": "CTBC Bank"},
     {"stock_code": "2330", "name_en": "Taiwan Semiconductor Manufacturing Company", "company_type": "semiconductor company"},
     {"stock_code": "5874", "name_en": "Nan Shan Life Insurance",                 "company_type": "insurance company"},
     {"stock_code": "2317", "name_en": "Foxconn Technology Group",                "company_type": "technology company"},
-    {"stock_code": "2886", "name_en": "Mega International Commercial Bank",      "company_type": "commercial bank"},
+    {"stock_code": "2886", "name_en": "Mega Financial Holdings",                 "company_type": "financial holding company", "f26_name_en": "Mega International Commercial Bank"},
     {"stock_code": "2880", "name_en": "Hua Nan Commercial Bank",                 "company_type": "commercial bank"},
     {"stock_code": "5857", "name_en": "Land Bank of Taiwan",                     "company_type": "state-owned bank"},
-    {"stock_code": "2888", "name_en": "Shin Kong Life Insurance",                "company_type": "insurance company"},
+    {"stock_code": "2888", "name_en": "Shin Kong Life Insurance",                "company_type": "insurance company", "delisted": True},
     {"stock_code": "2801", "name_en": "Chang Hwa Bank",                          "company_type": "commercial bank"},
-    {"stock_code": "2890", "name_en": "Bank SinoPac",                            "company_type": "commercial bank"},
+    {"stock_code": "2890", "name_en": "SinoPac Financial Holdings",               "company_type": "financial holding company", "f26_name_en": "Bank SinoPac"},
     {"stock_code": "5876", "name_en": "Shanghai Commercial & Savings Bank",      "company_type": "commercial bank"},
-    {"stock_code": "2885", "name_en": "Yuanta Commercial Bank",                  "company_type": "commercial bank"},
+    {"stock_code": "2885", "name_en": "Yuanta Financial Holdings",               "company_type": "financial holding company", "f26_name_en": "Yuanta Commercial Bank"},
     {"stock_code": "2833", "name_en": "Taiwan Life Insurance",                   "company_type": "insurance company"},
     {"stock_code": "2867", "name_en": "Mercuries Life Insurance",                "company_type": "insurance company"},
     {"stock_code": "5873", "name_en": "TransGlobe Life Insurance",               "company_type": "insurance company"},
@@ -66,33 +79,137 @@ WATCHLIST = [
     {"stock_code": "2897", "name_en": "O-Bank",                                  "company_type": "digital bank"},
     {"stock_code": "2002", "name_en": "China Steel Corporation",                 "company_type": "steel company"},
 ]
+_WATCHLIST_MAP = {w["stock_code"]: w for w in WATCHLIST}
+
+# Subsidiary detection: maps (parent_code, name_pattern) → subsidiary public code.
+# Used to re-label FC/PM records where the announcement title names the subsidiary.
+_SUBSIDIARY_PATTERNS: dict[str, list[tuple]] = {
+    "2881": [
+        (re.compile(r"Fubon Life(?:\s+Insurance)?", re.I),          "28810012"),
+        (re.compile(r"Taipei Fubon(?:\s+(?:Commercial\s+)?Bank)?", re.I), "28810006"),
+    ],
+    "2882": [
+        (re.compile(r"Cathay United Bank", re.I),                   "28820004"),
+        (re.compile(r"Cathay Life(?:\s+Insurance)?", re.I),         "28820001"),
+    ],
+    "2885": [
+        (re.compile(r"Yuanta Commercial Bank", re.I),               "28850007"),
+    ],
+    "2886": [
+        (re.compile(r"Mega International(?:\s+Commercial\s+Bank)?", re.I), "28860005"),
+    ],
+    "2890": [
+        (re.compile(r"Bank SinoPac|SinoPac Bank", re.I),                   "28900001"),
+    ],
+    "2891": [
+        (re.compile(r"CTBC Bank", re.I),                                   "28910001"),
+    ],
+}
+
+# Maps internal TWSE doc-server subsidiary_code → public-facing subsidiary code (for FS tab).
+# Only needed when the holding company files under its own stock_code but the FS PDF is for a
+# named subsidiary with a different public display code (e.g. Fubon Financial 2881 → Fubon Life).
+# Banks listed directly (2880/2886/2890) have sub_code != stock_code but we want to display
+# them under their watchlist code, so they are intentionally omitted — the fallback handles it.
+_FS_SUBSIDIARY_CODE_MAP: dict[str, str] = {
+    "5865":   "28810012",   # Fubon Life Insurance               (parent: Fubon Financial 2881)
+    "5852":   "28850007",   # Yuanta Commercial Bank             (parent: Yuanta Financial 2885)
+    "000700": "28860005",   # Mega International Commercial Bank  (parent: Mega Financial 2886)
+    "5849":   "28900001",   # Bank SinoPac                       (parent: SinoPac Financial 2890)
+    "2833":   "28910001",   # CTBC Bank                          (parent: CTBC Financial 2891)
+}
+
+def _resolve_subsidiary(parent_code: str, subject: str) -> str:
+    """Return the subsidiary public code if the subject names a known subsidiary, else parent_code."""
+    for pattern, sub_code in _SUBSIDIARY_PATTERNS.get(parent_code, []):
+        if pattern.search(subject):
+            return sub_code
+    return parent_code
+
+# Subsidiaries with no standalone EMOPS/MOPSOV profile — shown in Company Profiles with a notice
+_SUBSIDIARY_STUBS = [
+    {"stock_code": "28810012", "company_name_en": "Fubon Life Insurance",         "no_filing_data": True},
+    {"stock_code": "28810006", "company_name_en": "Taipei Fubon Commercial Bank", "no_filing_data": True},
+    {"stock_code": "28820001", "company_name_en": "Cathay Life Insurance",        "no_filing_data": True},
+    {"stock_code": "28820004", "company_name_en": "Cathay United Bank",           "no_filing_data": True},
+    {"stock_code": "28850007", "company_name_en": "Yuanta Commercial Bank",           "no_filing_data": True},
+    {"stock_code": "28860005", "company_name_en": "Mega International Commercial Bank", "no_filing_data": True},
+    {"stock_code": "28900001", "company_name_en": "Bank SinoPac",                       "no_filing_data": True},
+    {"stock_code": "28910001", "company_name_en": "CTBC Bank",                         "no_filing_data": True},
+]
 
 # Allowlist: fund commitment must match at least one of these in name+type+statement
 _FUND_ALLOWLIST_RE = re.compile(
-    r"\bfund\b|private equity|\bP\.?E\b|venture capital|"
+    r"\bfund\b|fund commitment|private equity|\bP\.?E\b|venture capital|"
     r"real estate|\bREIT\b|infrastructure|hedge fund|"
     r"alternative (?:asset|investment)|secondar(?:y|ies)|"
     r"private (?:credit|debt|market)|mezzanine|"
     r"growth (?:equity|capital)|buyout|\bLBO\b|"
     r"co.?invest|special situation|distressed|"
     r"natural resource|commodit(?:y|ies)|gold|precious metal|"
-    r"private fund|real asset",
+    r"private fund|real asset|"
+    r"direct investment|InvIT|"
+    r"\bdeal\b|\bacquisition\b",
     re.IGNORECASE
 )
+
+# Denylist: exclude even if allowlist matched
+_FUND_EXCLUDE_RE = re.compile(
+    r"asset.backed.securiti[sz]ation|mortgage.backed|"
+    r"\bdisposal\b|"
+    r"common (?:share|stock)|ordinary share|preferred (?:share|stock)|"
+    r"\bdebenture|\bcorporate bonds?|\bbond issue|\bnote issue|"
+    r"\bshares\b|"
+    r"(?<!private )(?<!growth )\bequity\b",
+    re.IGNORECASE
+)
+
+# Standard fund type categories — everything else is normalised to ""
+_FUND_TYPE_MAP = [
+    ("Private Equity", re.compile(
+        r"private equity|\bP\.?E\.?\b|venture capital|\bV\.?C\.?\b|buyout|\bLBO\b|"
+        r"growth (?:equity|capital)|mezzanine|co.?invest|special situation|distressed|"
+        r"secondar(?:y|ies)|direct investment",
+        re.IGNORECASE)),
+    ("Real Estate", re.compile(
+        r"real estate|\bREIT\b|real asset|property fund",
+        re.IGNORECASE)),
+    ("Hedge Funds", re.compile(
+        r"hedge fund",
+        re.IGNORECASE)),
+    ("Infrastructure", re.compile(
+        r"infrastructure|InvIT",
+        re.IGNORECASE)),
+    ("Private Debt", re.compile(
+        r"private (?:debt|credit|lending|loan)|direct lending",
+        re.IGNORECASE)),
+    ("Natural Resources", re.compile(
+        r"natural resource|commodit(?:y|ies)|energy|mining|oil\b|gas\b|timber|"
+        r"agriculture|precious metal|gold",
+        re.IGNORECASE)),
+]
+
+def _normalize_fund_type(raw_type: str, fund_name: str = "") -> str:
+    """Map raw fund_type to one of 6 standard categories, or '' if unrecognised."""
+    text = raw_type + " " + fund_name
+    for label, pattern in _FUND_TYPE_MAP:
+        if pattern.search(text):
+            return label
+    return ""
 
 # Fund name looks like a date or date-range (not a real fund name)
 _DATE_NAME_RE = re.compile(r"^\d{4}/\d{2}/\d{2}(\s*~\s*\d{4}/\d{2}/\d{2})?$")
 
 # Roles we actively track — sorted longest-first so the regex prefers specific matches
 TRACKED_ROLES = sorted([
-    "Chief Compliance Officer", "Chief Executive Officer",
+    "Chairman",
+    "Chief Executive Officer",
     "Chief Finance Officer", "Chief Financial Officer",
-    "Chief Information Officer", "Chief Investment Officer",
+    "Chief Investment Officer",
     "Chief Operating Officer", "Chief Operations Officer",
-    "Chief Risk Officer",
-    "Chief Sustainability Officer", "Chief Technology Officer",
-    "Chief Strategy Officer", "Chief Accountant",
-    "Chief Business Development Officer",
+    "Chief Technology Officer",
+    "Chief Strategy Officer",
+    "General Manager",
     "Global Head of Alternative Assets", "Global Head of Alternative Investments",
     "Global Head of Alternatives", "Global Head of Hedge Funds",
     "Global Head of Infrastructure", "Global Head of Investor Relations",
@@ -119,7 +236,7 @@ _TRACKED_ROLES_RE = re.compile(
 PEOPLE_KEYWORDS = (
     TRACKED_ROLES
     + list(_ROLE_ABBREV.keys())
-    + ["執行長", "投資長", "財務長", "風控長", "總經理", "General Manager", "President"]
+    + ["執行長", "投資長", "財務長", "總經理", "董事長", "President"]
 )
 
 _HEADERS = {
@@ -220,14 +337,11 @@ async def fetch_detail(url: str, retries: int = 3) -> str:
 def extract_statement(html: str) -> str:
     """Extract the Statement column content from detail page HTML."""
     soup = BeautifulSoup(html, "lxml")
-    for selector in [
-        lambda s: s.find("td", string=re.compile(r"Statement", re.I)),
-    ]:
-        header = selector(soup)
-        if header:
-            sibling = header.find_next_sibling("td")
-            if sibling:
-                return sibling.get_text("\n", strip=True)
+    header = soup.find("td", string=re.compile(r"Statement", re.I))
+    if header:
+        sibling = header.find_next_sibling("td")
+        if sibling:
+            return sibling.get_text("\n", strip=True)
     # Fallback: find the largest td containing numbered fields
     best = ""
     for td in soup.find_all("td"):
@@ -260,6 +374,8 @@ async def scrape_fund_commitments(stock_code: str, sdate: str = None) -> list[di
         rows.extend(await search_mopsov(stock_code, pro_item, sdate=sdate))
     results = []
     for row in rows:
+        if not _FUND_ALLOWLIST_RE.search(row["subject"]):
+            continue
         await asyncio.sleep(0.8)   # throttle to avoid server rate limit
         html = await fetch_detail(row["url"])
         if not html:
@@ -275,7 +391,7 @@ async def scrape_fund_commitments(stock_code: str, sdate: str = None) -> list[di
         f1_clean = f1.rsplit(":", 1)[-1].strip() if ":" in f1 else f1
         parts = [p.strip() for p in f1_clean.split(";")]
         fund_name = _clean_fund_name(parts[0] if parts else f1_clean)
-        fund_type = parts[1] if len(parts) > 1 else ""
+        raw_fund_type = parts[1] if len(parts) > 1 else ""
 
         # Skip disposal/secondary transactions and unparseable names
         if re.search(r"^The partnership interests? of\b", fund_name, re.I):
@@ -308,16 +424,21 @@ async def scrape_fund_commitments(stock_code: str, sdate: str = None) -> list[di
         amount_raw = re.sub(r"^([A-Z]{3})\s+\1\b", r"\1", amount_raw)
         currency_match = re.search(r"\b(USD|EUR|GBP|JPY|TWD|HKD|SGD|AUD|CAD)\b", amount_raw)
 
-        searchable = fund_name + " " + fund_type + " " + row["subject"] + " " + statement
+        searchable = fund_name + " " + raw_fund_type + " " + row["subject"] + " " + statement
         if not _FUND_ALLOWLIST_RE.search(searchable):
+            continue
+        if _FUND_EXCLUDE_RE.search(fund_name + " " + raw_fund_type + " " + row["subject"]):
             continue
 
         _, bs_date = _get_latest_aum(stock_code)
         formatted_amount, fx_url = await _format_commitment_amount(amount_raw, currency_match.group(1) if currency_match else "")
-        headline = _build_fund_headline(stock_code, fund_name, formatted_amount)
+        fund_type = _normalize_fund_type(raw_fund_type, fund_name)
+        headline = _build_fund_headline(stock_code, fund_name, formatted_amount) if fund_type else ""
+        twd_match = re.search(r"TWD ([\d,]+) million", formatted_amount)
+        twd_amount_mn = twd_match.group(1) if twd_match else ""
 
         results.append({
-            "stock_code": stock_code,
+            "stock_code": _resolve_subsidiary(stock_code, row["subject"]),
             "announcement_date": row["date"],
             "subject": row["subject"],
             "headline": headline,
@@ -325,6 +446,7 @@ async def scrape_fund_commitments(stock_code: str, sdate: str = None) -> list[di
             "fund_type": fund_type,
             "commitment_date": date_match.group(0) if date_match else "",
             "commitment_amount_raw": amount_raw,
+            "twd_amount_mn": twd_amount_mn,
             "commitment_currency": currency_match.group(1) if currency_match else "",
             "commitment_amount_numeric": _parse_amount(amount_raw),
             "fx_url": fx_url,
@@ -382,12 +504,14 @@ async def scrape_people_moves(stock_code: str, sdate: str = None) -> list[dict]:
             new_holder_clean  = _clean_holder_name(new_holder)
             prev_holder_clean = _clean_holder_name(prev_holder)
 
-            narrative = _build_narrative(stock_code, role_title,
-                                         new_holder_clean, prev_holder_clean,
-                                         change_type, effective_date,
-                                         reason=reason)
+            narrative = _NARRATIVE_ABBREV_RE.sub(
+                "", _build_narrative(stock_code, role_title,
+                                     new_holder_clean, prev_holder_clean,
+                                     change_type, effective_date,
+                                     reason=reason)
+            ).strip()
             results.append({
-                "stock_code": stock_code,
+                "stock_code": _resolve_subsidiary(stock_code, row["subject"]),
                 "announcement_date": row["date"],
                 "subject": row["subject"],
                 "role_type": role_type,
@@ -406,6 +530,11 @@ async def scrape_people_moves(stock_code: str, sdate: str = None) -> list[dict]:
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
+
+_NARRATIVE_ABBREV_RE = re.compile(
+    r",?\s*\bCo\.,?\s*Ltd\.?|,?\s*\bLtd\.?|,?\s*\bInc\.?|,?\s*\bCorp\.?",
+    re.IGNORECASE,
+)
 
 _LEGAL_SUFFIX_RE = re.compile(
     r"[,\s]*\b("
@@ -456,11 +585,11 @@ def _extract_tracked_role(text: str) -> str:
 
 def _clean_holder_name(text: str) -> str:
     """Return person's name from holder text, title-cased (strips '/ role...' suffix)."""
-    if not text or text.lower().strip() in ("none", "nil", "n/a", ""):
+    if not text or text.lower().strip() in ("none", "nil", "n/a", "na", ""):
         return ""
     name = re.split(r"\s*/\s*", text.strip(), maxsplit=1)[0].strip()
     name = name.rstrip(".,、，").strip()
-    if name.lower() in ("none", "nil", "n/a"):
+    if name.lower() in ("none", "nil", "n/a", "na"):
         return ""
     # Comma-separated format is SURNAME,GIVEN-NAME → convert to "Surname Given-Name"
     name = name.replace(",", " ").strip()
@@ -507,10 +636,22 @@ async def _format_commitment_amount(amount_raw: str, orig_currency: str) -> tupl
     fx_url is an XE.com link for the conversion, empty if no conversion needed."""
     if not amount_raw or re.match(r"^N/?A\b", amount_raw, re.I):
         return "", ""
+    # Infer currency from symbol if not explicitly provided (e.g. "US$" → USD, "€" → EUR)
+    if not orig_currency:
+        sym_map = {"US$": "USD", "€": "EUR", "£": "GBP", "¥": "JPY", "HK$": "HKD", "A$": "AUD", "S$": "SGD", "C$": "CAD"}
+        for sym, cur in sym_map.items():
+            if sym in amount_raw:
+                orig_currency = cur
+                break
     num_match = re.search(r"\d[\d,]*(?:\.\d+)?", amount_raw.replace(" ", ""))
     if not num_match:
         return amount_raw, ""
     amount = float(num_match.group().replace(",", ""))
+    # Adjust for amounts already expressed in millions/billions
+    if re.search(r"\bbillion\b", amount_raw, re.I):
+        amount *= 1e9
+    elif re.search(r"\bmillion\b", amount_raw, re.I):
+        amount *= 1e6
     orig_millions = amount / 1e6
 
     if not orig_currency or orig_currency == "TWD":
@@ -526,7 +667,7 @@ async def _format_commitment_amount(amount_raw: str, orig_currency: str) -> tupl
     return orig_str, fx_url
 
 def _build_fund_headline(stock_code, fund_name, formatted_amount):
-    entry = next((w for w in WATCHLIST if w["stock_code"] == stock_code), {})
+    entry = _WATCHLIST_MAP.get(stock_code, {})
     company_type = entry.get("company_type", "investor")
     aum, _ = _get_latest_aum(stock_code)
     ref = f"The {aum} {company_type}" if aum else f"The {company_type}"
@@ -535,15 +676,15 @@ def _build_fund_headline(stock_code, fund_name, formatted_amount):
 
 def _build_narrative(stock_code, role, new_holder, prev_holder, change_type,
                      effective_date, reason=""):
-    entry = next((w for w in WATCHLIST if w["stock_code"] == stock_code), {})
+    entry = _WATCHLIST_MAP.get(stock_code, {})
     company_type = entry.get("company_type", "company")
     aum, _ = _get_latest_aum(stock_code)
     company_ref = f"The {aum} {company_type}" if aum else f"The {company_type}"
     date_str = _format_date(effective_date)
     eff = f", effective {date_str}" if date_str else ""
 
-    has_new  = bool(new_holder  and new_holder.lower()  not in ("none", "nil", "n/a", ""))
-    has_prev = bool(prev_holder and prev_holder.lower() not in ("none", "nil", "n/a", ""))
+    has_new  = bool(new_holder  and new_holder.lower()  not in ("none", "nil", "n/a", "na", ""))
+    has_prev = bool(prev_holder and prev_holder.lower() not in ("none", "nil", "n/a", "na", ""))
     ct = change_type or ""
 
     if has_new:
@@ -593,6 +734,611 @@ def _get_latest_aum(stock_code: str) -> tuple[str, str]:
         pass
     return "", ""
 
+# ── TWSE Document Server — Quarterly Financial Report PDFs ───────────────────
+
+_TWSE_DOC_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+    "Referer":    "https://doc.twse.com.tw/",
+    "Accept":     "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+}
+
+def _twse_doc_url(co_id: str, roc_year: int, seamon: int | str = "") -> str:
+    return f"{TWSE_DOC_URL}?step=1&colorchg=1&co_id={co_id}&year={roc_year}&seamon={seamon}&mtype=A&"
+
+_SET_COID_RE = re.compile(r"setCoid\(['\"](\w+)['\"]\)", re.I)
+_CO_ID_HREF_RE = re.compile(r"co_id[='\"\s]*(['\"]?)(\w+)\1")
+
+def _find_twse_subsidiary(
+    soup: BeautifulSoup, target_display_code: str | None = None
+) -> tuple[str | None, str | None]:
+    """From t57sb01 parent listing page, return (internal_co_id, display_code) for relevant subsidiary.
+    Handles both javascript:setCoid('5846') and href co_id= link patterns.
+    If target_display_code provided (e.g. '28810012'), matches by display code; else returns first candidate."""
+    candidates = []
+    for row in soup.find_all("tr"):
+        cells = row.find_all(["td", "th"])
+        if len(cells) < 2:
+            continue
+        co_id_str = None
+        for cell in cells:
+            for tag in cell.find_all(True):
+                src = " ".join(str(v) for v in tag.attrs.values() if isinstance(v, str))
+                m = _SET_COID_RE.search(src)
+                if m:
+                    co_id_str = m.group(1)
+                    break
+                m2 = _CO_ID_HREF_RE.search(src)
+                if m2:
+                    co_id_str = m2.group(2)
+                    break
+            if co_id_str:
+                break
+        if not co_id_str:
+            continue
+        display_code = cells[0].get_text(strip=True)
+        candidates.append((co_id_str, display_code))
+
+    if target_display_code:
+        for cid, dc in candidates:
+            if dc == target_display_code:
+                return cid, dc
+    return (candidates[0][0], candidates[0][1]) if candidates else (None, None)
+
+
+# Matches both AI1 (consolidated) and AI3 (individual) TWSE PDF filenames.
+# Format: {gregorian_year}{season}_{co_id}_{AI_type}.pdf  e.g. 202404_2002_AI3.pdf
+_AI_FILENAME_RE = re.compile(r"(\d{4})(\d{2})_(\d+)_(AI[13])\.pdf", re.I)
+_READFILE2_RE   = re.compile(
+    r"readfile2\s*\(\s*['\"]([^'\"]+)['\"]\s*,\s*['\"]([^'\"]+)['\"]\s*,\s*['\"]([^'\"]+)['\"]\s*\)",
+    re.I
+)
+
+def _extract_ai3_links(soup: BeautifulSoup) -> list[tuple[str, str, str, int, int, str]]:
+    """Return list of (filename, kind, co_id, roc_year, season, report_type) for AI1/AI3 links.
+    report_type is 'AI1' (consolidated) or 'AI3' (individual/unconsolidated).
+    Parses javascript:readfile2('A','5846','202404_5846_AI3.pdf') href patterns used by TWSE doc site."""
+    results, seen = [], set()
+    for tag in soup.find_all(True):
+        src = " ".join(str(v) for v in tag.attrs.values() if isinstance(v, str))
+        src += " " + tag.get_text(strip=True)
+
+        m = _READFILE2_RE.search(src)
+        if m:
+            kind, co_id, filename = m.group(1), m.group(2), m.group(3)
+            if not _AI_FILENAME_RE.search(filename):
+                continue
+        else:
+            fm = _AI_FILENAME_RE.search(src)
+            if not fm:
+                continue
+            filename = fm.group(0)
+            co_id_m  = re.search(r"_(\d+)_(AI[13])", filename, re.I)
+            kind, co_id = "A", (co_id_m.group(1) if co_id_m else "")
+
+        if filename in seen:
+            continue
+        seen.add(filename)
+        fm = _AI_FILENAME_RE.search(filename)
+        roc_year    = int(fm.group(1)) - 1911
+        season      = int(fm.group(2))
+        report_type = fm.group(4).upper()
+        results.append((filename, kind, co_id, roc_year, season, report_type))
+    return results
+
+
+async def _get_twse_pdf_url(client, kind: str, co_id: str, filename: str) -> str:
+    """POST to t57sb01 step=9 with the form params from readfile2() to get the temporary PDF URL."""
+    try:
+        await asyncio.sleep(1.5)
+        r = await client.post(
+            "https://doc.twse.com.tw/server-java/t57sb01",
+            data={"step": "9", "kind": kind, "co_id": co_id, "filename": filename, "DEBUG": ""},
+        )
+        html = r.content.decode("big5", errors="replace")
+        m = re.search(r"href='(/pdf/[^']+\.pdf)'", html)
+        if m:
+            return f"https://doc.twse.com.tw{m.group(1)}"
+        logger.warning("No PDF URL in step=9 response for %s", filename)
+    except Exception as e:
+        logger.warning("PDF URL fetch [%s]: %s", filename, e)
+    return ""
+
+
+def _filing_month_to_season(filing_year: int, filing_month: int) -> tuple[int, int]:
+    """Map a PDF filing year/month to (roc_year, season).
+    Q4 annual: filed Jan–Apr → season=4 of previous calendar year
+    Q1:        filed May–Jun → season=1 of same year
+    Q2/H1:     filed Jul–Sep → season=2 of same year
+    Q3:        filed Oct–Dec → season=3 of same year
+    """
+    if filing_month <= 4:
+        return filing_year - 1912, 4
+    elif filing_month <= 6:
+        return filing_year - 1911, 1
+    elif filing_month <= 9:
+        return filing_year - 1911, 2
+    else:
+        return filing_year - 1911, 3
+
+
+def _extract_total_assets_from_pdf(pdf_path: Path) -> int | None:
+    """Extract 資産總計 from pages 4–12 of a quarterly financial report PDF."""
+    try:
+        import pdfplumber
+    except ImportError:
+        logger.error("pdfplumber not installed — run: pip install pdfplumber")
+        return None
+    # Handles 總計/合計, compact and spaced, both 産/產 variants
+    _ASSET_LABEL_RE = re.compile(r"資\s*[産產]\s*[總合]\s*計")
+    try:
+        with pdfplumber.open(pdf_path) as pdf:
+            for page in pdf.pages[3:12]:   # pages 4–12 (0-indexed 3–11)
+                for table in (page.extract_tables() or []):
+                    for row in table:
+                        cells = [str(c or "").strip() for c in row]
+                        norm_cells = [c.replace(" ", "") for c in cells]
+                        if any("資產總計" in c or "資産總計" in c
+                               or "資產合計" in c or "資産合計" in c for c in norm_cells):
+                            for cell in cells:
+                                clean = re.sub(r"[,\s]", "", cell)
+                                if re.match(r"^\d{6,}$", clean):
+                                    return int(clean)
+                text = page.extract_text() or ""
+                for line in text.split("\n"):
+                    if not _ASSET_LABEL_RE.search(line):
+                        continue
+                    # Skip 流動資産合計 / 非流動資産合計 subtotals — only want grand total
+                    if "流動" in line.replace(" ", ""):
+                        continue
+                    # Fix pdfplumber space-broken numbers: "6 49,570,217" → "649,570,217"
+                    norm_line = re.sub(r"(\d) (\d{1,3},)", r"\1\2", line)
+                    m = re.search(r"\$?\s*([\d,]{6,})", norm_line)
+                    if m:
+                        return int(m.group(1).replace(",", ""))
+    except Exception as e:
+        logger.warning("PDF extraction failed [%s]: %s", pdf_path.name, e)
+    return None
+
+
+# Maps Chinese season text in E02 subjects to season number
+_E02_SEASON_ZH = {
+    "第一季": 1, "第1季": 1,
+    "第二季": 2, "第2季": 2,
+    "第三季": 3, "第3季": 3,
+    "第四季": 4, "第4季": 4,
+    "年度": 4,        # 年度 = annual = Q4
+}
+
+async def _search_e02_filings(stock_code: str, sdate: str = None) -> list[tuple[int, int]]:
+    """Step 1: Search Chinese MOPS with PRO_ITEM=E02, lang=TW to discover available quarterly filing periods.
+    Returns deduplicated list of (roc_year, season) pairs sorted newest-first."""
+    data = {
+        "step": "00", "RADIO_CM": "2", "TYPEK": "CO_MARKET",
+        "CO_ID": stock_code, "PRO_ITEM": "E02", "SUBJECT": "",
+        "SDATE": sdate or SDATE, "EDATE": EDATE, "lang": "TW",
+    }
+    try:
+        async with httpx.AsyncClient(headers=_HEADERS, timeout=30, verify=False) as client:
+            resp = await client.post(MOPSOV_SEARCH_URL, data=data)
+            resp.raise_for_status()
+            records = json.loads(resp.text.lstrip("﻿ \r\n\t")).get("data", [])
+    except Exception as exc:
+        logger.error("E02 search [%s]: %s", stock_code, exc)
+        return []
+
+    seen, results = set(), []
+    for item in records:
+        subject  = item.get("SUBJECT", "")
+        date_str = item.get("CDATE", "")
+        roc_year, season = _parse_e02_period(subject, date_str)
+        if roc_year and season and (roc_year, season) not in seen:
+            seen.add((roc_year, season))
+            results.append((roc_year, season))
+    results.sort(reverse=True)
+    logger.info("E02 filings [%s]: %d periods found", stock_code, len(results))
+    return results
+
+
+def _parse_e02_period(subject: str, date_str: str) -> tuple[int | None, int | None]:
+    """Extract (roc_year, season) from an E02 filing subject like '114年度第4季財務報告'."""
+    ry_m = re.search(r"(\d{2,3})年", subject)
+    roc_year = int(ry_m.group(1)) if ry_m else None
+
+    season = None
+    for label, s in _E02_SEASON_ZH.items():
+        if label in subject:
+            season = s
+            break
+
+    if roc_year and season:
+        return roc_year, season
+
+    # Fallback: derive period from filing date
+    gm = re.match(r"(\d{4})/(\d{2})", date_str) if date_str else None
+    if gm:
+        return _filing_month_to_season(int(gm.group(1)), int(gm.group(2)))
+    return None, None
+
+
+def _pick_ai_link(links: list[tuple], season: int) -> tuple | None:
+    """Select the best AI link for the given season.
+    Always prefers AI3 (individual/unconsolidated).
+    Q4 (season 4) only: falls back to AI1 (consolidated) if no AI3 is available."""
+    ai3 = [t for t in links if t[4] == season and t[5] == "AI3"]
+    if ai3:
+        return ai3[0]
+    if season == 4:
+        ai1 = [t for t in links if t[4] == season and t[5] == "AI1"]
+        if ai1:
+            return ai1[0]
+    return None
+
+
+async def _get_ai3_for_period(
+    client, stock_code: str, roc_year: int, season: int,
+    target_display_code: str | None = None,
+) -> tuple[str, str, str] | None:
+    """Steps 2–4: Navigate t57sb01, find subsidiary if needed, locate AI PDF, get temp download URL.
+    Returns (pdf_url, pdf_filename, subsidiary_internal_co_id) or None.
+    Always prefers AI3 (individual); falls back to AI1 (consolidated) only for Q4 (season 4).
+    """
+    t57sb01_year = roc_year
+
+    # Step 2: GET listing for the parent company (seamon empty = all seasons)
+    await asyncio.sleep(1.5)
+    r1 = await client.get(_twse_doc_url(stock_code, t57sb01_year, seamon=""))
+    if r1.status_code != 200 or len(r1.text) < 500:
+        return None
+    soup1 = BeautifulSoup(r1.text, "html.parser")
+
+    # Try to find AI links directly (company IS the reporting entity)
+    ai_links = _extract_ai3_links(soup1)
+    if ai_links:
+        hit = _pick_ai_link(ai_links, season)
+        if not hit:
+            return None
+        filename, kind, co_id = hit[0], hit[1], hit[2]
+        pdf_url = await _get_twse_pdf_url(client, kind, co_id, filename)
+        return (pdf_url, filename, co_id) if pdf_url else None
+
+    # Step 3: Find the relevant subsidiary's internal co_id
+    sub_co_id, _ = _find_twse_subsidiary(soup1, target_display_code=target_display_code)
+    if not sub_co_id:
+        return None
+
+    # Step 4: Navigate to subsidiary page (seamon empty) — shows IFRSs個別財報 links
+    await asyncio.sleep(1.5)
+    r2 = await client.get(_twse_doc_url(sub_co_id, t57sb01_year, seamon=""))
+    if r2.status_code != 200 or len(r2.text) < 500:
+        return None
+    soup2 = BeautifulSoup(r2.text, "html.parser")
+
+    ai_links = _extract_ai3_links(soup2)
+    if not ai_links:
+        return None
+    hit = _pick_ai_link(ai_links, season)
+    if not hit:
+        return None
+    filename, kind, co_id = hit[0], hit[1], hit[2]
+    pdf_url = await _get_twse_pdf_url(client, kind, co_id, filename)
+    return (pdf_url, filename, sub_co_id) if pdf_url else None
+
+
+async def scrape_quarterly_reports(stock_code: str, roc_years: int = 2,
+                                   subsidiary_name_en: str = "") -> list[dict]:
+    """Quarterly AUM extraction — follows the 7-step flow:
+    1. Search PRO_ITEM=E02 (lang=TW) to discover available filing periods
+    2. Navigate doc.twse.com.tw/t57sb01 for the parent company
+    3. Find subsidiary internal co_id (e.g. 5865 for Fubon Life, ≠ display code 28810012)
+    4. Navigate to subsidiary page showing IFRSs個別財報 (AI3) PDF links
+    5. Download AI3 PDF
+    6. Extract 資産總計 from pages 4–8
+    7. Save PDF labelled '{subsidiary_name} Individual Financial Report {season} {year}.pdf'
+    """
+    state_path = STATE_DIR / f"{stock_code}_balance_history.json"
+    existing: dict[str, dict] = {}
+    if state_path.exists():
+        try:
+            for r in json.loads(state_path.read_text(encoding="utf-8")):
+                existing[r["period"]] = r
+        except Exception:
+            pass
+
+    # Step 1: discover available periods from Chinese MOPS E02 search
+    filing_periods = await _search_e02_filings(stock_code)
+    if not filing_periods:
+        logger.info("No E02 filings found for %s — no quarterly data to fetch", stock_code)
+        _flush_balance_history(state_path, existing)
+        return list(existing.values())
+
+    entry    = _WATCHLIST_MAP.get(stock_code, {})
+    sub_label = subsidiary_name_en or entry.get("f26_name_en") or entry.get("name_en", stock_code)
+    target_display_code = entry.get("f26_display_code")
+    pdf_dir   = PDF_DIR / stock_code
+    pdf_dir.mkdir(parents=True, exist_ok=True)
+
+    async with httpx.AsyncClient(headers=_TWSE_DOC_HEADERS, timeout=60,
+                                  verify=False, follow_redirects=True) as client:
+        for roc_year, season in filing_periods:
+            period_label = f"{roc_year + 1911}/{_SEASON_LABEL.get(season, f'S{season}')}"
+            prev = existing.get(period_label, {})
+            # Skip if already successfully extracted with a local PDF; retry if failed or PDF missing
+            if period_label in existing and not prev.get("extraction_failed") and prev.get("pdf_path"):
+                continue
+            try:
+                season_str = _SEASON_LABEL.get(season, f"S{season}")
+                year_str   = str(roc_year + 1911)
+                pdf_name   = f"{sub_label} Individual Financial Report {season_str} {year_str}.pdf"
+                pdf_dest   = pdf_dir / pdf_name
+
+                # If re-trying a failed extraction and PDF is cached, skip download
+                if prev.get("extraction_failed") and pdf_dest.exists():
+                    pdf_url   = prev.get("filing_url", "")
+                    sub_co_id = prev.get("subsidiary_code", stock_code)
+                    logger.info("Re-trying extraction from cached PDF: %s", pdf_dest.name)
+                else:
+                    # Steps 2–4: navigate t57sb01, find subsidiary, get AI3 PDF info
+                    result = await _get_ai3_for_period(client, stock_code, roc_year, season,
+                                                        target_display_code=target_display_code)
+                    if not result:
+                        logger.info("No AI3 PDF found [%s] %s", stock_code, period_label)
+                        continue
+                    pdf_url, orig_filename, sub_co_id = result
+
+                    # Step 5: download PDF
+                    await asyncio.sleep(1.5)
+                    pr = await client.get(pdf_url)
+                    ct = pr.headers.get("content-type", "")
+                    if pr.status_code != 200 or "pdf" not in ct:
+                        logger.warning("PDF unavailable [%s %s]: %d %s", stock_code, period_label,
+                                       pr.status_code, ct[:40])
+                        continue
+                    pdf_dest.write_bytes(pr.content)
+                    logger.info("PDF saved: %s", pdf_dest.name)
+
+                # Step 6: extract 資産總計
+                total_assets = _extract_total_assets_from_pdf(pdf_dest)
+                if total_assets is None:
+                    logger.warning("No 資産總計 in %s — flagged for manual check", pdf_dest.name)
+                    existing[period_label] = {
+                        "stock_code":                 stock_code,
+                        "subsidiary_code":            sub_co_id,
+                        "subsidiary_name_en":         sub_label,
+                        "period":                     period_label,
+                        "roc_year":                   roc_year,
+                        "season":                     season,
+                        "currency":                   "TWD (thousands)",
+                        "total_assets_raw":           "",
+                        "total_assets_numeric":       None,
+                        "investment_property_raw":    "",
+                        "investment_property_numeric": None,
+                        "pdf_path":                   str(pdf_dest),
+                        "filing_url":                 pdf_url,
+                        "scraped_at":                 datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+                        "extraction_failed":          True,
+                    }
+                    continue
+
+                record = {
+                    "stock_code":                 stock_code,
+                    "subsidiary_code":            sub_co_id,
+                    "subsidiary_name_en":         sub_label,
+                    "period":                     period_label,
+                    "roc_year":                   roc_year,
+                    "season":                     season,
+                    "currency":                   "TWD (thousands)",
+                    "total_assets_raw":           f"NT${total_assets:,}K",
+                    "total_assets_numeric":       total_assets,
+                    "investment_property_raw":    "",
+                    "investment_property_numeric": None,
+                    "pdf_path":                   str(pdf_dest),
+                    "filing_url":                 pdf_url,
+                    "scraped_at":                 datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+                }
+                existing[period_label] = record
+                logger.info("Quarterly BS [%s] %s → NT$%s K",
+                            stock_code, period_label, f"{total_assets:,}")
+
+            except Exception as e:
+                logger.warning("Quarterly reports [%s] %s: %s", stock_code, period_label, e)
+
+    _flush_balance_history(state_path, existing)
+    return sorted(existing.values(),
+                  key=lambda r: (r.get("roc_year", 0), r.get("season", 0)), reverse=True)
+
+
+def _flush_balance_history(state_path: Path, existing: dict) -> None:
+    state_path.parent.mkdir(parents=True, exist_ok=True)
+    state_path.write_text(
+        json.dumps(sorted(existing.values(),
+                          key=lambda r: (r.get("roc_year", 0), r.get("season", 0)), reverse=True),
+                   indent=2, ensure_ascii=False),
+        encoding="utf-8"
+    )
+
+
+# ── EMOPS Company Profile + Consolidated Balance Sheet ────────────────────────
+
+async def _post_emops(path: str, stock_code: str, extra: dict = None) -> str:
+    """POST to an EMOPS endpoint, trying each TYPEK until a valid response is returned."""
+    url = EMOPS_HOST + path
+    base_data = {"co_id": stock_code, **(extra or {})}
+    async with httpx.AsyncClient(headers=_EMOPS_PROFILE_HEADERS, timeout=30,
+                                  follow_redirects=True, verify=False) as client:
+        try:
+            await client.get(f"{EMOPS_HOST}/server-java/t58query")
+        except Exception:
+            pass
+        for typek in _TYPEK_OPTIONS:
+            try:
+                resp = await client.post(url, data={**base_data, "TYPEK": typek})
+                resp.raise_for_status()
+                html = resp.text
+                if html and len(html) > 200 and "error" not in html[:200].lower():
+                    logger.info("EMOPS POST %s [%s] TYPEK=%s → %d chars", path, stock_code, typek, len(html))
+                    return html
+            except Exception as exc:
+                logger.warning("EMOPS POST failed [%s] TYPEK=%s: %s", stock_code, typek, exc)
+    return ""
+
+
+def _find_column_field(soup: BeautifulSoup, labels: list) -> str:
+    """Find a field value by locating its column header label, then reading the cell below."""
+    for label in labels:
+        for cell in soup.find_all(["td", "th"],
+                                   string=lambda t, l=label: t and l.lower() in t.lower()):
+            row = cell.find_parent("tr")
+            if not row:
+                continue
+            siblings = row.find_all(["td", "th"])
+            try:
+                col_idx = siblings.index(cell)
+            except ValueError:
+                continue
+            next_row = row.find_next_sibling("tr")
+            if next_row:
+                next_cells = next_row.find_all(["td", "th"])
+                if col_idx < len(next_cells):
+                    val = next_cells[col_idx].get_text(strip=True)
+                    if val and val.lower() != label.lower():
+                        return val
+    return ""
+
+
+def _dedup_address(text: str) -> str:
+    for marker in ["Taiwan", "R.O.C"]:
+        idx = text.find(marker)
+        if idx != -1:
+            return text[:idx + len(marker)].strip(" ,")
+    return text
+
+
+_ADDR_LABEL_RE      = re.compile(
+    r"(?i)^\s*(?:company\s+|registered\s+|business\s+|head\s+office\s+)?address\s*:?\s*$"
+)
+_NOT_ADDR_CONTENT_RE = re.compile(r"(?i)^https?://|^www\.|@")
+
+def _find_emops_address(soup: BeautifulSoup) -> str:
+    _ADDR_KW = ["Road", "Rd.", "St.", "Ave", "No.", "Blvd", "F.,", "路", "街", "號"]
+    _CITY_KW = ["Taiwan", "Taipei", "Kaohsiung", "Taichung", "Tainan", "Hsinchu",
+                "台北", "台中", "新北", "高雄", "桃園", "新竹", "台南"]
+
+    def _valid(val):
+        return (val and len(val) > 10
+                and not _NOT_ADDR_CONTENT_RE.search(val)
+                and not re.search(r"Address", val, re.I))
+
+    # Strategy 1: label cell matching "Address", "Address:", "Company Address:", etc.
+    # (but NOT "Web Address" / "Email Address" — excluded by _ADDR_LABEL_RE)
+    for cell in soup.find_all(["td", "th"],
+                               string=lambda t: t and _ADDR_LABEL_RE.match(t)):
+        # (a) same-row next-sibling: inline label|value layout
+        ns = cell.find_next_sibling(["td", "th"])
+        if ns:
+            val = ns.get_text(strip=True)
+            if _valid(val):
+                return _dedup_address(val)
+        # (b) column-header layout: read same column position in next row
+        row = cell.find_parent("tr")
+        if not row:
+            continue
+        siblings = row.find_all(["td", "th"])
+        try:
+            col_idx = siblings.index(cell)
+        except ValueError:
+            continue
+        next_row = row.find_next_sibling("tr")
+        if next_row:
+            cells = next_row.find_all(["td", "th"])
+            if col_idx < len(cells):
+                val = cells[col_idx].get_text(strip=True)
+                if _valid(val):
+                    return _dedup_address(val)
+    # Strategy 2: colspan TDs with address keywords
+    for td in soup.find_all("td", attrs={"colspan": True}):
+        text = td.get_text(strip=True)
+        if text and any(kw in text for kw in _ADDR_KW):
+            return _dedup_address(text)
+    # Strategy 3: any TD with address keywords + a city/country marker
+    for td in soup.find_all("td"):
+        text = td.get_text(strip=True)
+        if (len(text) > 15
+                and any(kw in text for kw in _ADDR_KW)
+                and any(kw in text for kw in _CITY_KW)):
+            return _dedup_address(text)
+    return ""
+
+
+async def scrape_emops_profile(stock_code: str) -> dict:
+    html = await _post_emops("/server-java/t146sb05_e", stock_code, {"step": "0"})
+    if not html:
+        return {"stock_code": stock_code, "company_name_en": "", "address": "",
+                "telephone": "", "web_address": ""}
+    soup = BeautifulSoup(html, "lxml")
+    return {
+        "stock_code":      stock_code,
+        "company_name_en": _find_column_field(soup, ["Company Name"]),
+        "chairman":        _find_column_field(soup, ["Chairman"]),
+        "general_manager": _find_column_field(soup, ["General Manager"]),
+        "telephone":       _find_column_field(soup, ["Telephone"]),
+        "web_address":     _find_column_field(soup, ["Web Address"]),
+        "address":         _find_emops_address(soup),
+    }
+
+
+def _extract_consolidated_period(soup: BeautifulSoup) -> str:
+    text = soup.get_text(" ")
+    m = re.search(r"(20\d{2})[/-](\d{2})[/-](\d{2})", text)
+    if m:
+        return f"{m.group(1)}/{m.group(2)}/{m.group(3)}"
+    m = re.search(r"民國\s*(\d{2,3})\s*年\s*(\d{1,2})\s*月\s*(\d{1,2})\s*日", text)
+    if m:
+        return f"{int(m.group(1)) + 1911}/{int(m.group(2)):02d}/{int(m.group(3)):02d}"
+    months = {"January":"01","February":"02","March":"03","April":"04","May":"05","June":"06",
+              "July":"07","August":"08","September":"09","October":"10","November":"11","December":"12"}
+    m = re.search(r"(January|February|March|April|May|June|July|August|September|October|"
+                  r"November|December)\s+(\d{1,2}),?\s*(20\d{2})", text)
+    if m:
+        return f"{m.group(3)}/{months[m.group(1)]}/{int(m.group(2)):02d}"
+    return ""
+
+
+def _find_balance_value(soup: BeautifulSoup, labels: list) -> str:
+    for label in labels:
+        for cell in soup.find_all("td", string=lambda t, l=label:
+                                   t and l.lower() in t.replace("　", "").strip().lower()):
+            value_td = cell.find_next_sibling("td")
+            if value_td:
+                val = value_td.get_text(strip=True)
+                if val:
+                    return val
+    return ""
+
+
+async def scrape_emops_balance_sheet(stock_code: str) -> dict:
+    html = await _post_emops("/server-java/t164sb03_e", stock_code, {"step": "current"})
+    base = {"stock_code": stock_code, "period": "", "currency": "TWD",
+            "total_assets_raw": "", "total_assets_numeric": None,
+            "investment_property_raw": "", "investment_property_numeric": None}
+    if not html:
+        return base
+    soup = BeautifulSoup(html, "lxml")
+    period   = _extract_consolidated_period(soup)
+    currency = "TWD (thousands)" if "千元" in soup.get_text() else "TWD"
+    ta_raw   = _find_balance_value(soup, ["Total assets", "Total Assets", "資產總計"])
+    ip_raw   = _find_balance_value(soup, ["Investment property, net", "Investment property",
+                                           "投資性不動產淨額", "投資性不動產"])
+    return {
+        "stock_code":                stock_code,
+        "period":                    period,
+        "currency":                  currency,
+        "total_assets_raw":          ta_raw,
+        "total_assets_numeric":      _parse_amount(ta_raw),
+        "investment_property_raw":   ip_raw,
+        "investment_property_numeric": _parse_amount(ip_raw),
+    }
+
+
 def _format_date(date_str: str) -> str:
     for fmt in ("%Y/%m/%d", "%Y-%m-%d"):
         try:
@@ -605,12 +1351,13 @@ def _format_date(date_str: str) -> str:
 # ── Change Detection ──────────────────────────────────────────────────────────
 
 def _apply_date_status(records, new_since, date_field="announcement_date"):
-    if not new_since:
-        return records
-    ns = new_since.replace("/", "-")
+    ns = new_since.replace("/", "-") if new_since else None
     for r in records:
-        d = (r.get(date_field) or "").replace("/", "-")[:10]
-        r["status"] = "NEW" if d >= ns else "HISTORICAL"
+        if ns:
+            d = (r.get(date_field) or "").replace("/", "-")[:10]
+            r["status"] = "NEW" if d >= ns else "HISTORICAL"
+        else:
+            r["status"] = "HISTORICAL"
     return records
 
 def detect_changes(records, state_path, key_fields):
@@ -652,11 +1399,13 @@ _MOJIBAKE_RE = re.compile(chr(0xfffd) + '[@AB]')
 def _clean_address(addr: str) -> str:
     if not addr:
         return addr
-    # Big5 0xA1 bytes decode as U+FFFD + next ASCII byte; replace each pair with ', '
     addr = _MOJIBAKE_RE.sub(', ', addr)
     addr = addr.replace('、', ', ').replace('，', ', ')
     addr = re.sub(r',\s*,', ', ', addr)
     addr = re.sub(r'\s+', ' ', addr).strip()
+    # Normalise to title case only if the string is mostly uppercase
+    if addr == addr.upper():
+        addr = addr.title()
     return addr
 
 def _clean_web_address(url: str) -> str:
@@ -730,7 +1479,7 @@ def _save_run_to_history(fund_commitments, people_moves, emops_data, since, new_
                "change_type","reason","effective_date","narrative_en","status","scraped_at","url"]
     em_keys = ["stock_code","name_en","company_type","company_name_en","address","telephone",
                "web_address","period","currency","total_assets_raw","inv_property_raw",
-               "profile_status","changed_fields","scraped_at"]
+               "profile_status","changed_fields","scraped_at","no_filing_data"]
 
     def slim_em(r):
         d = {k: (r.get(k) or "") for k in em_keys}
@@ -755,10 +1504,11 @@ def _save_run_to_history(fund_commitments, people_moves, emops_data, since, new_
     return history
 
 
-def write_html_report(fund_commitments, people_moves, emops_data=None, since=None, new_since=None):
+def write_html_report(fund_commitments, people_moves, emops_data=None, balance_history=None, since=None, new_since=None):
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     history = _save_run_to_history(fund_commitments, people_moves, emops_data, since, new_since)
     history_json = json.dumps(history, ensure_ascii=False)
+    balance_history_json = json.dumps(balance_history or [], ensure_ascii=False)
     run_ts = history[0]["run_date"]
 
     run_options = "\n".join(
@@ -768,12 +1518,16 @@ def write_html_report(fund_commitments, people_moves, emops_data=None, since=Non
 
     companies_js = "{" + ",".join(
         f'"{w["stock_code"]}":"{w["name_en"]}"' for w in WATCHLIST
+    ) + "," + ",".join(
+        f'"{s["stock_code"]}":"{s["company_name_en"]}"' for s in _SUBSIDIARY_STUBS
     ) + "}"
 
     # JS is a plain string (not f-string) so template literals work without escaping
     js = (
         f"<script>\nconst COMPANIES={companies_js};\nconst HISTORY = "
         + history_json
+        + f";\nconst BALANCE_HISTORY = "
+        + balance_history_json
         + r"""
 ;
 function badge(st){const m={NEW:'new',HISTORICAL:'his',CHANGED:'chg',UNCHANGED:''};const c=m[st]||'';return c?`<span class="badge ${c}">${st}</span>`:(st||'');}
@@ -782,13 +1536,21 @@ function chkGet(key){try{return JSON.parse(localStorage.getItem(key)||'null');}c
 function chkSet(key,state,name){localStorage.setItem(key,JSON.stringify({state,name,ts:new Date().toISOString()}));}
 function fmtTs(iso){if(!iso)return '';try{const d=new Date(iso);return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})+' '+d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});}catch{return '';}}
 function chkBtn(key){
-  const d=chkGet(key)||{};const done=d.state==='checked';
-  return `<span class="chk-wrap"><button class="chk-btn ${done?'chk-done':'chk-pend'}" onclick="toggleCheck(this,'${key}')">${done?'Checked ✓':'Pending'}</button><div class="chk-ts">${fmtTs(d.ts)}</div><input class="chk-name" placeholder="Reviewer" value="${d.name||''}" onchange="saveName(this,'${key}')" onclick="event.stopPropagation()"></span>`;
+  const d=chkGet(key)||{};const st=d.state||'pending';
+  const lbl={pending:'Pending',checked:'Checked ✓',irrelevant:'Irrelevant'};
+  const cls={pending:'chk-pend',checked:'chk-done',irrelevant:'chk-irrel'};
+  return `<span class="chk-wrap"><button class="chk-btn ${cls[st]||'chk-pend'}" onclick="toggleCheck(this,'${key}')">${lbl[st]||'Pending'}</button><div class="chk-ts">${fmtTs(d.ts)}</div><input class="chk-name" placeholder="Reviewer" value="${d.name||''}" onchange="saveName(this,'${key}')" onclick="event.stopPropagation()"></span>`;
 }
 function toggleCheck(btn,key){
-  const d=chkGet(key)||{};const next=d.state!=='checked';
-  chkSet(key,next?'checked':'pending',d.name||'');
-  btn.textContent=next?'Checked ✓':'Pending';btn.className='chk-btn '+(next?'chk-done':'chk-pend');
+  const inp=btn.closest('.chk-wrap').querySelector('.chk-name');
+  if(!inp.value.trim()){inp.style.outline='2px solid #e74c3c';inp.focus();return;}
+  inp.style.outline='';
+  const d=chkGet(key)||{};const cycle=['pending','checked','irrelevant'];
+  const next=cycle[(cycle.indexOf(d.state||'pending')+1)%3];
+  chkSet(key,next,inp.value.trim());
+  const lbl={pending:'Pending',checked:'Checked ✓',irrelevant:'Irrelevant'};
+  const cls={pending:'chk-pend',checked:'chk-done',irrelevant:'chk-irrel'};
+  btn.textContent=lbl[next];btn.className='chk-btn '+cls[next];
   btn.nextElementSibling.textContent=fmtTs(new Date().toISOString());
 }
 function saveName(inp,key){const d=chkGet(key)||{state:'pending'};chkSet(key,d.state,inp.value);}
@@ -806,40 +1568,53 @@ function renderRun(idx){
   document.getElementById('m-new-fc').textContent=run.n_new_fc;
   document.getElementById('m-his-fc').textContent=run.n_his_fc;
   document.getElementById('m-new-pm').textContent=run.n_new_pm;
-  document.getElementById('m-chg-pm').textContent=run.n_chg_pm;
-  document.getElementById('m-chg-em').textContent=run.n_chg_em||0;
   // Populate company dropdowns from run data
+  const nameMap=Object.assign({},COMPANIES);BALANCE_HISTORY.forEach(r=>{if(r.name_en)nameMap[r.stock_code]=r.name_en;});
   const allCodes=[...new Set([...run.funds.map(r=>r.stock_code),...(run.people||[]).map(r=>r.stock_code),...(run.emops||[]).map(r=>r.stock_code)])].sort();
-  const codeOpts=allCodes.map(c=>[c,COMPANIES[c]?`${c} — ${COMPANIES[c]}`:c]);
-  document.querySelectorAll('.co-filter').forEach(s=>populateSel(s,codeOpts));
+  const codeOpts=allCodes.map(c=>[c,nameMap[c]?`${c} — ${nameMap[c]}`:c]);
+  document.querySelectorAll('.co-filter:not(#fs .co-filter)').forEach(s=>populateSel(s,codeOpts));
   // Populate fund type dropdown
   const ftypes=[...new Set(run.funds.map(r=>r.fund_type||'').filter(Boolean))].sort();
   populateSel(document.getElementById('fc-ft-sel'),ftypes.map(t=>[t.toLowerCase(),t]));
-  renderEM(run.emops||[]);renderFS(run.emops||[]);renderFC(run.funds||[]);renderPM(run.people||[]);
+  renderEM(run.emops||[]);renderFS(BALANCE_HISTORY);renderFC(run.funds||[]);renderPM(run.people||[]);
 }
 function renderEM(rows){
   document.querySelector('#em-table tbody').innerHTML=rows.map(r=>{
+    if(r.no_filing_data){
+      return `<tr data-co="${r.stock_code}" data-date=""><td>${r.stock_code}</td><td></td><td>${r.company_name_en}</td><td colspan="6" style="color:#888;font-style:italic;">Information not available on filings — please refer to firm website</td><td></td></tr>`;
+    }
     const webUrl=r.web_address?(r.web_address.match(/^https?:\/\//)?r.web_address:'https://'+r.web_address):'';
     const webCell=webUrl?`<a href="${webUrl}" target="_blank">${r.web_address}</a>`:(r.web_address||'—');
     const ck=`chk_em_${r.stock_code}`;
-    return `<tr data-co="${r.stock_code}" data-date="${normDate(r.scraped_at||'')}"><td>${r.stock_code}</td><td>${r.company_name_en||r.name_en||'—'}</td><td>${r.company_type||'—'}</td><td>${r.period||'—'}</td><td>${r.currency||'—'}</td><td>${r.telephone||'—'}</td><td>${webCell}</td><td>${r.address||'—'}</td><td>${fmtScraped(r.scraped_at)}</td><td>${chkBtn(ck)}</td></tr>`;
+    return `<tr data-co="${r.stock_code}" data-date="${normDate(r.scraped_at||'')}"><td>${r.stock_code}</td><td></td><td>${r.company_name_en||r.name_en||'—'}</td><td></td><td>${r.period||'—'}</td><td>${r.telephone||'—'}</td><td>${webCell}</td><td>${r.address||'—'}</td><td>${fmtScraped(r.scraped_at)}</td><td>${chkBtn(ck)}</td></tr>`;
   }).join('');
   document.getElementById('em-count').textContent=rows.length+' companies';
 }
 function renderFS(rows){
+  const fsCos=[...new Map(rows.map(r=>[r.stock_code,r.name_en||COMPANIES[r.stock_code]||r.stock_code])).entries()].sort((a,b)=>a[0].localeCompare(b[0]));
+  populateSel(document.querySelector('#fs .filters select'),fsCos.map(([c,n])=>[c,`${c} — ${n}`]));
   document.querySelector('#fs-table tbody').innerHTML=rows.map(r=>{
-    return `<tr data-co="${r.stock_code}" data-date="${normDate(r.scraped_at||'')}"><td>${r.stock_code}</td><td>${r.company_name_en||r.name_en||'—'}</td><td>${r.period||'—'}</td><td>${r.currency||'—'}</td><td>${r.total_assets_raw||'—'}</td><td>${r.inv_property_raw||'—'}</td><td>${fmtScraped(r.scraped_at)}</td></tr>`;
+    const base=r.name_en||COMPANIES[r.stock_code]||r.stock_code;
+    const co=r.delisted?`${base} <span style="color:#c0392b;font-weight:600">(Delisted)</span>`:base;
+    const src=r.source==='quarterly'?'PDFs - Unconsolidated FS':'Balance Sheet';
+    const ck=`chk_fs_${r.stock_code}_${(r.period||'').replace(/\W+/g,'_')}`;
+    const filing=r.filing_url?`<a href="${r.filing_url}" target="_blank">View ↗</a>`:'—';
+    const taCell=r.extraction_failed
+      ?`<span style="color:#e67e22;font-weight:600" title="PDF downloaded but text could not be extracted (likely image-based). Manual review required.">⚠ Manual check needed</span>`
+      :(r.total_assets_raw||'—');
+    const rowCls=r.extraction_failed?'style="background:#fff8f0"':'';
+    return `<tr ${rowCls} data-co="${r.stock_code}" data-period="${(r.period||'').toLowerCase()}"><td>${r.stock_code}</td><td></td><td>${co}</td><td>${r.period||'—'}</td><td>${src}</td><td>${taCell}</td><td>${r.investment_property_raw||'—'}</td><td>${fmtScraped(r.scraped_at)}</td><td>${filing}</td><td>${chkBtn(ck)}</td></tr>`;
   }).join('');
-  document.getElementById('fs-count').textContent=rows.length+' companies';
+  document.getElementById('fs-count').textContent=rows.length+' records';
 }
 function renderFC(rows){
   document.querySelector('#fc-table tbody').innerHTML=rows.map(r=>{
     const st=r.status||'';const yr=(r.announcement_date||'').slice(0,4);
     const nm=r.url?`<a href="${r.url}" target="_blank">${r.fund_name}</a>`:(r.fund_name||'');
-    const amt=r.fx_url?`<a href="${r.fx_url}" target="_blank">${r.commitment_amount_raw}</a>`:(r.commitment_amount_raw||'—');
+    const amt=r.commitment_amount_raw?(r.fx_url?`<a href="${r.fx_url}" target="_blank">${r.commitment_amount_raw}</a>`:r.commitment_amount_raw):'—';
     const ck=`chk_fc_${r.stock_code}_${(r.fund_name||'').replace(/\W+/g,'_')}_${r.commitment_date}`;
     const firm=COMPANIES[r.stock_code]||r.stock_code;
-    return `<tr class="row-${st.toLowerCase()}" data-co="${r.stock_code}" data-ft="${(r.fund_type||'').toLowerCase()}" data-st="${st.toLowerCase()}" data-yr="${yr}" data-date="${normDate(r.announcement_date||'')}"><td>${r.stock_code}</td><td>${firm}</td><td>${r.announcement_date}</td><td>${nm}</td><td>${r.fund_type||'—'}</td><td>${r.commitment_date}</td><td>${amt}</td><td class="headline">${r.headline}</td><td>${r.bs_date}</td><td>${badge(st)}</td><td>${fmtScraped(r.scraped_at)}</td><td>${chkBtn(ck)}</td></tr>`;
+    return `<tr class="row-${st.toLowerCase()}" data-co="${r.stock_code}" data-ft="${(r.fund_type||'').toLowerCase()}" data-st="${st.toLowerCase()}" data-yr="${yr}" data-date="${normDate(r.announcement_date||'')}"><td>${r.stock_code}</td><td></td><td>${firm}</td><td>${r.announcement_date}</td><td>${nm}</td><td>${r.fund_type||'—'}</td><td>${r.commitment_date}</td><td>${amt}</td><td class="headline">${r.headline||''}</td><td>${r.bs_date}</td><td>${fmtScraped(r.scraped_at)}</td><td>${chkBtn(ck)}</td></tr>`;
   }).join('');
   document.getElementById('fc-count').textContent=rows.length+' records';
 }
@@ -849,7 +1624,8 @@ function renderPM(rows){
     const role=r.role_title||r.role_type||'';
     const lnk=r.url?`<a href="${r.url}" target="_blank">View</a>`:'';
     const ck=`chk_pm_${r.stock_code}_${r.announcement_date}_${(r.new_holder||'').replace(/\W+/g,'_')}`;
-    return `<tr class="row-${st.toLowerCase()}" data-co="${r.stock_code}" data-st="${st.toLowerCase()}" data-yr="${yr}" data-date="${normDate(r.announcement_date||'')}"><td>${r.stock_code}</td><td>${r.announcement_date}</td><td>${role||'—'}</td><td>${r.new_holder||'—'}</td><td>${r.previous_holder||'—'}</td><td>${r.effective_date}</td><td class="headline">${r.narrative_en}</td><td>${lnk}</td><td>${fmtScraped(r.scraped_at)}</td><td>${chkBtn(ck)}</td></tr>`;
+    const firmNm=COMPANIES[r.stock_code]||r.stock_code;
+    return `<tr class="row-${st.toLowerCase()}" data-co="${r.stock_code}" data-st="${st.toLowerCase()}" data-yr="${yr}" data-date="${normDate(r.announcement_date||'')}"><td>${r.stock_code}</td><td></td><td>${firmNm}</td><td>${r.announcement_date}</td><td>${role||'—'}</td><td>${r.new_holder||'—'}</td><td>${r.previous_holder||'—'}</td><td>${r.effective_date}</td><td class="headline">${r.narrative_en||''}</td><td>${lnk}</td><td>${fmtScraped(r.scraped_at)}</td><td>${chkBtn(ck)}</td></tr>`;
   }).join('');
   document.getElementById('pm-count').textContent=rows.length+' records';
 }
@@ -874,15 +1650,15 @@ function filterFS(){
   let v=0;document.querySelectorAll('#fs-table tbody tr').forEach(r=>{
     const s=(!co||r.dataset.co===co)&&(!q||r.textContent.toLowerCase().includes(q));
     r.style.display=s?'':'none';if(s)v++;});
-  document.getElementById('fs-count').textContent=v+' companies';
+  document.getElementById('fs-count').textContent=v+' records';
 }
 function filterFC(){
   const sel=[...document.querySelectorAll('#fc .filters select')].map(e=>e.value.toLowerCase());
   const dates=[...document.querySelectorAll('#fc .filters input[type=date]')].map(e=>e.value);
   const q=document.querySelector('#fc .filters input[type=text]').value.toLowerCase();
-  const [co,ft,st]=[sel[0],sel[1],sel[2]];const [df,dt]=dates;
+  const [co,ft]=[sel[0],sel[1]];const [df,dt]=dates;
   let v=0;document.querySelectorAll('#fc-table tbody tr').forEach(r=>{
-    const s=(!co||r.dataset.co===co)&&(!ft||r.dataset.ft.includes(ft))&&(!st||r.dataset.st===st)&&inDateRange(r.dataset.date,df,dt)&&(!q||r.textContent.toLowerCase().includes(q));
+    const s=(!co||r.dataset.co===co)&&(!ft||r.dataset.ft.includes(ft))&&inDateRange(r.dataset.date,df,dt)&&(!q||r.textContent.toLowerCase().includes(q));
     r.style.display=s?'':'none';if(s)v++;});
   document.getElementById('fc-count').textContent=v+' records';
 }
@@ -922,33 +1698,33 @@ renderRun(0);
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MOPS Monitor</title>
+<title>MOPs</title>
 <style>
   *{{box-sizing:border-box;margin:0;padding:0;}}
   body{{font-family:'Segoe UI',sans-serif;background:#f5f6fa;color:#1a1a2e;}}
-  header{{background:#1F3864;color:#fff;padding:14px 32px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;}}
+  header{{background:#FF6633;color:#fff;padding:14px 32px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;}}
   header h1{{font-size:1.25rem;font-weight:700;flex-shrink:0;}}
   .run-sel{{display:flex;align-items:center;gap:8px;}}
   .run-sel label{{font-size:.8rem;opacity:.75;white-space:nowrap;}}
-  .run-sel select{{padding:4px 10px;border-radius:6px;border:none;font-size:.82rem;background:rgba(255,255,255,.15);color:#fff;cursor:pointer;max-width:360px;}}
-  .run-sel select option{{background:#1F3864;}}
+  .run-sel select{{padding:4px 10px;border-radius:6px;border:none;font-size:.82rem;background:rgba(0,0,0,.15);color:#fff;cursor:pointer;max-width:360px;}}
+  .run-sel select option{{background:#e05520;}}
   #run-info{{font-size:.78rem;opacity:.65;margin-left:auto;}}
   .metrics{{display:flex;gap:16px;padding:20px 32px;}}
   .metric{{background:#fff;border-radius:8px;padding:14px 20px;flex:1;box-shadow:0 1px 4px rgba(0,0,0,.08);}}
-  .metric .num{{font-size:1.9rem;font-weight:700;color:#1F3864;}}
+  .metric .num{{font-size:1.9rem;font-weight:700;color:#FF6633;}}
   .metric .lbl{{font-size:.78rem;color:#666;margin-top:4px;}}
   .tabs{{display:flex;padding:0 32px;border-bottom:2px solid #ddd;margin-top:4px;}}
   .tab{{padding:10px 22px;cursor:pointer;font-weight:600;font-size:.88rem;color:#666;border-bottom:3px solid transparent;margin-bottom:-2px;}}
-  .tab.active{{color:#1F3864;border-bottom-color:#1F3864;}}
+  .tab.active{{color:#FF6633;border-bottom-color:#FF6633;}}
   .panel{{display:none;padding:20px 32px;}}
   .panel.active{{display:block;}}
   .filters{{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}}
   .filters select,.filters input{{padding:5px 10px;border:1px solid #ddd;border-radius:6px;font-size:.83rem;background:#fff;}}
   .filters label{{font-size:.78rem;color:#666;font-weight:600;}}
   table{{width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.08);font-size:.81rem;}}
-  th{{background:#1F3864;color:#fff;padding:9px 11px;text-align:left;font-weight:600;white-space:nowrap;}}
+  th{{background:#FF6633;color:#fff;padding:9px 11px;text-align:left;font-weight:600;white-space:nowrap;}}
   th.sortable{{cursor:pointer;user-select:none;}}
-  th.sortable:hover{{background:#2a4a8a;}}
+  th.sortable:hover{{background:#e05520;}}
   th.sortable::after{{content:' ⇅';opacity:.35;font-size:.7em;}}
   th.sortable[data-sort=asc]::after{{content:' ▲';opacity:1;}}
   th.sortable[data-sort=desc]::after{{content:' ▼';opacity:1;}}
@@ -963,15 +1739,15 @@ renderRun(0);
   .cf-list{{font-size:.75rem;color:#9C6500;font-style:italic;}}
   .chk-wrap{{display:flex;flex-direction:column;gap:2px;min-width:88px;}}
   .chk-btn{{padding:3px 8px;border:none;border-radius:4px;font-size:.75rem;font-weight:700;cursor:pointer;white-space:nowrap;width:100%;}}
-  .chk-pend{{background:#FFD700;color:#5a4000;}}.chk-done{{background:#C6EFCE;color:#276221;}}
+  .chk-pend{{background:#FFD700;color:#5a4000;}}.chk-done{{background:#C6EFCE;color:#276221;}}.chk-irrel{{background:#D3D3D3;color:#555;}}
   .chk-ts{{font-size:.65rem;color:#888;white-space:nowrap;}}
   .chk-name{{width:100%;padding:2px 4px;border:1px solid #ddd;border-radius:3px;font-size:.72rem;box-sizing:border-box;}}
-  a{{color:#1F3864;}}.count{{font-size:.78rem;color:#666;margin-bottom:8px;}}
+  a{{color:#FF6633;}}.count{{font-size:.78rem;color:#666;margin-bottom:8px;}}
 </style>
 </head>
 <body>
 <header>
-  <h1>📡 MOPS Monitor</h1>
+  <h1>MOPs</h1>
   <div class="run-sel">
     <label>Run:</label>
     <select onchange="renderRun(+this.value)">
@@ -984,8 +1760,6 @@ renderRun(0);
   <div class="metric"><div class="num" id="m-new-fc">—</div><div class="lbl">New Fund Commitments</div></div>
   <div class="metric"><div class="num" id="m-his-fc">—</div><div class="lbl">Historical Commitments</div></div>
   <div class="metric"><div class="num" id="m-new-pm">—</div><div class="lbl">New People Moves</div></div>
-  <div class="metric"><div class="num" id="m-chg-pm">—</div><div class="lbl">Changed People Moves</div></div>
-  <div class="metric"><div class="num" id="m-chg-em">—</div><div class="lbl">EMOPS Profile Changes</div></div>
 </div>
 <div class="tabs">
   <div class="tab active" onclick="showTab('em',this)">🏢 Company Profiles</div>
@@ -1001,7 +1775,7 @@ renderRun(0);
     <input type="text" placeholder="Search…" oninput="filterEM()" style="width:180px;">
   </div>
   <div class="count" id="em-count"></div>
-  <table id="em-table"><thead><tr><th class="sortable" onclick="sortTable('em-table',0)">Code</th><th class="sortable" onclick="sortTable('em-table',1)">Company Name</th><th class="sortable" onclick="sortTable('em-table',2)">Type</th><th class="sortable" onclick="sortTable('em-table',3)">BS Period</th><th class="sortable" onclick="sortTable('em-table',4)">Currency</th><th>Telephone</th><th>Website</th><th>Address</th><th class="sortable" onclick="sortTable('em-table',8)">Scraped At</th><th>Action</th></tr></thead><tbody></tbody></table>
+  <table id="em-table"><thead><tr><th class="sortable" onclick="sortTable('em-table',0)">Stock Code</th><th>Firm ID</th><th class="sortable" onclick="sortTable('em-table',2)">Firm Name</th><th class="sortable" onclick="sortTable('em-table',3)">Type</th><th class="sortable" onclick="sortTable('em-table',4)">BS Period</th><th>Telephone</th><th>Website</th><th>Address</th><th class="sortable" onclick="sortTable('em-table',8)">Scraped At</th><th>Action</th></tr></thead><tbody></tbody></table>
 </div>
 <div id="fs" class="panel">
   <div class="filters">
@@ -1009,19 +1783,18 @@ renderRun(0);
     <input type="text" placeholder="Search…" oninput="filterFS()" style="width:180px;">
   </div>
   <div class="count" id="fs-count"></div>
-  <table id="fs-table"><thead><tr><th class="sortable" onclick="sortTable('fs-table',0)">Code</th><th class="sortable" onclick="sortTable('fs-table',1)">Company Name</th><th class="sortable" onclick="sortTable('fs-table',2)">BS Period</th><th class="sortable" onclick="sortTable('fs-table',3)">Currency</th><th class="sortable" onclick="sortTable('fs-table',4)">Total Assets</th><th class="sortable" onclick="sortTable('fs-table',5)">Inv. Property</th><th class="sortable" onclick="sortTable('fs-table',6)">Scraped At</th></tr></thead><tbody></tbody></table>
+  <table id="fs-table"><thead><tr><th class="sortable" onclick="sortTable('fs-table',0)">Stock Code</th><th>Firm ID</th><th class="sortable" onclick="sortTable('fs-table',2)">Firm Name</th><th class="sortable" onclick="sortTable('fs-table',3)">Period</th><th class="sortable" onclick="sortTable('fs-table',4)">Source</th><th class="sortable" onclick="sortTable('fs-table',5)">Total Assets (TWD, mn)</th><th class="sortable" onclick="sortTable('fs-table',6)">Inv. Property (TWD, mn)</th><th class="sortable" onclick="sortTable('fs-table',7)">Scraped At</th><th>Filing</th><th>Action</th></tr></thead><tbody></tbody></table>
 </div>
 <div id="fc" class="panel">
   <div class="filters">
     <label>Company</label><select class="co-filter" onchange="filterFC()"><option value="">All</option></select>
     <label>Fund Type</label><select id="fc-ft-sel" onchange="filterFC()"><option value="">All</option></select>
-    <label>Status</label><select onchange="filterFC()"><option value="">All</option><option value="new">NEW</option><option value="historical">HISTORICAL</option><option value="changed">CHANGED</option></select>
     <label>From</label><input type="date" onchange="filterFC()" style="width:140px;">
     <label>To</label><input type="date" onchange="filterFC()" style="width:140px;">
     <input type="text" placeholder="Search fund name…" oninput="filterFC()" style="width:180px;">
   </div>
   <div class="count" id="fc-count"></div>
-  <table id="fc-table"><thead><tr><th class="sortable" onclick="sortTable('fc-table',0)">Code</th><th class="sortable" onclick="sortTable('fc-table',1)">Firm Name</th><th class="sortable" onclick="sortTable('fc-table',2)">Published Date</th><th class="sortable" onclick="sortTable('fc-table',3)">Fund Name</th><th class="sortable" onclick="sortTable('fc-table',4)">Fund Type</th><th class="sortable" onclick="sortTable('fc-table',5)">Commit Date</th><th class="sortable" onclick="sortTable('fc-table',6)">Amount (Raw)</th><th>Headline</th><th class="sortable" onclick="sortTable('fc-table',8)">BS Date</th><th class="sortable" onclick="sortTable('fc-table',9)">Status</th><th class="sortable" onclick="sortTable('fc-table',10)">Scraped At</th><th>Action</th></tr></thead><tbody></tbody></table>
+  <table id="fc-table"><thead><tr><th class="sortable" onclick="sortTable('fc-table',0)">Stock Code</th><th>Firm ID</th><th class="sortable" onclick="sortTable('fc-table',2)">Firm Name</th><th class="sortable" onclick="sortTable('fc-table',3)">Published Date</th><th class="sortable" onclick="sortTable('fc-table',4)">Fund Name</th><th class="sortable" onclick="sortTable('fc-table',5)">Fund Type</th><th class="sortable" onclick="sortTable('fc-table',6)">Commit Date</th><th class="sortable" onclick="sortTable('fc-table',7)">Amount</th><th>Headline</th><th class="sortable" onclick="sortTable('fc-table',9)">AUM as of</th><th class="sortable" onclick="sortTable('fc-table',10)">Scraped At</th><th>Action</th></tr></thead><tbody></tbody></table>
 </div>
 <div id="pm" class="panel">
   <div class="filters">
@@ -1032,17 +1805,20 @@ renderRun(0);
     <input type="text" placeholder="Search name or role…" oninput="filterPM()" style="width:180px;">
   </div>
   <div class="count" id="pm-count"></div>
-  <table id="pm-table"><thead><tr><th class="sortable" onclick="sortTable('pm-table',0)">Code</th><th class="sortable" onclick="sortTable('pm-table',1)">Published Date</th><th class="sortable" onclick="sortTable('pm-table',2)">Role</th><th class="sortable" onclick="sortTable('pm-table',3)">New Holder</th><th class="sortable" onclick="sortTable('pm-table',4)">Previous Holder</th><th class="sortable" onclick="sortTable('pm-table',5)">Effective Date</th><th>Narrative</th><th>Link</th><th class="sortable" onclick="sortTable('pm-table',8)">Scraped At</th><th>Action</th></tr></thead><tbody></tbody></table>
+  <table id="pm-table"><thead><tr><th class="sortable" onclick="sortTable('pm-table',0)">Stock Code</th><th>Firm ID</th><th class="sortable" onclick="sortTable('pm-table',2)">Firm Name</th><th class="sortable" onclick="sortTable('pm-table',3)">Published Date</th><th class="sortable" onclick="sortTable('pm-table',4)">Role</th><th class="sortable" onclick="sortTable('pm-table',5)">New Holder</th><th class="sortable" onclick="sortTable('pm-table',6)">Previous Holder</th><th class="sortable" onclick="sortTable('pm-table',7)">Effective Date</th><th>Headlines</th><th>Link</th><th class="sortable" onclick="sortTable('pm-table',10)">Scraped At</th><th>Action</th></tr></thead><tbody></tbody></table>
 </div>
 """ + js + "\n</body></html>"
 
-    report_path = OUTPUT_DIR / "report.html"
-    report_path.write_text(html, encoding="utf-8")
-    logger.info("HTML report saved: %s", report_path)
-    return report_path
+    ts = datetime.now().strftime("%Y%m%d_%H%M")
+    timestamped = OUTPUT_DIR / f"MOPSOV_{ts}.html"
+    timestamped.write_text(html, encoding="utf-8")
+    latest = OUTPUT_DIR / "report.html"
+    latest.write_text(html, encoding="utf-8")
+    logger.info("HTML report saved: %s (also → report.html)", timestamped.name)
+    return latest
 
 
-def write_excel(fund_commitments, people_moves, emops_data=None, since=None, new_since=None):
+def write_excel(fund_commitments, people_moves, emops_data=None, balance_history=None, since=None, new_since=None):
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     ts = datetime.now().strftime("%Y%m%d_%H%M")
     path = OUTPUT_DIR / f"MOPSOV_{ts}.xlsx"
@@ -1066,17 +1842,17 @@ def write_excel(fund_commitments, people_moves, emops_data=None, since=None, new
     # Fund Commitments — mirrors HTML FC table
     _co_map = {w["stock_code"]: w["name_en"] for w in WATCHLIST}
     ws = wb.create_sheet("FundCommitments")
-    _FC_COLS = ["Stock Code", "Firm Name", "Published Date", "Fund Name", "Fund Type",
-                "Commit Date", "Amount (Raw)", "Headline", "BS Date", "Status", "Scraped At"]
+    _FC_COLS = ["Stock Code", "Firm ID", "Firm Name", "Published Date", "Fund Name", "Fund Type",
+                "Commit Date", "Amount", "Headline", "AUM as of", "Scraped At"]
     _header(ws, _FC_COLS)
     _name_col = _FC_COLS.index("Fund Name") + 1
-    _amt_col  = _FC_COLS.index("Amount (Raw)") + 1
+    _amt_col  = _FC_COLS.index("Amount") + 1
     for i, r in enumerate(fund_commitments, 2):
         firm = _co_map.get(r.get("stock_code", ""), "")
         scraped = (r.get("scraped_at") or "")[:10].replace("-", "/")
-        ws.append([r.get("stock_code"), firm, r.get("announcement_date"), r.get("fund_name"),
+        ws.append([r.get("stock_code"), "", firm, r.get("announcement_date"), r.get("fund_name"),
                    r.get("fund_type"), r.get("commitment_date"), r.get("commitment_amount_raw"),
-                   r.get("headline"), r.get("bs_date"), r.get("status"), scraped])
+                   r.get("headline"), r.get("bs_date"), scraped])
         if r.get("url"):
             cell = ws.cell(i, _name_col)
             cell.hyperlink = r["url"]
@@ -1090,14 +1866,15 @@ def write_excel(fund_commitments, people_moves, emops_data=None, since=None, new
 
     # People Moves — mirrors HTML PM table
     ws = wb.create_sheet("PeopleMoves")
-    _PM_COLS = ["Stock Code", "Published Date", "Role", "New Holder", "Previous Holder",
-                "Effective Date", "Narrative", "URL", "Status", "Scraped At"]
+    _PM_COLS = ["Stock Code", "Firm ID", "Firm Name", "Published Date", "Role", "New Holder",
+                "Previous Holder", "Effective Date", "Headlines", "URL", "Status", "Scraped At"]
     _header(ws, _PM_COLS)
     _url_col = _PM_COLS.index("URL") + 1
     for i, r in enumerate(people_moves, 2):
         role = r.get("role_title") or r.get("role_type") or ""
+        firm = _co_map.get(r.get("stock_code", ""), "")
         scraped = (r.get("scraped_at") or "")[:10].replace("-", "/")
-        ws.append([r.get("stock_code"), r.get("announcement_date"), role,
+        ws.append([r.get("stock_code"), "", firm, r.get("announcement_date"), role,
                    r.get("new_holder"), r.get("previous_holder"),
                    r.get("effective_date"), r.get("narrative_en"),
                    r.get("url"), r.get("status"), scraped])
@@ -1111,16 +1888,23 @@ def write_excel(fund_commitments, people_moves, emops_data=None, since=None, new
     # Company Profiles — Code, Name, Type, BS Period, Currency, Telephone, Website, Address
     if emops_data:
         ws = wb.create_sheet("CompanyProfiles")
-        _EM_COLS = ["Stock Code", "Company Name", "Type", "BS Period", "Currency",
-                    "Telephone", "Website", "Address", "Scraped At"]
+        _EM_COLS = ["Stock Code", "Firm ID", "Firm Name", "Type", "BS Period",
+                    "Telephone", "Website", "Address", "Scraped At", "Notes"]
         _header(ws, _EM_COLS)
-        _web_col = _EM_COLS.index("Website") + 1
+        _web_col   = _EM_COLS.index("Website") + 1
+        _notes_col = _EM_COLS.index("Notes") + 1
         for i, r in enumerate(emops_data, 2):
+            if r.get("no_filing_data"):
+                ws.append([r.get("stock_code"), "", r.get("company_name_en"),
+                           "", "", "", "", "", "",
+                           "Information not available on filings — please refer to firm website"])
+                ws.cell(i, _notes_col).font = Font(italic=True, color="888888")
+                continue
             scraped = (r.get("scraped_at") or "")[:10].replace("-", "/")
-            ws.append([r.get("stock_code"), r.get("company_name_en") or r.get("name_en"),
-                       r.get("company_type"), r.get("period"), r.get("currency"),
+            ws.append([r.get("stock_code"), "", r.get("company_name_en") or r.get("name_en"),
+                       "", r.get("period"),
                        r.get("telephone"), r.get("web_address"),
-                       r.get("address"), scraped])
+                       r.get("address"), scraped, ""])
             web = r.get("web_address", "")
             if web:
                 url = web if web.startswith("http") else "https://" + web
@@ -1129,16 +1913,37 @@ def write_excel(fund_commitments, people_moves, emops_data=None, since=None, new
                 cell.font = _link_font
         _autofit(ws)
 
-        # Financial Statements — BS Period, Currency, Total Assets, Inv. Property
+        # Financial Statements — annual (EMOPS) + quarterly (F26) balance sheet data
         ws = wb.create_sheet("FinancialStatements")
-        _FS_COLS = ["Stock Code", "Company Name", "BS Period", "Currency",
-                    "Total Assets", "Inv. Property", "Scraped At"]
+        _FS_COLS = ["Stock Code", "Firm ID", "Firm Name", "Period", "Source",
+                    "Total Assets (TWD, mn)", "Inv. Property (TWD, mn)", "Scraped At", "Filing"]
         _header(ws, _FS_COLS)
-        for i, r in enumerate(emops_data, 2):
-            scraped = (r.get("scraped_at") or "")[:10].replace("-", "/")
-            ws.append([r.get("stock_code"), r.get("company_name_en") or r.get("name_en"),
-                       r.get("period"), r.get("currency"),
-                       r.get("total_assets_raw"), r.get("inv_property_raw"), scraped])
+        _fs_co_map  = {w["stock_code"]: w["name_en"] for w in WATCHLIST}
+        _filing_col = _FS_COLS.index("Filing") + 1
+        _ta_col     = _FS_COLS.index("Total Assets (TWD, mn)") + 1
+        _warn_fill  = PatternFill("solid", fgColor="FFF3E0")
+        _warn_font  = Font(color="E65100", bold=True)
+        for i, r in enumerate(balance_history or [], 2):
+            base_name = r.get("name_en") or _fs_co_map.get(r.get("stock_code", ""), "")
+            co_name = f"{base_name} (Delisted)" if r.get("delisted") else base_name
+            ta_val = "⚠ Manual check needed" if r.get("extraction_failed") else r.get("total_assets_raw")
+            ws.append([r.get("stock_code"),
+                       "",
+                       co_name,
+                       r.get("period"),
+                       "Balance Sheet" if r.get("source") == "annual" else "PDFs - Unconsolidated FS",
+                       ta_val,
+                       r.get("investment_property_raw"),
+                       (r.get("scraped_at") or "")[:10].replace("-", "/"),
+                       r.get("filing_url", "")])
+            if r.get("extraction_failed"):
+                ws.cell(i, _ta_col).font  = _warn_font
+                ws.cell(i, _ta_col).fill  = _warn_fill
+            if r.get("filing_url"):
+                cell = ws.cell(i, _filing_col)
+                cell.hyperlink = r["filing_url"]
+                cell.value = "View"
+                cell.font = _link_font
         _autofit(ws)
 
     wb.save(path)
@@ -1158,11 +1963,16 @@ def _status_fill(ws, row, status):
     elif status == "CHANGED":
         for cell in ws[row]: cell.fill = _CHG_FILL
 
+_WIDE_COLS = {"Headline", "Narrative"}
+
 def _autofit(ws):
+    header_row = [c.value for c in ws[1]]
     for col in ws.columns:
         letter = get_column_letter(col[0].column)
+        col_name = col[0].value or ""
         width = max((len(str(c.value or "")) for c in col), default=10)
-        ws.column_dimensions[letter].width = min(max(width + 2, 10), 50)
+        max_w = 80 if col_name in _WIDE_COLS else 50
+        ws.column_dimensions[letter].width = min(max(width + 2, 10), max_w)
 
 # ── Terminal Preview ──────────────────────────────────────────────────────────
 
@@ -1193,6 +2003,20 @@ def print_results(fund_commitments, people_moves):
 _EMOPS_TRACK = ["company_name_en", "address", "telephone", "web_address",
                 "period", "currency", "total_assets_raw", "inv_property_raw"]
 
+def _load_all_balance_history() -> list[dict]:
+    """Load cached quarterly balance history from state files (no network calls)."""
+    all_records = []
+    for entry in WATCHLIST:
+        code = entry["stock_code"]
+        path = STATE_DIR / f"{code}_balance_history.json"
+        if path.exists():
+            try:
+                all_records.extend(json.loads(path.read_text(encoding="utf-8")))
+            except Exception:
+                pass
+    all_records.sort(key=lambda r: (r["stock_code"], -r.get("roc_year", 0), -r.get("season", 0)))
+    return all_records
+
 def _load_emops_data() -> list[dict]:
     """Read latest profile + balance sheet archive per company, detect field-level changes."""
     results = []
@@ -1221,8 +2045,9 @@ def _load_emops_data() -> list[dict]:
             "period":               bs.get("period", ""),
             "currency":             bs.get("currency", "").replace(" (thousands)", ""),
             "total_assets_raw":     bs.get("total_assets_raw", ""),
-            "total_assets_numeric": bs.get("total_assets_numeric"),
-            "inv_property_raw":     bs.get("investment_property_raw", ""),
+            "total_assets_numeric":  bs.get("total_assets_numeric"),
+            "inv_property_raw":      bs.get("investment_property_raw", ""),
+            "inv_property_numeric":  bs.get("investment_property_numeric"),
             "profile_status":       "",
             "changed_fields":       [],
             "scraped_at":           profile.get("scraped_at", ""),
@@ -1250,22 +2075,140 @@ def _load_emops_data() -> list[dict]:
     return results
 
 
-async def run(companies=None, export_excel=True, funds_only=False, people_only=False,
-              since=None, new_since=None):
+def _fmt_millions(num) -> str:
+    if num is None:
+        return ""
+    return f"{int(num / 1000):,}"
+
+_PERIOD_SEASON = {"03/31": 1, "06/30": 2, "09/30": 3, "12/31": 4}
+
+def _fs_filing_url(stock_code: str, period: str) -> str:
+    """Return the MOPS iXBRL financial statement URL for a given company and period."""
+    if not period or len(period) < 10:
+        return ""
+    year   = period[:4]
+    season = _PERIOD_SEASON.get(period[5:], 0)
+    if not season:
+        return ""
+    return (f"https://mopsov.twse.com.tw/server-java/t164sb01"
+            f"?step=1&CO_ID={stock_code}&SYEAR={year}&SSEASON={season}&REPORT_ID=C")
+
+_HOLDING_RE = re.compile(r"financial.hold", re.I)
+
+def _build_fs_data(emops_data: list[dict], balance_history: list[dict],
+                   since: str | None = None) -> list[dict]:
+    """Combine annual EMOPS rows (financial holdings only) + quarterly PDF rows (all others) for the FS tab.
+    Financial holdings identified by 'Financial Hold' in name_en.
+    All numeric values are expressed in TWD millions (source data is in NT$K)."""
+    rows = []
+    _name_map = {w["stock_code"]: w["name_en"] for w in WATCHLIST}
+    since_norm = since.replace("/", "-")[:10] if since else None
+
+    # Annual BS rows: financial holding companies only
+    for r in emops_data:
+        if not r.get("total_assets_numeric"):
+            continue
+        if not _HOLDING_RE.search(r.get("name_en") or ""):
+            continue
+        period = r.get("period", "")
+        if since_norm and period:
+            if period.replace("/", "-")[:10] < since_norm:
+                continue
+        entry = _WATCHLIST_MAP.get(r["stock_code"], {})
+        rows.append({
+            "stock_code":              r["stock_code"],
+            "name_en":                 r["name_en"],
+            "period":                  period,
+            "currency":                "TWD",
+            "total_assets_raw":        _fmt_millions(r.get("total_assets_numeric")),
+            "investment_property_raw": _fmt_millions(r.get("inv_property_numeric")),
+            "scraped_at":              (r.get("scraped_at") or "")[:10],
+            "delisted":                entry.get("delisted", False),
+            "source":                  "annual",
+            "filing_url":              _fs_filing_url(r["stock_code"], period),
+        })
+
+    # All quarterly rows from cached PDF-extracted balance history.
+    # Only show rows where a PDF was successfully downloaded — any season without a local pdf_path is skipped.
+    for r in balance_history:
+        season = r.get("season", 4)
+        if not r.get("pdf_path"):
+            continue
+        entry    = _WATCHLIST_MAP.get(r["stock_code"], {})
+        yr     = r.get("roc_year", 0)
+        period = (f"{yr + 1911}/{_FS_SEASON_DATE.get(season, '12/31')}"
+                  if yr else r.get("period", ""))
+        internal_sub_code = str(r.get("subsidiary_code") or "")
+        display_code = (_FS_SUBSIDIARY_CODE_MAP.get(internal_sub_code)
+                        or r["stock_code"])
+        # Prefer the watchlist/stub name for the resolved display entity over the raw TWSE internal label
+        _stub_name_map = {s["stock_code"]: s["company_name_en"] for s in _SUBSIDIARY_STUBS}
+        sub_name = (_WATCHLIST_MAP.get(display_code, {}).get("name_en")
+                    or _stub_name_map.get(display_code)
+                    or r.get("subsidiary_name_en")
+                    or entry.get("f26_name_en")
+                    or _name_map.get(display_code, display_code))
+        rows.append({
+            "stock_code":              display_code,
+            "name_en":                 sub_name,
+            "period":                  period,
+            "currency":                "TWD",
+            "total_assets_raw":        _fmt_millions(r.get("total_assets_numeric")),
+            "investment_property_raw": _fmt_millions(r.get("investment_property_numeric")),
+            "scraped_at":              (r.get("scraped_at") or "")[:10],
+            "delisted":                entry.get("delisted", False),
+            "source":                  "quarterly",
+            "filing_url":              "",
+            "extraction_failed":       r.get("extraction_failed", False),
+        })
+
+    # Deduplicate: if annual and quarterly share the same (stock_code, period, name_en), keep annual.
+    # name_en is included so subsidiary rows (e.g. Fubon Life under 2881) are not dropped.
+    annual_keys = {(r["stock_code"], r["period"], r["name_en"]) for r in rows if r["source"] == "annual"}
+    rows = [r for r in rows if r["source"] == "annual"
+            or (r["stock_code"], r["period"], r["name_en"]) not in annual_keys]
+
+    return rows
+
+
+async def run(companies=None, export_excel=True, mode="full", since=None, new_since=None):
+    """
+    mode="full"       — scrape everything: EMOPS profiles, quarterly PDF balance sheets, FC, PM (run quarterly)
+    mode="daily"      — FC + PM only; EMOPS/FS loaded from cached state files (run nightly)
+    mode="report-only" — no network calls; rebuild HTML/Excel from cached state files only
+    """
     watchlist = WATCHLIST if not companies else [w for w in WATCHLIST if w["stock_code"] in companies]
-    logger.info("Running MOPSOV for %d companies", len(watchlist))
+    scrape_profiles = mode == "full"
+    scrape_fc_pm    = mode != "report-only"
+    logger.info("Running MOPSOV [mode=%s] for %d companies", mode, len(watchlist))
     if since:
         logger.info("Extracting fund commitments from %s", since)
     if new_since:
-        logger.info("Last-run baseline date: %s (records seen before this run will be HISTORICAL)", new_since)
+        logger.info("Last-run baseline date: %s", new_since)
 
-    all_funds, all_people = [], []
+    all_funds, all_people, all_balance_history = [], [], []
 
     for entry in watchlist:
         code = entry["stock_code"]
         logger.info("── %s %s", code, entry["name_en"])
 
-        if not people_only:
+        if scrape_profiles:
+            profile = await scrape_emops_profile(code)
+            profile = detect_changes([profile], STATE_DIR / f"{code}_profile.json", ["stock_code"])[0]
+            archive(code, "profile", [profile])
+
+            bs = await scrape_emops_balance_sheet(code)
+            bs = detect_changes([bs], STATE_DIR / f"{code}_balance_sheet.json", ["stock_code"])[0]
+            archive(code, "balance_sheet", [bs])
+            logger.info("Profile [%s] addr=%s | BS period=%s total_assets=%s",
+                        code, profile.get("address") or "—", bs.get("period") or "—",
+                        bs.get("total_assets_raw") or "—")
+
+            bs_history = await scrape_quarterly_reports(code,
+                                                      subsidiary_name_en=entry.get("f26_name_en", ""))
+            all_balance_history.extend(bs_history)
+
+        if scrape_fc_pm:
             funds = await scrape_fund_commitments(code, sdate=since)
             funds = detect_changes(funds, STATE_DIR / f"{code}_funds.json",
                                    ["stock_code", "fund_name", "commitment_date"])
@@ -1273,7 +2216,6 @@ async def run(companies=None, export_excel=True, funds_only=False, people_only=F
             all_funds.extend(funds)
             archive(code, "fund_commitments", funds)
 
-        if not funds_only:
             moves = await scrape_people_moves(code, sdate=since)
             moves = detect_changes(moves, STATE_DIR / f"{code}_people.json",
                                    ["stock_code", "role_type", "change_date"])
@@ -1281,24 +2223,77 @@ async def run(companies=None, export_excel=True, funds_only=False, people_only=F
             all_people.extend(moves)
             archive(code, "people_moves", moves)
 
+    # Always build FS from state files so partial runs (--companies X) still show all companies
+    all_balance_history = _load_all_balance_history()
+    # In full mode, respect --since as a universal filter: only show periods scraped on/after that date
+    if mode == "full" and since:
+        since_norm = since.replace("/", "-")[:10]
+        all_balance_history = [r for r in all_balance_history
+                               if (r.get("scraped_at") or "")[:10] >= since_norm]
+
+    # In report-only mode, load FC and PM from latest archive files instead of scraping
+    if mode == "report-only":
+        all_funds, all_people = [], []
+        for entry in WATCHLIST:
+            code = entry["stock_code"]
+            for arc in sorted(ARCHIVE_DIR.glob(f"{code}_fund_commitments_*.json"), reverse=True)[:1]:
+                d = _load_json(arc)
+                if d and d.get("records"):
+                    all_funds.extend(d["records"])
+            for arc in sorted(ARCHIVE_DIR.glob(f"{code}_people_moves_*.json"), reverse=True)[:1]:
+                d = _load_json(arc)
+                if d and d.get("records"):
+                    for r in d["records"]:
+                        # Re-resolve subsidiary code and re-clean names/narrative
+                        r["stock_code"] = _resolve_subsidiary(r["stock_code"], r.get("subject", ""))
+                        r["new_holder"] = _clean_holder_name(r.get("new_holder", ""))
+                        r["previous_holder"] = _clean_holder_name(r.get("previous_holder", ""))
+                        r["narrative_en"] = _NARRATIVE_ABBREV_RE.sub(
+                            "", _build_narrative(
+                                r["stock_code"], r.get("role_title", ""),
+                                r["new_holder"], r["previous_holder"],
+                                r.get("change_type", ""), r.get("effective_date", ""),
+                                reason=r.get("reason", ""),
+                            )
+                        ).strip()
+                    all_people.extend(d["records"])
+
+        # Re-compute fund_type, subsidiary codes, formatted amounts, and headlines for FC records
+        # (cached data may predate normalization and "million" suffix handling)
+        for r in all_funds:
+            r["stock_code"] = _resolve_subsidiary(r["stock_code"], r.get("subject", ""))
+            r["fund_type"] = _normalize_fund_type(r.get("fund_type", ""), r.get("fund_name", ""))
+            formatted, fx = await _format_commitment_amount(
+                r.get("commitment_amount_raw", ""), r.get("commitment_currency", "")
+            )
+            if formatted:
+                twd_m = re.search(r"TWD ([\d,]+) million", formatted)
+                r["twd_amount_mn"] = twd_m.group(1) if twd_m else r.get("twd_amount_mn", "")
+                r["fx_url"] = fx
+                r["headline"] = (
+                    _build_fund_headline(r["stock_code"], r.get("fund_name", ""), formatted)
+                    if r.get("fund_type") else ""
+                )
+
     print_results(all_funds, all_people)
     if export_excel:
         emops_data = _load_emops_data()
-        write_excel(all_funds, all_people, emops_data, since=since, new_since=new_since)
-        write_html_report(all_funds, all_people, emops_data, since=since, new_since=new_since)
+        emops_data = emops_data + _SUBSIDIARY_STUBS
+        fs_data = _build_fs_data(emops_data, all_balance_history, since=since)
+        write_excel(all_funds, all_people, emops_data, balance_history=fs_data, since=since, new_since=new_since)
+        write_html_report(all_funds, all_people, emops_data, balance_history=fs_data, since=since, new_since=new_since)
 
 
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description="MOPSOV Scraper — Fund Commitments & People Moves")
     parser.add_argument("--companies", nargs="+", help="Limit to specific stock codes e.g. 2882 2330")
-    parser.add_argument("--no-excel", action="store_true", help="Print only, skip Excel export")
-    parser.add_argument("--funds-only", action="store_true", help="Fund commitments only")
-    parser.add_argument("--people-only", action="store_true", help="People moves only")
+    parser.add_argument("--no-excel", action="store_true", help="Print only, skip Excel/HTML export")
+    parser.add_argument("--mode", choices=["full", "daily", "report-only"], default="full",
+                        help="full=everything (default); daily=FC+PM only; report-only=rebuild output from cache, no network")
     parser.add_argument("--since", help="Extract data from this date e.g. 2025/01/01 (YYYY/MM/DD)")
-    parser.add_argument("--new-since", dest="new_since", help="Flag as NEW (green) if on/after this date, else HISTORICAL (red) e.g. 2025/09/30")
+    parser.add_argument("--new-since", dest="new_since", help="Flag as NEW if on/after this date e.g. 2025/09/30")
     args = parser.parse_args()
 
     asyncio.run(run(companies=args.companies, export_excel=not args.no_excel,
-                    funds_only=args.funds_only, people_only=args.people_only,
-                    since=args.since, new_since=args.new_since))
+                    mode=args.mode, since=args.since, new_since=args.new_since))
