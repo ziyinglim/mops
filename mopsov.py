@@ -583,19 +583,63 @@ def _extract_tracked_role(text: str) -> str:
             best = expanded
     return best.strip()
 
+# Titles/roles that follow a person's name — strip from first match onwards.
+# Ordered longest-first so alternation picks the most specific phrase.
+_TITLE_STRIP_RE = re.compile(
+    r"\b(?:Senior\s+Executive\s+Vice\s+President"
+    r"|Executive\s+Vice\s+President"
+    r"|Senior\s+Vice\s+President"
+    r"|Vice[\s-]+President"
+    r"|Senior\s+Managing\s+Director"
+    r"|Managing\s+Director"
+    r"|Senior\s+Executive\s+Director"
+    r"|Executive\s+Director"
+    r"|Independent\s+Director"
+    r"|Non-?Executive\s+Director"
+    r"|Senior\s+Director"
+    r"|Deputy\s+General\s+Manager"
+    r"|Assistant\s+General\s+Manager"
+    r"|General\s+Manager"
+    r"|Chief\s+\w+\s+Officer"
+    r"|Senior\s+Executive"
+    r"|Executive\s+Officer"
+    r"|President"
+    r"|Chairman"
+    r"|Director"
+    r"|Manager"
+    r"|C(?:EO|FO|OO|TO|SO|IO|LO|CRO)\b"
+    r")\b.*$",
+    re.IGNORECASE | re.DOTALL,
+)
+
 def _clean_holder_name(text: str) -> str:
-    """Return person's name from holder text, title-cased (strips '/ role...' suffix)."""
+    """Extract only the person's name from holder text.
+
+    Handles three formats:
+      'SURNAME,GIVEN-NAME'              → joined to 'Surname Given-Name' (Chinese format)
+      'Name, Title, Company...'         → takes text before first comma (English comma-separated)
+      'Name Senior Vice President Co.'  → strips from first recognised title keyword onward
+    """
     if not text or text.lower().strip() in ("none", "nil", "n/a", "na", ""):
         return ""
+    # Strip slash-separated role suffix (e.g. "Name / CEO")
     name = re.split(r"\s*/\s*", text.strip(), maxsplit=1)[0].strip()
+
+    if ", " in name or ",\t" in name:
+        # English comma-separated: "Suwat Chritamara, CSO, Land and Houses Bank..."
+        name = name.split(",")[0].strip()
+    elif "," in name:
+        # Chinese SURNAME,GIVEN-NAME format — join with space
+        name = name.replace(",", " ").strip()
+    else:
+        # No comma: strip from first recognised title word onward
+        # e.g. "Ching-Li Chang Senior Executive Vice President Cathay United Bank"
+        name = _TITLE_STRIP_RE.sub("", name).strip()
+
     name = name.rstrip(".,、，").strip()
-    if name.lower() in ("none", "nil", "n/a", "na"):
+    if not name or name.lower() in ("none", "nil", "n/a", "na"):
         return ""
-    # Comma-separated format is SURNAME,GIVEN-NAME → convert to "Surname Given-Name"
-    name = name.replace(",", " ").strip()
-    # Title-case each word, preserving hyphens (Python's str.title handles hyphens)
-    name = name.title()
-    return name
+    return name.title()
 
 def _matches(text: str, keywords: list[str]) -> bool:
     t = text.lower()
