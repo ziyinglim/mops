@@ -126,6 +126,13 @@ def _resolve_subsidiary(parent_code: str, subject: str) -> str:
             return sub_code
     return parent_code
 
+# Reverse lookup: subsidiary display code → parent WATCHLIST stock_code
+_SUBSIDIARY_TO_PARENT: dict[str, str] = {
+    sub_code: parent
+    for parent, patterns in _SUBSIDIARY_PATTERNS.items()
+    for _, sub_code in patterns
+}
+
 # Subsidiaries with no standalone EMOPS/MOPSOV profile — shown in Company Profiles with a notice
 _SUBSIDIARY_STUBS = [
     {"stock_code": "28810012", "company_name_en": "Fubon Life Insurance",         "no_filing_data": True},
@@ -517,6 +524,7 @@ async def scrape_people_moves(stock_code: str, sdate: str = None) -> list[dict]:
                                      reason=reason)
             ).strip()
             resolved_code = _resolve_subsidiary(stock_code, row["subject"])
+            _, bs_date = _get_latest_aum(resolved_code)
             key_events = _build_pm_key_event(
                 resolved_code, role_title, new_holder_clean, prev_holder_clean,
                 effective_date or change_date or row["date"], change_type
@@ -535,6 +543,7 @@ async def scrape_people_moves(stock_code: str, sdate: str = None) -> list[dict]:
                 "effective_date": effective_date,
                 "narrative_en": narrative,
                 "key_events": key_events,
+                "bs_date": bs_date,
                 "url": row["url"],
             })
     logger.info("People moves [%s]: %d found", stock_code, len(results))
@@ -643,10 +652,11 @@ def _clean_holder_name(text: str) -> str:
     elif "," in name:
         # Chinese SURNAME,GIVEN-NAME format — join with space
         name = name.replace(",", " ").strip()
-    else:
-        # No comma: strip from first recognised title word onward
-        # e.g. "Ching-Li Chang Senior Executive Vice President Cathay United Bank"
-        name = _TITLE_STRIP_RE.sub("", name).strip()
+
+    # Always strip recognised title words (catches both no-comma and post-comma-split cases)
+    # e.g. "Ching-Li Chang Senior Executive Vice President Cathay United Bank" → "Ching-Li Chang"
+    # e.g. "Sajiv Dalal President Of Tsmc North America" → "Sajiv Dalal"
+    name = _TITLE_STRIP_RE.sub("", name).strip()
 
     name = name.rstrip(".,、，").strip()
     if not name or name.lower() in ("none", "nil", "n/a", "na"):
@@ -723,10 +733,8 @@ async def _format_commitment_amount(amount_raw: str, orig_currency: str) -> tupl
     return orig_str, fx_url
 
 def _build_fund_headline(stock_code, fund_name, formatted_amount, fund_type=""):
-    entry = _WATCHLIST_MAP.get(stock_code, {})
-    company_type = entry.get("company_type", "investor")
     aum, _ = _get_latest_aum(stock_code)
-    ref = f"The {aum} {company_type}" if aum else f"The {company_type}"
+    ref = f"The {aum} [firm type]" if aum else "[firm type]"
     committed = f"has committed {formatted_amount} to" if formatted_amount else "has committed to"
     body = f"{ref} {committed} {fund_name}."
     abbrev = _FUND_TYPE_ABBREV.get(fund_type, fund_type or "Fund")
@@ -734,10 +742,8 @@ def _build_fund_headline(stock_code, fund_name, formatted_amount, fund_type=""):
 
 def _build_narrative(stock_code, role, new_holder, prev_holder, change_type,
                      effective_date, reason=""):
-    entry = _WATCHLIST_MAP.get(stock_code, {})
-    company_type = entry.get("company_type", "company")
     aum, _ = _get_latest_aum(stock_code)
-    company_ref = f"The {aum} {company_type}" if aum else f"The {company_type}"
+    company_ref = f"The {aum} [firm type]" if aum else "[firm type]"
     date_str = _format_date(effective_date)
     eff = f", effective {date_str}" if date_str else ""
 
@@ -766,27 +772,31 @@ def _build_narrative(stock_code, role, new_holder, prev_holder, change_type,
     return f"[{abbrev}]\n\n{body}"
 
 def _get_latest_aum(stock_code: str) -> tuple[str, str]:
-    """Returns (aum_string, balance_sheet_period). Both empty string if unavailable."""
-    files = sorted(ARCHIVE_DIR.glob(f"{stock_code}_balance_sheet_*.json"), reverse=True)
-    if not files:
-        return "", ""
-    try:
-        data = json.loads(files[0].read_text(encoding="utf-8"))
-        records = data.get("records", [])
-        if not records:
+    """Returns (aum_string, balance_sheet_period) from quarterly FS balance history.
+    Falls back to parent company balance history for subsidiary codes."""
+    path = STATE_DIR / f"{stock_code}_balance_history.json"
+    if not path.exists():
+        parent = _SUBSIDIARY_TO_PARENT.get(stock_code)
+        if not parent:
             return "", ""
-        rec = records[0]
-        total = rec.get("total_assets_numeric")
-        currency = rec.get("currency", "TWD").replace(" (thousands)", "")
-        period = rec.get("period", "")
-        if total is None:
-            return "", period
-        if "thousands" in rec.get("currency", ""):
-            total *= 1000
-        if total >= 1e9:
-            return f"{currency} {total/1e9:,.0f} billion", period
-        if total >= 1e6:
-            return f"{currency} {total/1e6:,.0f} million", period
+        path = STATE_DIR / f"{parent}_balance_history.json"
+        if not path.exists():
+            return "", ""
+    try:
+        records = json.loads(path.read_text(encoding="utf-8"))
+        records.sort(key=lambda r: (r.get("roc_year", 0), r.get("season", 0)), reverse=True)
+        for rec in records:
+            total_k = rec.get("total_assets_numeric")
+            if total_k is None:
+                continue
+            period = rec.get("period", "")
+            total = total_k * 1000  # NT$K → NT$
+            if total >= 1e12:
+                return f"TWD {total/1e12:,.0f} trillion", period
+            if total >= 1e9:
+                return f"TWD {total/1e9:,.0f} billion", period
+            if total >= 1e6:
+                return f"TWD {total/1e6:,.0f} million", period
     except Exception:
         pass
     return "", ""
@@ -918,72 +928,69 @@ def _filing_month_to_season(filing_year: int, filing_month: int) -> tuple[int, i
         return filing_year - 1911, 3
 
 
+_ASSET_LABEL_ZH_RE  = re.compile(r"資\s*[産產]\s*[總合]\s*計")
+_ASSET_LABEL_EN_RE  = re.compile(r"^\s*Total\s+[Aa]ssets\b")
+
 def _extract_total_assets_from_pdf(pdf_path: Path) -> int | None:
     """Extract total assets from a quarterly financial report PDF.
-    For Chinese PDFs (AI1/AI3): looks for 資産總計.
-    For English PDFs (AIA): looks for 'Total assets' in text."""
+    Tries both triggers — [資産總計] (Chinese) and [Total Assets] (English) — on every PDF."""
     try:
         import pdfplumber
     except ImportError:
         logger.error("pdfplumber not installed — run: pip install pdfplumber")
         return None
 
-    is_english = "_AIA." in pdf_path.name.upper() or pdf_path.name.upper().endswith("_AIA.PDF")
-
-    if is_english:
-        _TOTAL_ASSETS_EN_RE = re.compile(r"^\s*Total\s+assets\b", re.I)
-        try:
-            with pdfplumber.open(pdf_path) as pdf:
-                for page in pdf.pages[3:15]:
-                    for table in (page.extract_tables() or []):
-                        for row in table:
-                            cells = [str(c or "").strip() for c in row]
-                            if any(_TOTAL_ASSETS_EN_RE.match(c) for c in cells):
-                                if not any(re.search(r"current|non.current", c, re.I)
-                                           for c in cells):
-                                    for cell in cells:
-                                        clean = re.sub(r"[,\s]", "", cell)
-                                        if re.match(r"^\d{6,}$", clean):
-                                            return int(clean)
-                    text = page.extract_text() or ""
-                    for line in text.split("\n"):
-                        if not _TOTAL_ASSETS_EN_RE.match(line):
-                            continue
-                        norm_line = re.sub(r"(\d) (\d{1,3},)", r"\1\2", line)
-                        m = re.search(r"\$?\s*([\d,]{6,})", norm_line)
-                        if m:
-                            return int(m.group(1).replace(",", ""))
-        except Exception as e:
-            logger.warning("PDF extraction failed [%s]: %s", pdf_path.name, e)
+    def _try_chinese(pdf) -> int | None:
+        for page in pdf.pages[3:15]:
+            for table in (page.extract_tables() or []):
+                for row in table:
+                    cells = [str(c or "").strip() for c in row]
+                    norm_cells = [c.replace(" ", "") for c in cells]
+                    if any("資產總計" in c or "資産總計" in c
+                           or "資產合計" in c or "資産合計" in c for c in norm_cells):
+                        for cell in cells:
+                            clean = re.sub(r"[,\s]", "", cell)
+                            if re.match(r"^\d{6,}$", clean):
+                                return int(clean)
+            text = page.extract_text() or ""
+            for line in text.split("\n"):
+                if not _ASSET_LABEL_ZH_RE.search(line):
+                    continue
+                if "流動" in line.replace(" ", ""):
+                    continue
+                norm_line = re.sub(r"(\d) (\d{1,3},)", r"\1\2", line)
+                m = re.search(r"\$?\s*([\d,]{6,})", norm_line)
+                if m:
+                    return int(m.group(1).replace(",", ""))
         return None
 
-    # Chinese PDF extraction (AI1/AI3)
-    _ASSET_LABEL_RE = re.compile(r"資\s*[産產]\s*[總合]\s*計")
-    try:
-        with pdfplumber.open(pdf_path) as pdf:
-            for page in pdf.pages[3:12]:   # pages 4–12 (0-indexed 3–11)
-                for table in (page.extract_tables() or []):
-                    for row in table:
-                        cells = [str(c or "").strip() for c in row]
-                        norm_cells = [c.replace(" ", "") for c in cells]
-                        if any("資產總計" in c or "資産總計" in c
-                               or "資產合計" in c or "資産合計" in c for c in norm_cells):
+    def _try_english(pdf) -> int | None:
+        for page in pdf.pages[3:15]:
+            for table in (page.extract_tables() or []):
+                for row in table:
+                    cells = [str(c or "").strip() for c in row]
+                    if any(_ASSET_LABEL_EN_RE.match(c) for c in cells):
+                        if not any(re.search(r"current|non.current", c, re.I) for c in cells):
                             for cell in cells:
                                 clean = re.sub(r"[,\s]", "", cell)
                                 if re.match(r"^\d{6,}$", clean):
                                     return int(clean)
-                text = page.extract_text() or ""
-                for line in text.split("\n"):
-                    if not _ASSET_LABEL_RE.search(line):
-                        continue
-                    # Skip 流動資産合計 / 非流動資産合計 subtotals — only want grand total
-                    if "流動" in line.replace(" ", ""):
-                        continue
-                    # Fix pdfplumber space-broken numbers: "6 49,570,217" → "649,570,217"
-                    norm_line = re.sub(r"(\d) (\d{1,3},)", r"\1\2", line)
-                    m = re.search(r"\$?\s*([\d,]{6,})", norm_line)
-                    if m:
-                        return int(m.group(1).replace(",", ""))
+            text = page.extract_text() or ""
+            for line in text.split("\n"):
+                if not _ASSET_LABEL_EN_RE.match(line):
+                    continue
+                norm_line = re.sub(r"(\d) (\d{1,3},)", r"\1\2", line)
+                m = re.search(r"\$?\s*([\d,]{6,})", norm_line)
+                if m:
+                    return int(m.group(1).replace(",", ""))
+        return None
+
+    try:
+        with pdfplumber.open(pdf_path) as pdf:
+            result = _try_chinese(pdf)
+            if result is None:
+                result = _try_english(pdf)
+            return result
     except Exception as e:
         logger.warning("PDF extraction failed [%s]: %s", pdf_path.name, e)
     return None
@@ -1593,7 +1600,7 @@ def _save_run_to_history(fund_commitments, people_moves, emops_data, since, new_
                "bs_date","status","scraped_at","url","fx_url"]
     pm_keys = ["stock_code","announcement_date","role_type","role_title","new_holder","previous_holder",
                "change_type","reason","effective_date","narrative_en","key_events","internal_notes",
-               "status","scraped_at","url"]
+               "bs_date","status","scraped_at","url"]
     em_keys = ["stock_code","name_en","company_type","company_name_en","address","telephone",
                "web_address","period","currency","total_assets_raw","inv_property_raw",
                "profile_status","changed_fields","scraped_at","no_filing_data"]
@@ -1699,7 +1706,7 @@ function renderRun(idx){
 function renderEM(rows){
   document.querySelector('#em-table tbody').innerHTML=rows.map(r=>{
     if(r.no_filing_data){
-      return `<tr data-co="${r.stock_code}" data-date=""><td>${r.stock_code}</td><td></td><td>${r.company_name_en}</td><td colspan="6" style="color:#888;font-style:italic;">Information not available on filings — please refer to firm website</td><td></td></tr>`;
+      return `<tr data-co="${r.stock_code}" data-date=""><td>${r.stock_code}</td><td></td><td>${r.company_name_en}</td><td colspan="7" style="color:#888;font-style:italic;">Information not available on filings — please refer to firm website</td><td></td></tr>`;
     }
     const webUrl=r.web_address?(r.web_address.match(/^https?:\/\//)?r.web_address:'https://'+r.web_address):'';
     const webCell=webUrl?`<a href="${webUrl}" target="_blank">${r.web_address}</a>`:(r.web_address||'—');
@@ -1722,7 +1729,7 @@ function renderFS(rows){
       :(r.total_assets_raw||'—');
     const rowCls=r.extraction_failed?'style="background:#fff8f0"':'';
     const notes=(r.internal_notes||'').replace(/\n/g,'<br>');
-    return `<tr ${rowCls} data-co="${r.stock_code}" data-period="${(r.period||'').toLowerCase()}"><td>${r.stock_code}</td><td></td><td>${co}</td><td>${r.period||'—'}</td><td>${src}</td><td>${taCell}</td><td>${r.investment_property_raw||'—'}</td><td>${fmtScraped(r.scraped_at)}</td><td>${filing}</td><td class="headline">${notes}</td><td>${chkBtn(ck)}</td></tr>`;
+    return `<tr ${rowCls} data-co="${r.stock_code}" data-period="${(r.period||'').toLowerCase()}"><td>${r.stock_code}</td><td></td><td>${co}</td><td></td><td>${r.period||'—'}</td><td>${src}</td><td>${taCell}</td><td>${r.investment_property_raw||'—'}</td><td>${fmtScraped(r.scraped_at)}</td><td>${filing}</td><td class="headline">${notes}</td><td>${chkBtn(ck)}</td></tr>`;
   }).join('');
   document.getElementById('fs-count').textContent=rows.length+' records';
 }
@@ -1734,7 +1741,7 @@ function renderFC(rows){
     const ck=`chk_fc_${r.stock_code}_${(r.fund_name||'').replace(/\W+/g,'_')}_${r.commitment_date}`;
     const firm=COMPANIES[r.stock_code]||r.stock_code;
     const notes=(r.internal_notes||'').replace(/\n/g,'<br>');
-    return `<tr class="row-${st.toLowerCase()}" data-co="${r.stock_code}" data-ft="${(r.fund_type||'').toLowerCase()}" data-st="${st.toLowerCase()}" data-yr="${yr}" data-date="${normDate(r.announcement_date||'')}"><td>${r.stock_code}</td><td></td><td>${firm}</td><td>${r.announcement_date}</td><td>${nm}</td><td>${r.fund_type||'—'}</td><td>${r.commitment_date}</td><td>${amt}</td><td class="headline">${fmtHeadline(r.headline||'')}</td><td class="headline">${r.key_events||''}</td><td>${r.bs_date}</td><td>${fmtScraped(r.scraped_at)}</td><td class="headline">${notes}</td><td>${chkBtn(ck)}</td></tr>`;
+    return `<tr class="row-${st.toLowerCase()}" data-co="${r.stock_code}" data-ft="${(r.fund_type||'').toLowerCase()}" data-st="${st.toLowerCase()}" data-yr="${yr}" data-date="${normDate(r.announcement_date||'')}"><td>${r.stock_code}</td><td></td><td>${firm}</td><td></td><td>${r.announcement_date}</td><td>${nm}</td><td>${r.fund_type||'—'}</td><td>${r.commitment_date}</td><td>${amt}</td><td class="headline">${fmtHeadline(r.headline||'')}</td><td class="headline">${r.key_events||''}</td><td>${r.bs_date}</td><td>${fmtScraped(r.scraped_at)}</td><td class="headline">${notes}</td><td>${chkBtn(ck)}</td></tr>`;
   }).join('');
   document.getElementById('fc-count').textContent=rows.length+' records';
 }
@@ -1746,7 +1753,7 @@ function renderPM(rows){
     const ck=`chk_pm_${r.stock_code}_${r.announcement_date}_${(r.new_holder||'').replace(/\W+/g,'_')}`;
     const firmNm=COMPANIES[r.stock_code]||r.stock_code;
     const notes=(r.internal_notes||'').replace(/\n/g,'<br>');
-    return `<tr class="row-${st.toLowerCase()}" data-co="${r.stock_code}" data-st="${st.toLowerCase()}" data-yr="${yr}" data-date="${normDate(r.announcement_date||'')}"><td>${r.stock_code}</td><td></td><td>${firmNm}</td><td>${r.announcement_date}</td><td>${role||'—'}</td><td>${r.new_holder||'—'}</td><td>${r.previous_holder||'—'}</td><td>${r.effective_date}</td><td class="headline">${fmtHeadline(r.narrative_en||'')}</td><td class="headline">${r.key_events||''}</td><td>${lnk}</td><td>${fmtScraped(r.scraped_at)}</td><td class="headline">${notes}</td><td>${chkBtn(ck)}</td></tr>`;
+    return `<tr class="row-${st.toLowerCase()}" data-co="${r.stock_code}" data-st="${st.toLowerCase()}" data-yr="${yr}" data-date="${normDate(r.announcement_date||'')}"><td>${r.stock_code}</td><td></td><td>${firmNm}</td><td></td><td>${r.announcement_date}</td><td>${role||'—'}</td><td>${r.new_holder||'—'}</td><td>${r.previous_holder||'—'}</td><td>${r.effective_date}</td><td class="headline">${fmtHeadline(r.narrative_en||'')}</td><td class="headline">${r.key_events||''}</td><td>${r.bs_date||'—'}</td><td>${lnk}</td><td>${fmtScraped(r.scraped_at)}</td><td class="headline">${notes}</td><td>${chkBtn(ck)}</td></tr>`;
   }).join('');
   document.getElementById('pm-count').textContent=rows.length+' records';
 }
@@ -1896,7 +1903,7 @@ renderRun(0);
     <input type="text" placeholder="Search…" oninput="filterEM()" style="width:180px;">
   </div>
   <div class="count" id="em-count"></div>
-  <table id="em-table"><thead><tr><th class="sortable" onclick="sortTable('em-table',0)">Stock Code</th><th>Firm ID</th><th class="sortable" onclick="sortTable('em-table',2)">Firm Name</th><th class="sortable" onclick="sortTable('em-table',3)">Type</th><th class="sortable" onclick="sortTable('em-table',4)">BS Period</th><th>Telephone</th><th>Website</th><th>Address</th><th class="sortable" onclick="sortTable('em-table',8)">Scraped At</th><th>Action</th></tr></thead><tbody></tbody></table>
+  <table id="em-table"><thead><tr><th class="sortable" onclick="sortTable('em-table',0)">Stock Code</th><th>Firm ID</th><th class="sortable" onclick="sortTable('em-table',2)">Firm Name</th><th class="sortable" onclick="sortTable('em-table',3)">Firm Type</th><th class="sortable" onclick="sortTable('em-table',4)">BS Period</th><th>Telephone</th><th>Website</th><th>Address</th><th class="sortable" onclick="sortTable('em-table',8)">Scraped At</th><th>Action</th></tr></thead><tbody></tbody></table>
 </div>
 <div id="fs" class="panel">
   <div class="filters">
@@ -1904,7 +1911,7 @@ renderRun(0);
     <input type="text" placeholder="Search…" oninput="filterFS()" style="width:180px;">
   </div>
   <div class="count" id="fs-count"></div>
-  <table id="fs-table"><thead><tr><th class="sortable" onclick="sortTable('fs-table',0)">Stock Code</th><th>Firm ID</th><th class="sortable" onclick="sortTable('fs-table',2)">Firm Name</th><th class="sortable" onclick="sortTable('fs-table',3)">Period</th><th class="sortable" onclick="sortTable('fs-table',4)">Source</th><th class="sortable" onclick="sortTable('fs-table',5)">Total Assets (TWD, mn)</th><th class="sortable" onclick="sortTable('fs-table',6)">Inv. Property (TWD, mn)</th><th class="sortable" onclick="sortTable('fs-table',7)">Scraped At</th><th>Filing</th><th>Internal Notes</th><th>Action</th></tr></thead><tbody></tbody></table>
+  <table id="fs-table"><thead><tr><th class="sortable" onclick="sortTable('fs-table',0)">Stock Code</th><th>Firm ID</th><th class="sortable" onclick="sortTable('fs-table',2)">Firm Name</th><th>Firm Type</th><th class="sortable" onclick="sortTable('fs-table',4)">Period</th><th class="sortable" onclick="sortTable('fs-table',5)">Source</th><th class="sortable" onclick="sortTable('fs-table',6)">Total Assets (TWD, mn)</th><th class="sortable" onclick="sortTable('fs-table',7)">Inv. Property (TWD, mn)</th><th class="sortable" onclick="sortTable('fs-table',8)">Scraped At</th><th>Filing</th><th>Internal Notes</th><th>Action</th></tr></thead><tbody></tbody></table>
 </div>
 <div id="fc" class="panel">
   <div class="filters">
@@ -1915,7 +1922,7 @@ renderRun(0);
     <input type="text" placeholder="Search fund name…" oninput="filterFC()" style="width:180px;">
   </div>
   <div class="count" id="fc-count"></div>
-  <table id="fc-table"><thead><tr><th class="sortable" onclick="sortTable('fc-table',0)">Stock Code</th><th>Firm ID</th><th class="sortable" onclick="sortTable('fc-table',2)">Firm Name</th><th class="sortable" onclick="sortTable('fc-table',3)">Published Date</th><th class="sortable" onclick="sortTable('fc-table',4)">Fund Name</th><th class="sortable" onclick="sortTable('fc-table',5)">Fund Type</th><th class="sortable" onclick="sortTable('fc-table',6)">Commit Date</th><th class="sortable" onclick="sortTable('fc-table',7)">Amount</th><th>Headlines</th><th>Key Events</th><th class="sortable" onclick="sortTable('fc-table',10)">AUM as of</th><th class="sortable" onclick="sortTable('fc-table',11)">Scraped At</th><th>Internal Notes</th><th>Action</th></tr></thead><tbody></tbody></table>
+  <table id="fc-table"><thead><tr><th class="sortable" onclick="sortTable('fc-table',0)">Stock Code</th><th>Firm ID</th><th class="sortable" onclick="sortTable('fc-table',2)">Firm Name</th><th>Firm Type</th><th class="sortable" onclick="sortTable('fc-table',4)">Published Date</th><th class="sortable" onclick="sortTable('fc-table',5)">Fund Name</th><th class="sortable" onclick="sortTable('fc-table',6)">Fund Type</th><th class="sortable" onclick="sortTable('fc-table',7)">Commit Date</th><th class="sortable" onclick="sortTable('fc-table',8)">Amount</th><th>Headlines</th><th>Key Events</th><th class="sortable" onclick="sortTable('fc-table',11)">AUM as of</th><th class="sortable" onclick="sortTable('fc-table',12)">Scraped At</th><th>Internal Notes</th><th>Action</th></tr></thead><tbody></tbody></table>
 </div>
 <div id="pm" class="panel">
   <div class="filters">
@@ -1926,7 +1933,7 @@ renderRun(0);
     <input type="text" placeholder="Search name or role…" oninput="filterPM()" style="width:180px;">
   </div>
   <div class="count" id="pm-count"></div>
-  <table id="pm-table"><thead><tr><th class="sortable" onclick="sortTable('pm-table',0)">Stock Code</th><th>Firm ID</th><th class="sortable" onclick="sortTable('pm-table',2)">Firm Name</th><th class="sortable" onclick="sortTable('pm-table',3)">Published Date</th><th class="sortable" onclick="sortTable('pm-table',4)">Role</th><th class="sortable" onclick="sortTable('pm-table',5)">New Holder</th><th class="sortable" onclick="sortTable('pm-table',6)">Previous Holder</th><th class="sortable" onclick="sortTable('pm-table',7)">Effective Date</th><th>Headlines</th><th>Key Events</th><th>Link</th><th class="sortable" onclick="sortTable('pm-table',11)">Scraped At</th><th>Internal Notes</th><th>Action</th></tr></thead><tbody></tbody></table>
+  <table id="pm-table"><thead><tr><th class="sortable" onclick="sortTable('pm-table',0)">Stock Code</th><th>Firm ID</th><th class="sortable" onclick="sortTable('pm-table',2)">Firm Name</th><th>Firm Type</th><th class="sortable" onclick="sortTable('pm-table',4)">Published Date</th><th class="sortable" onclick="sortTable('pm-table',5)">Role</th><th class="sortable" onclick="sortTable('pm-table',6)">New Holder</th><th class="sortable" onclick="sortTable('pm-table',7)">Previous Holder</th><th class="sortable" onclick="sortTable('pm-table',8)">Effective Date</th><th>Headlines</th><th>Key Events</th><th class="sortable" onclick="sortTable('pm-table',11)">AUM as of</th><th>Link</th><th class="sortable" onclick="sortTable('pm-table',13)">Scraped At</th><th>Internal Notes</th><th>Action</th></tr></thead><tbody></tbody></table>
 </div>
 """ + js + "\n</body></html>"
 
@@ -1963,9 +1970,9 @@ def write_excel(fund_commitments, people_moves, emops_data=None, balance_history
     # Fund Commitments — mirrors HTML FC table
     _co_map = {w["stock_code"]: w["name_en"] for w in WATCHLIST}
     ws = wb.create_sheet("FundCommitments")
-    _FC_COLS = ["Stock Code", "Firm ID", "Firm Name", "Published Date", "Fund Name", "Fund Type",
-                "Commit Date", "Amount", "Headlines", "Key Events", "AUM as of", "Scraped At",
-                "Internal Notes"]
+    _FC_COLS = ["Stock Code", "Firm ID", "Firm Name", "Firm Type", "Published Date", "Fund Name",
+                "Fund Type", "Commit Date", "Amount", "Headlines", "Key Events", "AUM as of",
+                "Scraped At", "Internal Notes"]
     _header(ws, _FC_COLS)
     _name_col  = _FC_COLS.index("Fund Name") + 1
     _amt_col   = _FC_COLS.index("Amount") + 1
@@ -1973,7 +1980,7 @@ def write_excel(fund_commitments, people_moves, emops_data=None, balance_history
     for i, r in enumerate(fund_commitments, 2):
         firm = _co_map.get(r.get("stock_code", ""), "")
         scraped = (r.get("scraped_at") or "")[:10].replace("-", "/")
-        ws.append([r.get("stock_code"), "", firm, r.get("announcement_date"), r.get("fund_name"),
+        ws.append([r.get("stock_code"), "", firm, "", r.get("announcement_date"), r.get("fund_name"),
                    r.get("fund_type"), r.get("commitment_date"), r.get("commitment_amount_raw"),
                    r.get("headline"), r.get("key_events"), r.get("bs_date"), scraped,
                    r.get("internal_notes", "")])
@@ -1992,9 +1999,9 @@ def write_excel(fund_commitments, people_moves, emops_data=None, balance_history
 
     # People Moves — mirrors HTML PM table
     ws = wb.create_sheet("PeopleMoves")
-    _PM_COLS = ["Stock Code", "Firm ID", "Firm Name", "Published Date", "Role", "New Holder",
-                "Previous Holder", "Effective Date", "Headlines", "Key Events", "URL", "Status",
-                "Scraped At", "Internal Notes"]
+    _PM_COLS = ["Stock Code", "Firm ID", "Firm Name", "Firm Type", "Published Date", "Role",
+                "New Holder", "Previous Holder", "Effective Date", "Headlines", "Key Events",
+                "AUM as of", "URL", "Status", "Scraped At", "Internal Notes"]
     _header(ws, _PM_COLS)
     _url_col   = _PM_COLS.index("URL") + 1
     _pm_hl_col = _PM_COLS.index("Headlines") + 1
@@ -2002,10 +2009,11 @@ def write_excel(fund_commitments, people_moves, emops_data=None, balance_history
         role = r.get("role_title") or r.get("role_type") or ""
         firm = _co_map.get(r.get("stock_code", ""), "")
         scraped = (r.get("scraped_at") or "")[:10].replace("-", "/")
-        ws.append([r.get("stock_code"), "", firm, r.get("announcement_date"), role,
+        ws.append([r.get("stock_code"), "", firm, "", r.get("announcement_date"), role,
                    r.get("new_holder"), r.get("previous_holder"),
                    r.get("effective_date"), r.get("narrative_en"), r.get("key_events"),
-                   r.get("url"), r.get("status"), scraped, r.get("internal_notes", "")])
+                   r.get("bs_date", ""), r.get("url"), r.get("status"), scraped,
+                   r.get("internal_notes", "")])
         ws.cell(i, _pm_hl_col).alignment = Alignment(wrap_text=True, vertical="top")
         if r.get("url"):
             cell = ws.cell(i, _url_col)
@@ -2017,7 +2025,7 @@ def write_excel(fund_commitments, people_moves, emops_data=None, balance_history
     # Company Profiles — Code, Name, Type, BS Period, Currency, Telephone, Website, Address
     if emops_data:
         ws = wb.create_sheet("CompanyProfiles")
-        _EM_COLS = ["Stock Code", "Firm ID", "Firm Name", "Type", "BS Period",
+        _EM_COLS = ["Stock Code", "Firm ID", "Firm Name", "Firm Type", "BS Period",
                     "Telephone", "Website", "Address", "Scraped At", "Notes"]
         _header(ws, _EM_COLS)
         _web_col   = _EM_COLS.index("Website") + 1
@@ -2044,7 +2052,7 @@ def write_excel(fund_commitments, people_moves, emops_data=None, balance_history
 
         # Financial Statements — annual (EMOPS) + quarterly (F26) balance sheet data
         ws = wb.create_sheet("FinancialStatements")
-        _FS_COLS = ["Stock Code", "Firm ID", "Firm Name", "Period", "Source",
+        _FS_COLS = ["Stock Code", "Firm ID", "Firm Name", "Firm Type", "Period", "Source",
                     "Total Assets (TWD, mn)", "Inv. Property (TWD, mn)", "Scraped At", "Filing",
                     "Internal Notes"]
         _header(ws, _FS_COLS)
@@ -2064,6 +2072,7 @@ def write_excel(fund_commitments, people_moves, emops_data=None, balance_history
             ws.append([r.get("stock_code"),
                        "",
                        co_name,
+                       "",
                        r.get("period"),
                        src_label,
                        ta_val,
@@ -2524,6 +2533,7 @@ async def run(companies=None, export_excel=True, mode="full", since=None, new_si
                             r.get("effective_date", "") or r.get("change_date", "") or r.get("announcement_date", ""),
                             r.get("change_type", ""),
                         )
+                        _, r["bs_date"] = _get_latest_aum(r["stock_code"])
                     all_people.extend(d["records"])
 
         # Re-compute fund_type, subsidiary codes, formatted amounts, headlines, and key_events for FC
