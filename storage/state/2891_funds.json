@@ -8,8 +8,8 @@
     "last_seen": "2026-04-21T13:48:42.732308+00:00"
   },
   "2891|The investment was approved by the Taiwan Life board of directors on\n2025/3/28, and authorized by the General Manager. The investment was\nfurther approved by the General Manager on 2025/08/07.|": {
-    "hash": "fe1ca88dbb536e9afab81c58f3bde614669a9acbb863a4a8908a6c50f8c4575f",
-    "last_seen": "2026-04-21T13:48:42.732308+00:00"
+    "hash": "9bd0f720233bfe59f26eb3ece996307ab94a03967d36f6e3257d9d1c81a04c0d",
+    "last_seen": "2026-05-04 05:09"
   },
   "2891|Name and nature of the underlying assets (if preferred shares, the terms\nand conditions of issuance shall also be indicated, e.g., dividend yield,\netc.):Performing loan asset of CTBC|2026/04/17": {
     "hash": "cb824eeaadc5501e1d86f052ce236882456057d4795f2e8eca837d774269f0c0",
@@ -230,5 +230,305 @@
   "2891|Name and nature of the underlying assets (if preferred shares, the terms\nand conditions of issuance shall also be indicated, e.g., dividend yield,\netc.):Performing loan asset of CTBC|2024/05/09": {
     "hash": "d8030de7436a38c0300318fdc41653b907943b47eb320438b0ccb5ba13fe81c2",
     "last_seen": "2026-04-21T13:48:42.732308+00:00"
+  },
+  "2891|NA|2025/08/18": {
+    "hash": "0e90361b153cfd9fd5ef89470500c74b845132156172a058f3115e735e9e3792",
+    "last_seen": "2026-05-11 05:03"
+  },
+  "2891|Performing loan asset of CTBC|2026/04/23": {
+    "hash": "cc3883137de89f4e8c947ccae532d6a0e65a1c0b471e541d70dc0d14f95466fd",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2026/04/17": {
+    "hash": "de2b79f5044ca2caa004860b81e176f82330437ef3a052923a477bca13608d9a",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2026/01/21": {
+    "hash": "5b8f11fdda9d86709f46703832401b46e3e0164486a641a5f11899a8e6874aa0",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2026/03/23": {
+    "hash": "c3582968e6ab07bf78707a290d4a4408e323b126e1ad8e76e62677b5acce04d9",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2026/03/20": {
+    "hash": "9bb9816dea7b1f8c27ae77413b725e5fb310e980baa6d7ec11bbd6f70cfe6ac0",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2026/03/19": {
+    "hash": "451fccc47b5c9ca8991e481652b1c1a32cbd8ae1e03318a9533f896bd75e0c1e",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2026/03/16": {
+    "hash": "a6bd3027a5e7fc674a9125f65c944d5c318e640e444c6e65ba03d5ee8a56f929",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2026/03/13": {
+    "hash": "932dfaaec1e310e6acc351f1fb77e9daef4d2c67832c894e92839a3f455e68be",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2026/03/10": {
+    "hash": "48061667426a410491d7bd40681f04b566ccfd3e3866b3b1b84b77f9c7da47f5",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2026/03/09": {
+    "hash": "0bdc1972d8bcf05360f5322f0ba37160d5d5be37674f206eff7b0b301584c4cf",
+    "last_seen": "2026-05-07 01:41"
+  },
+  "2891|Performing loan asset of CTBC|2026/03/04": {
+    "hash": "79914cd9b697087ede02ad281c2da550b5aeec8011b600ea2e7ac0d50030971e",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2026/02/26": {
+    "hash": "fa5d29b5a92f8eb86dd7da6223254780e6ff30f92d6957d4bf100601d053a039",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2026/02/10": {
+    "hash": "210a84d8275a9fd4b718c8f8bd1e5775e4b01f4e3c3a675ab6eebec86cb938d2",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2026/02/06": {
+    "hash": "28ea037ccab20f2632dddd2c6d92077076c87b1e823253c0b1068e9245c5dc05",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2026/01/28": {
+    "hash": "0115ac8ca4a76905130439f0a68dea0f2a9c4ce2ef183865e71c781aa2ad5620",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2026/01/23": {
+    "hash": "9168e55ca51456917405ba9f2701b903f0bae3460bda72d8f08dabe3b35499a4",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2026/01/22": {
+    "hash": "67434902443d40cb429e8b5b1123f31816a64cafccddae6e07c4b08c72018ffe",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2025/06/20": {
+    "hash": "487913558d1d357c863cc597e462dff0472df20973768a4e71cc88bb054dd8c3",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2026/01/16": {
+    "hash": "8785840eba307356cdaf9bdd1c9f48aaeed51243182a92d65aee61319b3396be",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2026/01/15": {
+    "hash": "8e737c8542d41cb9b2ab3fc07ab7ddc92193f8b1f17a5a93831e547298874000",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2026/01/14": {
+    "hash": "a0512b8b7e6e3cd1c5badb0bd4aa1fd12925115721ae669be8d5c6c7a4c52d4c",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2026/01/09": {
+    "hash": "795d0abac7d14bf99459ed9722101f9a644a01f101f52be8dcf9f112811e7fd6",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2026/01/07": {
+    "hash": "9f3de0a4cea095e0f5b3ea33dabe6afec0605402ad7bc1c61d6619abf52eb388",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2025/06/25": {
+    "hash": "869cdbe2c43cd1c00f7fe93dfc484e37c4514bc627b1f0f3a94be156a07e88ac",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|TLB|2025/12/23": {
+    "hash": "67addc3ab1a75cd1a121a693d816c0b336aed76bb45e6ee9dce02299387c6d53",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2025/12/23": {
+    "hash": "cc5309764bb9cb95d40ae2fcf04fcba5eb4192d03741eb25f82fabbc2dd18655",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2025/12/22": {
+    "hash": "e7c01bf1b9ab958eece62b7c299701569f2d3171e8aa698a44ba0490ad3b436b",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2025/12/17": {
+    "hash": "168c56fc0e05180a2ba1bba1da3568d2e11e39274c579405e2981a2bcbb42713",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2025/12/09": {
+    "hash": "5411a8abf375591720c8add6a4174ad2ec4f2baead60da97b5f78f87a6eac364",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2025/11/27": {
+    "hash": "954afe8029de003233722c059e56e0dacac7a6d8210ccec652fecdcacacdc387",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2025/11/21": {
+    "hash": "df0f2eccf0049bb5f53a577dcd8157efe466b33e2371609c15358cd49bc8da42",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Hon. Precision|2025/11/18": {
+    "hash": "c92d3eff0a943c8ff3e308a1a6e064d6a252dfd37f4b01c01b79f7103e076eb5",
+    "last_seen": "2026-05-09 23:54"
+  },
+  "2891|Performing loan asset of CTBC|2025/11/17": {
+    "hash": "45bd28bade6c1952b4c30f04a1ab14c4b5273d3a708ebd750b1f71c1a9f2d732",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2025/11/11": {
+    "hash": "9f1f47a79c6c57e9b8c29ecbda0fd6ba043d55584777f02a6298a2bc3e1b2294",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2025/02/18": {
+    "hash": "e439038d89b7585326f8f8a42b9480c74a29f367f46db0542526cd55daf953f0",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2025/09/30": {
+    "hash": "5796bf0eafc5ece7fa400764ce73908f63b07b121a878cddb95cc408750f9224",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2025/09/22": {
+    "hash": "b74c825c804f03086b009e06d7578a96efa05951959acef8b7d090b9fc6f88c5",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2025/09/19": {
+    "hash": "5db9ef11e7cd1e11ecb6eada39b4070533e64f2a5d48ee5a9f5ff918686b01b8",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2025/09/05": {
+    "hash": "f3cebed93fb776973b26129875aa9dfef9a7a4eabb2f0ab1970a711ad58bcdaf",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2025/08/25": {
+    "hash": "57dc71cec2cbbd92ac0596477f7c480b3fc6f047d6685283e81c3a919308eff0",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2025/08/22": {
+    "hash": "343f24105dbdec11d0d41d77e33d67341580fef4ea3d2f3ac84a9818beb794b7",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Kaohsiung Energy Vault Company|2025/08/07": {
+    "hash": "fe66611b19ab45ebde605b7515b0fc51391c39c9d76bf9cd9efc70659c2986fb",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2025/03/03": {
+    "hash": "94da79443de3c8bbcbd96bb5db700c367e123b22d029b5041402cfdd4cfe4f4f",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2025/07/24": {
+    "hash": "194d6074badc619a724d7060a3db95b0c9b37450838de6a9ba6f5b0f609ab3a0",
+    "last_seen": "2026-05-07 01:41"
+  },
+  "2891|Performing loan asset of CTBC|2024/09/19": {
+    "hash": "99482c53446c9c533651beb0edef246c5520c1af9cad724d07c8651c9be23142",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|All the software package’s license costs,\nCustomized development and the consulting services fees, etc.|2025/07/11": {
+    "hash": "6bfcaa31f5472e7cd0ac59f2375b7c66687d58eabac187f0f27415e228aab3ab",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2025/07/04": {
+    "hash": "a65c4c8627760b9af2022f2635ca8edddb24ee60048c23f3b87a82e7df8c1c99",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of  CTBC Bank (Philippines)|2025/06/23": {
+    "hash": "baedbe7da4e74bab434981a046bd7d04dc8a39cc438811252d07be8aa8ad332f",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2024/07/16": {
+    "hash": "335fcfed8f392c8338a055a54c8089b8301e29af0f8f2632d46b398678d81ee9",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2024/07/04": {
+    "hash": "2a161544d4b2bfe78b9ba72edadb147c953bdcdde74ac77a20d1bdd0a4a7acaf",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2025/06/05": {
+    "hash": "57d4ff3289589041affdac9e2755b76bc0b9c08a4095121c9383f8279fd03c92",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2025/05/29": {
+    "hash": "fd4d1b53bf242cf46777d32ac35f664c17d396f4faf7e82c04bc64ef890902b5",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2025/05/28": {
+    "hash": "e5d8dca68e75b636b0d6199fed4e4858666fe869f84bc9cd2977206af2f94233",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2024/09/20": {
+    "hash": "0336eb1188bf80f5c2264f06361f22dcd834b2db15c491dae3503d76542f2966",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2025/05/09": {
+    "hash": "9b39c4ac457ae13cc6e51b6e7838dfd52727d804214661d0f83ed1eb456fb8fe",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2025/04/29": {
+    "hash": "e7dc693cdaf07ca5f1dd2d9e4a2d4a58c2e85a1e97fc8166473a37c302dc8a45",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2025/04/25": {
+    "hash": "6582fe3c9eddbeeaf167a841a8f5776ce3bd4c5ff043a95e3bd0e6380b94a56d",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2025/04/15": {
+    "hash": "16db38f93bb2129989f11aa3e27e9e710d432d7197a5da3fae0fc9c62e9a0e92",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2025/04/01": {
+    "hash": "8ba07fe6f1dfacae1415f4a74b5527c633c8579ca9885e984dac197413061348",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2025/03/28": {
+    "hash": "a3b679a85620416b8f3e55ec4f043cc3631eeb83f136e2e2b733560212ee4a7a",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2025/03/24": {
+    "hash": "07c66d24929dc9984fb057000e6849efd2b3b27eca80551e5574074ed135ad72",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2025/03/21": {
+    "hash": "1d4120b4def99e1ce395f2b367481384b70244c9c6360e97ae3a2dd189500225",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2025/02/12": {
+    "hash": "2670dcd0f5f3f8e7f198ef60c148ffadfdb46a0c1223ef734397993c47380f57",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2025/01/07": {
+    "hash": "dc3e532c6c6a36c757d83598f40e4f3ffe37f61baf10b850b79649c8222f4ff5",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Performing loan asset of CTBC|2025/01/22": {
+    "hash": "935789fc882fe3bd2db89a91b62e5841ae2bbe5cef3f29d72d95d10a5bfbe6ef",
+    "last_seen": "2026-05-04 05:09"
+  },
+  "2891|Taiwan Life Singapore Pte. Ltd.；common shares|2025/11/07": {
+    "hash": "5d25fb1e313f3c920e667521482ce1971208f0503a8c2263cf6d15a6d8e55883",
+    "last_seen": "2026-05-07 01:41"
+  },
+  "2891|The 1st Issue of Unsecured Cumulative Subordinated Corporate Bonds\nof Taiwan Life in 2026|2025/12/26": {
+    "hash": "217a315ff0a82b8f34ed43315dc3ce8a10ebe0fae4255af8f3c6493ebe18ef83",
+    "last_seen": "2026-05-09 23:54"
+  },
+  "2891|The Unsecured Cumulative Subordinated Corporate Bonds of Taiwan Life|2025/11/21": {
+    "hash": "f4676e4ad57a37e1c8f72fcddae63593faebe9fef233a5bb16eba24b4fee76c2",
+    "last_seen": "2026-05-09 23:54"
+  },
+  "2891|The 2nd Issue of USD Unsecured Cumulative Subordinated Corporate\nBonds of Taiwan Life in 2025|2025/09/03": {
+    "hash": "7b9f8efef0965afe044d619b978e526afe08004800c9d6b51e93c5dceeab2dbd",
+    "last_seen": "2026-05-09 23:54"
+  },
+  "2891|CTBC FHC 1st Unsecured Corporate Bonds Issue in 2025|2025/08/25": {
+    "hash": "da728f178f4602d0e13b963eb48246a4540ecfe90de02c1f7be3f6900b29f362",
+    "last_seen": "2026-05-09 23:54"
+  },
+  "2891|The 2nd Issue of USD Unsecured Cumulative Subordinated Corporate\nBonds of Taiwan Life in 2025|2025/08/22": {
+    "hash": "4bb45c1bdd2e6620b2cc69cf5ac322ca5b702a5dd87a69cf9fa294848524a66f",
+    "last_seen": "2026-05-09 23:54"
+  },
+  "2891|The 1st Issue of Unsecured Cumulative Subordinated Corporate Bonds\nof Taiwan Life in 2025|2025/08/18": {
+    "hash": "329eca225a6af9b3e5065dcd5f023610836c2287d8051f3eae42a323f7ba0de8",
+    "last_seen": "2026-05-09 23:54"
+  },
+  "2891|The Subordinated Corporate Bonds of Taiwan Life Insurance\nCo., Ltd. in 2025|2025/06/27": {
+    "hash": "a28cfe72fa3c366841de39fdc9884ade3fdb1b93c73e6ecf22df1d2d2828855d",
+    "last_seen": "2026-05-09 23:54"
+  },
+  "2891|Unsecured Corporate Bonds of CTBC FHC|2025/06/27": {
+    "hash": "a52d03c0537707ccac14805dde192157d89bad4324dbc48fb82089ee2c15b7d8",
+    "last_seen": "2026-05-09 23:54"
   }
 }

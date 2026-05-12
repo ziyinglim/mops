@@ -1,0 +1,34 @@
+[
+  {
+    "stock_code": "3231",
+    "subsidiary_code": "3231",
+    "subsidiary_name_en": "Wistron Corporation",
+    "period": "2025/Q4",
+    "roc_year": 114,
+    "season": 4,
+    "currency": "TWD (thousands)",
+    "total_assets_raw": "NT$892,809,322K",
+    "total_assets_numeric": 892809322,
+    "investment_property_raw": "",
+    "investment_property_numeric": null,
+    "pdf_path": "storage\\pdfs\\3231\\Wistron Corporation Individual Financial Report Q4 2025.pdf",
+    "filing_url": "https://doc.twse.com.tw/pdf/202504_3231_AI3_20260509_205245.pdf",
+    "scraped_at": "2026-05-09"
+  },
+  {
+    "stock_code": "3231",
+    "subsidiary_code": "3231",
+    "subsidiary_name_en": "Wistron Corporation",
+    "period": "2024/Q4",
+    "roc_year": 113,
+    "season": 4,
+    "currency": "TWD (thousands)",
+    "total_assets_raw": "NT$495,409,759K",
+    "total_assets_numeric": 495409759,
+    "investment_property_raw": "",
+    "investment_property_numeric": null,
+    "pdf_path": "storage\\pdfs\\3231\\Wistron Corporation Individual Financial Report Q4 2024.pdf",
+    "filing_url": "https://doc.twse.com.tw/pdf/202404_3231_AI3_20260509_215121.pdf",
+    "scraped_at": "2026-05-09"
+  }
+]

@@ -230,5 +230,313 @@
   "2881|Name and nature of the underlying asset (e.g., land located at Sublot XX,\nLot XX, North District, Taichung City):\nParts of B2 and 8F., No.108, Sec.1,Dunhua S.Rd., Songshan Dist., Taipei City|2024/06/26": {
     "hash": "9835fe6ef76bc8f0c0d2d94e28cb06213c72d040c4b6bc561b0976824c8235b5",
     "last_seen": "2026-04-21T13:40:40.604911+00:00"
+  },
+  "2881|Non-Performing Loans|2025/10/30": {
+    "hash": "163cc433063949e9139b22fdec9ba3ecd3e9047ac1170fe7d047d9914138c6b8",
+    "last_seen": "2026-05-04 04:45"
+  },
+  "2881|Infrastructure asset backed-securitization notes issued by\nBayfront IABS VIII|2026/04/28": {
+    "hash": "2b7f47d2dd1038760db919b4c3f8b7c3f998d75670259896b6eb92ae220e76f9",
+    "last_seen": "2026-05-07 20:43"
+  },
+  "2881|Syndicated loan|2026/04/28": {
+    "hash": "c24baaa055a766251cd81df325c18b27f7e3397f11c73b129e49bd810c3719e3",
+    "last_seen": "2026-05-04 04:45"
+  },
+  "2881|Syndicated loans|2026/04/28": {
+    "hash": "7a54862fe5833811a359b4a5169edeb8c7bcc69f0f945cf23e6294b98884821d",
+    "last_seen": "2026-05-04 04:45"
+  },
+  "2881|Infrastructure asset backed-securitization notes issued by\nBayfront IABS VIII|2026/04/22": {
+    "hash": "a01f68a999b62812dade69279dcb7153a9f419c0963cd3a0de266ae3e1c72299",
+    "last_seen": "2026-05-07 20:43"
+  },
+  "2881|Syndicated loans|2026/03/30": {
+    "hash": "6b671726013704d6237f2dca8bbf806c31c05cac4288105282941080e8085bd5",
+    "last_seen": "2026-05-04 04:45"
+  },
+  "2881|Syndicated loans|2025/12/18": {
+    "hash": "a715cba2d3ae08da5337ab9ee82ce63ab1ca209a839e95f2ed2cf3c5b857ede3",
+    "last_seen": "2026-05-04 04:45"
+  },
+  "2881|Syndicated loan|2025/12/18": {
+    "hash": "33547cc274998c7172aa492188d64b878df39c3a328f690a19476a3a0b43a2a8",
+    "last_seen": "2026-05-04 04:45"
+  },
+  "2881|Syndicated loans|2025/11/25": {
+    "hash": "352248d5b18c34afd94caae723770334961a47aa4d87999b6021b8601a29da7d",
+    "last_seen": "2026-05-04 04:45"
+  },
+  "2881|ACP Barite Investment|2025/11/19": {
+    "hash": "c9a85da9bea0833e7fb22581245b9db0258991ab378d554e3ece9b4a80a2e2d1",
+    "last_seen": "2026-05-07 20:43"
+  },
+  "2881|Infrastructure asset backed-securitization notes issued by\nBayfront IABS VII|2025/11/18": {
+    "hash": "ad64b253cd9b8dc73403a4648abfc51e95d7620ba117a0cf19864c2c57261cad",
+    "last_seen": "2026-05-07 20:43"
+  },
+  "2881|Infrastructure asset backed-securitization notes issued by\nBayfront IABS VII|2025/11/12": {
+    "hash": "52be9b857cfc671d81e51683428e458716cdc91e3980a0d48d8b93bcc6833290",
+    "last_seen": "2026-05-07 20:43"
+  },
+  "2881|Syndicated loans|2025/11/11": {
+    "hash": "59e1d5a78ba8e79020769314d07d12a009085637b19c138adbec382a2b484f17",
+    "last_seen": "2026-05-04 04:45"
+  },
+  "2881|Syndicated loans|2025/10/16": {
+    "hash": "a84f78142b18de919ad2bb5e2c6233afe2a2e320a9d55865ccc9f32e48ebf277",
+    "last_seen": "2026-05-04 04:45"
+  },
+  "2881|Infrastructure asset backed-securitization notes issued by\nBauhinia ILBS 3|2025/10/10": {
+    "hash": "6299a25434ca691d92a2fcdd24e3d738354e4a0a87334f3ff33f4e6891bd0f5b",
+    "last_seen": "2026-05-07 20:43"
+  },
+  "2881|Infrastructure asset backed-securitization notes issued by\nBauhinia ILBS 3|2025/09/19": {
+    "hash": "248aa762ce8403f0e161920b28a352ab085094df118449f817739b586c3b0364",
+    "last_seen": "2026-05-07 20:43"
+  },
+  "2881|Syndicated loans|2025/09/02": {
+    "hash": "6e085d0b5fa796f4e0aa0b4b4526646bacf1ac14304473128654e05c970816b8",
+    "last_seen": "2026-05-04 04:45"
+  },
+  "2881|Non-Performing Loans|2025/02/27": {
+    "hash": "786e88a5bab435ef6a25d5b9c82ec745ae31ec794db939d6689feb5ff14f5742",
+    "last_seen": "2026-05-04 04:45"
+  },
+  "2881|Syndicated loans.|2025/08/25": {
+    "hash": "f72a196e0c0bffd3965431685ecbc08e2d0d676606a4a086f334c37d819fa08b",
+    "last_seen": "2026-05-04 04:45"
+  },
+  "2881|Syndicated loans.|2025/08/11": {
+    "hash": "b2141a9b2cca5f43e4fc7b1dcf13f3d8ab46b9874dd1c4486e8720dab300e446",
+    "last_seen": "2026-05-04 04:45"
+  },
+  "2881|Syndicated loans|2025/05/09": {
+    "hash": "3138dd1f692685f33eb75c0aaf12ad595864048fb941f1c2af7560bba22954cb",
+    "last_seen": "2026-05-04 04:45"
+  },
+  "2881|The Registered Capital of Fubon life Singapore|2025/04/29": {
+    "hash": "b0e4fe305c03030908a49cf48663f8050ae74ebea70ef0737100cf42419ca664",
+    "last_seen": "2026-05-04 04:45"
+  },
+  "2881|Syndicated loans|2025/03/17": {
+    "hash": "cfa7cbe100513e65b33dc2522e5bac313d40b561c658336b8ce7ab7aeb6aa518",
+    "last_seen": "2026-05-07 01:07"
+  },
+  "2881|Infrastructure asset backed-securitization notes issued by\nBayfront Infrastructure Capital VI|2025/03/12": {
+    "hash": "5565d7306082e335b57cdf9b1c428101d3225f8f35862794c78ab56d0ae0cfba",
+    "last_seen": "2026-05-07 20:43"
+  },
+  "2881|Sumray Power Company|2025/03/10": {
+    "hash": "fde1e204cad5ff9be2a3fefa8065a2fe6548f54dd93d21754b0db217b9bcfd21",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Infrastructure asset backed-securitization notes issued by\nBayfront Infrastructure Capital VI|2025/03/10": {
+    "hash": "bdd8c6b6bb6a6f0da947bd6a45fd06c30812e2f6b4b44fbe754bef02c4fb1fac",
+    "last_seen": "2026-05-07 20:43"
+  },
+  "2881|Syndicated loans|2025/02/10": {
+    "hash": "64d32bc15c7211d47fe904652c10b0580034daf3a752209454fcbee71a2ea092",
+    "last_seen": "2026-05-04 04:45"
+  },
+  "2881|Ordinary shares of Fubon Credit (Hong Kong)\nLimited (Fubon Credit (Hong Kong))|2026/03/09": {
+    "hash": "ecc203b7e4dd3cec89d3623030c720404c1dc153c47b4dad2cc9d9014213276d",
+    "last_seen": "2026-05-07 19:37"
+  },
+  "2881|Common shares of Fubon Hyundai Life Insurance|2025/08/19": {
+    "hash": "78645bbebe711918b8d732c8d4b83868fc026eb2b89eddd35710a2a160e9f994",
+    "last_seen": "2026-05-07 19:37"
+  },
+  "2881|Shenzhen Tengfubo Investment|2024/12/03": {
+    "hash": "a6fc3afc04b22fd026ae9f2a917ed1324a5782fc8f86f40f19f6f293c2836d6c",
+    "last_seen": "2026-05-07 19:37"
+  },
+  "2881|Infrastructure asset backed-securitization notes issued by\nBauhinia ILBS 2|2024/08/30": {
+    "hash": "660d15e73cda5c821d15be42ba658807c88f6c2ce2417ed9ab88f31abe292171",
+    "last_seen": "2026-05-07 19:37"
+  },
+  "2881|Infrastructure asset backed-securitization notes issued by\nBauhinia ILBS 2|2024/08/27": {
+    "hash": "1b5b33ebbb1e7d5a5e458aa0559cf25fdfe6d000c5a9b177a0d8aedf9c1a8fc5",
+    "last_seen": "2026-05-07 01:07"
+  },
+  "2881|the capital increase in Sichuan VipFubon Consumer Finance|2024/08/23": {
+    "hash": "cbddb84a096697b2e2b8f6b1606adef0e08f75e59ff9cd128ca3c7e77d2eff45",
+    "last_seen": "2026-05-07 19:37"
+  },
+  "2881|Ordinary shares issued by capital increase of Fubon Ellipse (Belgium) S.A.\nLimited (“ELP”)|2024/08/20": {
+    "hash": "c95ac3ac05e0aa58d33ee2728711a661d8b697c91dcf02f806bda1e0986b7889",
+    "last_seen": "2026-05-07 19:37"
+  },
+  "2881|Ordinary shares of Fubon Credit (Hong Kong) Limited (Fubon Credit (Hong\nKong))|2024/08/12": {
+    "hash": "6c7825525fdfce92b71e0aff22feffb6e48c289a3e26424d03d6baf34d3edad5",
+    "last_seen": "2026-05-07 19:37"
+  },
+  "2881|Infrastructure asset backed-securitization notes issued by Bayfront\nInfrastructure Capital V|2024/07/11": {
+    "hash": "b011200a93b62a165209582d9f73dd10d2f04137f0ea193d09a7018367a2d52a",
+    "last_seen": "2026-05-07 19:37"
+  },
+  "2881|Syndicated loans.|2024/06/26": {
+    "hash": "deda03d5aa0d7a704fa608390c7ec9a850cb2ae72dd5a370b28ec39033003015",
+    "last_seen": "2026-05-07 19:37"
+  },
+  "2881|Ordinary shares issued by capital increase of Bow Bells House (Jersey)\nLimited (“BBH”)|2024/06/04": {
+    "hash": "35461438231f3b0767892c1b775b16193b4d3e14d04288a68e1ec8c048b02029",
+    "last_seen": "2026-05-07 19:37"
+  },
+  "2881|Fubon Life Insurance Co., Ltd. 1st issue of\nUnsecured Cumulative Subordinated Corporate Bonds in 2026(update)|2026/04/28": {
+    "hash": "8758c17bffff578935bffd09da48a603283c4c1f95ffb68e52ff197884357535",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Taipei Fubon Commercial Bank 1st issue of Senior Unsecured Financial\nDebentures in 2026(update)|2026/03/02": {
+    "hash": "e93cd723d352b5f3794335a08854a548551894090d8c41099574bb0cbfe1bd4e",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Fubon Life Insurance Co., Ltd.\nUnsecured Cumulative Subordinated Corporate Bonds|2026/01/29": {
+    "hash": "1d5f953d1c6ea53e343d2c6af1b51a42048a4e77f7a7cbdfd773efee3b1a3993",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Fubon Life Insurance Co., Ltd. issue of\nUnsecured Cumulative Subordinated Corporate Bonds|2026/01/28": {
+    "hash": "0d1736bb5c6b30a86aa5aea9424ad8cbddf8cf909390f7f1324f48e05042ad31",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Fubon FHC 1st issue of Unsecured Corporate Bonds in 2026(update)|2025/12/30": {
+    "hash": "9e48ef605b3b9e64eb4f28c3a4f6564e708741eff533dba06da8d16ac3e16dd1",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Taipei Fubon Commercial Bank issue of Unsecured Subordinate Financial\nDebentures|2025/12/17": {
+    "hash": "daff66efb1567353e0129b490ae17c8414d299d7b1e28500035106637f6ace2d",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Taiwan Cement Corp. 1st issue of Unsecured Corporate Bonds in 2025|2025/12/12": {
+    "hash": "7d4791d8709d7117830655902197898f0dfe7c04d4ca15e24de52526555fcddd",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Fubon Life Insurance Co., Ltd. 3rd issue of\nUnsecured Cumulative Subordinated Corporate Bonds in 2025|2025/12/09": {
+    "hash": "d8c30ec136045d8fc21469fdf2afd51031079831c13a677b6591cab90afb6671",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Fubon FHC issue of Unsecured Corporate Bonds|2025/10/29": {
+    "hash": "4f0d847c6e60f583aba15f03c5a15c8693865b3412a4177ca9fc3b26d0f640a1",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Fubon FHC Unsecured Corporate Bonds|2025/10/23": {
+    "hash": "f41ad675ec1fb390c55cfb0541ee1d42cfeb52373dcf8e8a4630ddc7f37590af",
+    "last_seen": "2026-05-09 23:16"
+  },
+  "2881|Taipei Fubon Commercial Bank 3rd issue of Senior Unsecured Financial\nDebentures in 2025|2025/10/02": {
+    "hash": "8ed1fb080816b4feeadc02b5945036d9c60de2336fc1154a47761704d87d3f81",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Fubon Life Insurance Co., Ltd. 2nd issue of\nUnsecured Cumulative Subordinated Corporate Bonds in 2025|2025/08/20": {
+    "hash": "abf41c566b09c917a67d290c4793539829b0e7ee8e54935d8da3e44615343d35",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Fubon FHC 3rd issue of Unsecured Corporate Bonds in 2025|2025/08/12": {
+    "hash": "f20bf1a6a5aa69be3f7b58f60338cdd6d282efea5f3835812cb7b40f091de404",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Fubon Life Insurance Co., Ltd.\nUnsecured Cumulative Subordinated Corporate Bonds|2025/05/14": {
+    "hash": "deb4287ced491583d03f5ea556102e107b9b87454f428f8617ff901e4200cc7a",
+    "last_seen": "2026-05-09 23:16"
+  },
+  "2881|Fubon FHC issue of Unsecured Corporate Bonds|2025/04/23": {
+    "hash": "44a5723e68394b5b34ee666817161acc74e342eea6874bc7d6b715d30e24ff9e",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|TAIWAN MOBILE First Unsecured Corporate Bonds in 2025|2025/04/21": {
+    "hash": "a970b517ba546d0b44c04a21c004c874b1b5a78268ebe95604914b73f33dc11c",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Fubon FHC 2nd issue of Unsecured Corporate Bonds in 2025|2025/04/16": {
+    "hash": "20b70aa0a39702a1ce07d04e54ea54f5097634506ceb40d00e799f4f9d8e7e1c",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Fubon Life Insurance Co., Ltd. 1st issue of\nUnsecured Cumulative Subordinated Corporate Bonds in 2025|2025/04/15": {
+    "hash": "90c1f6c48578b9e5d191311961de789e6f044c73d8907666afcd3ac3eb3b6630",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Fubon Life Insurance Co., Ltd.1st issue of\nUnsecured Cumulative Subordinated Corporate Bonds in 2025|2025/04/15": {
+    "hash": "951969f2cb83810d49d01b85f780f7f77211d5ceaea2faba9724fa18cc26095b",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Taipei Fubon Commercial Bank 2nd issue of Senior Unsecured Financial\nDebentures in 2025|2025/03/14": {
+    "hash": "28836d7ac24544f9d1a02a0acde5bdee190f362a4dab79f53edc2ca422fd100a",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Taipei Fubon Commercial Bank issue of Senior Unsecured Financial Debentures|2025/03/12": {
+    "hash": "099a51e6cea9eebe09f925ed0857b74891daea19547dabaf61f82460996a7923",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Fubon FHC 1st issue of Unsecured Corporate Bonds in 2025|2025/02/11": {
+    "hash": "28c841f8d7b48e012cc2915981c27ca8cf47184573d90f167079e16fd1020648",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Taipei Fubon Commercial Bank 1st issue of Senior Unsecured Financial\nDebentures in 2025|2025/01/10": {
+    "hash": "3e9210cea3253f5e6f859d328a5dc75d970b15a5eca9b70e4746ad64f148802d",
+    "last_seen": "2026-05-09 23:16"
+  },
+  "2881|Fubon Life Insurance Co., Ltd. 2nd issue of\nUnsecured Cumulative Subordinated Corporate Bonds in 2024|2024/10/18": {
+    "hash": "962440f2c98a0a98dc85a17bddeea30e8d5a1318a96645eaee9487da59962cec",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Fubon Life Insurance Co., Ltd.2nd issue of\nUnsecured Cumulative Subordinated Corporate Bonds in 2024|2024/10/18": {
+    "hash": "fd3e4bee315359beb16b30ca9cba008f2b04d77449b8d69653284c4077bb383e",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Fubon FHC 3rd issue of Unsecured Corporate Bonds in 2024|2024/10/07": {
+    "hash": "44ec9a9702eb3bf43f17b94844ed17e763894f7ba478d5e5dfc5016bdd7797de",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Taipei Fubon Commercial Bank 3rd issue of Senior Unsecured Financial\nDebentures in 2024|2024/09/03": {
+    "hash": "b36dc354b138ee3dc3aa5f58d3f477ab8cc9cfef9276e6791a6aa7a2481c0bda",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Taipei Fubon Bank issue of Unsecured Subordinate Financial Debentures|2024/08/21": {
+    "hash": "a252e65f72a48b6060e5e8d0db247445e10e9ca01f42267ea932515a76efff9d",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Taipei Fubon Commercial Bank issue of Senior Unsecured Financial Debentures|2024/08/21": {
+    "hash": "68b0bac559a51582ad8a0b626f7802f4b31ba3479eead4aa43548e62a490870e",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Taipei Fubon Commercial Bank 2nd issue of Senior Unsecured Financial\nDebentures in 2024|2024/08/19": {
+    "hash": "e3924865cad08bf7bad75afae996e1bb29455a7bbff44060d30de75e3b6568bb",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Fubon Life Insurance Co., Ltd.\nUnsecured Cumulative Subordinated Corporate Bonds|2024/07/31": {
+    "hash": "7c456f2567e420237d8e3a64c5071e3e47fd0058119901aac96d8f756de5fb9d",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Fubon Life Insurance Co., Ltd.\nUnsecured Cumulative Subordinated Corporate Bonds|2024/07/30": {
+    "hash": "c473ce4fe5e5f1ed48c413ab6fba65344044602c345aa49fb5fa9bb911c3638c",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Fubon FHC 2nd issue of Unsecured Corporate Bonds in 2024|2024/07/16": {
+    "hash": "abbeea23bc303d28fbf306c908e71fb78378dde21d92968cc82c56a401874067",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Li-Tong Management Consulting|2024/06/26": {
+    "hash": "a0774e22f92c59e25b3d9316e0bedca88de8d2c21a394b8a9749cd9eb29b6aad",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Fubon FHC Unsecured Corporate Bonds|2024/06/24": {
+    "hash": "7c0a410787992eff49076f6492c0f9b6ce0424942d41f08805216de504f7a27b",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Fubon Life Insurance Co.,Ltd.1st issue of\nUnsecured Cumulative Subordinated Corporate Bonds in 2024|2024/06/04": {
+    "hash": "754687d47b34ff3055bec68f49aba31325baf406c223e6c78c19ea6e3fefceae",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Fubon Life Insurance Co., Ltd. 1st issue of\nUnsecured Cumulative Subordinated Corporate Bonds in 2024|2024/06/04": {
+    "hash": "f831b914c02ce9219a2decdb8ff1d59cf945b161936993ed502254ed28202db8",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Taipei Fubon Commercial Bank 1st issue of Unsecured Financial Debentures\nin 2024|2024/05/30": {
+    "hash": "752135257d60f4f5d16a5dca66d66f5867270543cda125f80551756c7f8c2084",
+    "last_seen": "2026-05-09 23:27"
+  },
+  "2881|Fubon Life Insurance Co., Ltd.\nUnsecured Cumulative Subordinated Corporate Bonds|2025/05/15": {
+    "hash": "3a733b565a8d4c3bab9c2aff09dd61c2ad20351d26eb9b094352c078cab3d6fd",
+    "last_seen": "2026-05-09 23:27"
   }
 }
