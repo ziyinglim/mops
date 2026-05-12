@@ -54,20 +54,45 @@ _SEASON_LABEL   = {1: "Q1", 2: "H1", 3: "Q3", 4: "Q4"}
 _FS_SEASON_DATE = {1: "03/31", 2: "06/30", 3: "09/30", 4: "12/31"}
 
 WATCHLIST = [
-    {"stock_code": "2881", "name_en": "Fubon Financial Holding",                "company_type": "financial holding company", "f26_name_en": "Fubon Life Insurance", "f26_display_code": "28810012"},
-    {"stock_code": "2882", "name_en": "Cathay Financial Holdings",               "company_type": "financial holding company"},
-    {"stock_code": "2891", "name_en": "CTBC Financial Holdings",                 "company_type": "financial holding company", "f26_name_en": "CTBC Bank"},
+    {"stock_code": "2881", "name_en": "Fubon Financial Holding",                "company_type": "financial holding company",
+     "f26_name_en": "Fubon Life Insurance", "f26_display_code": "28810012",
+     "f26_subsidiaries": [
+         {"display_code": "28810012", "name_en": "Fubon Life Insurance"},
+         {"display_code": "28810006", "name_en": "Taipei Fubon Commercial Bank"},
+     ]},
+    {"stock_code": "2882", "name_en": "Cathay Financial Holdings",               "company_type": "financial holding company",
+     "f26_subsidiaries": [
+         {"display_code": "28820001", "name_en": "Cathay Life Insurance"},
+         {"display_code": "28820004", "name_en": "Cathay United Bank"},
+     ]},
+    {"stock_code": "2891", "name_en": "CTBC Financial Holdings",                 "company_type": "financial holding company",
+     "f26_name_en": "CTBC Bank",
+     "f26_subsidiaries": [
+         {"display_code": "28910001", "name_en": "CTBC Bank"},
+     ]},
     {"stock_code": "2330", "name_en": "Taiwan Semiconductor Manufacturing Company", "company_type": "semiconductor company"},
     {"stock_code": "5874", "name_en": "Nan Shan Life Insurance",                 "company_type": "insurance company"},
     {"stock_code": "2317", "name_en": "Foxconn Technology Group",                "company_type": "technology company"},
-    {"stock_code": "2886", "name_en": "Mega Financial Holdings",                 "company_type": "financial holding company", "f26_name_en": "Mega International Commercial Bank"},
+    {"stock_code": "2886", "name_en": "Mega Financial Holdings",                 "company_type": "financial holding company",
+     "f26_name_en": "Mega International Commercial Bank",
+     "f26_subsidiaries": [
+         {"display_code": "28860005", "name_en": "Mega International Commercial Bank"},
+     ]},
     {"stock_code": "2880", "name_en": "Hua Nan Commercial Bank",                 "company_type": "commercial bank"},
     {"stock_code": "5857", "name_en": "Land Bank of Taiwan",                     "company_type": "state-owned bank"},
     {"stock_code": "2888", "name_en": "Shin Kong Life Insurance",                "company_type": "insurance company", "delisted": True},
     {"stock_code": "2801", "name_en": "Chang Hwa Bank",                          "company_type": "commercial bank"},
-    {"stock_code": "2890", "name_en": "SinoPac Financial Holdings",               "company_type": "financial holding company", "f26_name_en": "Bank SinoPac"},
+    {"stock_code": "2890", "name_en": "SinoPac Financial Holdings",               "company_type": "financial holding company",
+     "f26_name_en": "Bank SinoPac",
+     "f26_subsidiaries": [
+         {"display_code": "28900001", "name_en": "Bank SinoPac"},
+     ]},
     {"stock_code": "5876", "name_en": "Shanghai Commercial & Savings Bank",      "company_type": "commercial bank"},
-    {"stock_code": "2885", "name_en": "Yuanta Financial Holdings",               "company_type": "financial holding company", "f26_name_en": "Yuanta Commercial Bank"},
+    {"stock_code": "2885", "name_en": "Yuanta Financial Holdings",               "company_type": "financial holding company",
+     "f26_name_en": "Yuanta Commercial Bank",
+     "f26_subsidiaries": [
+         {"display_code": "28850007", "name_en": "Yuanta Commercial Bank"},
+     ]},
     {"stock_code": "2833", "name_en": "Taiwan Life Insurance",                   "company_type": "insurance company"},
     {"stock_code": "2867", "name_en": "Mercuries Life Insurance",                "company_type": "insurance company"},
     {"stock_code": "5873", "name_en": "TransGlobe Life Insurance",               "company_type": "insurance company"},
@@ -113,10 +138,14 @@ _SUBSIDIARY_PATTERNS: dict[str, list[tuple]] = {
 # them under their watchlist code, so they are intentionally omitted — the fallback handles it.
 _FS_SUBSIDIARY_CODE_MAP: dict[str, str] = {
     "5865":   "28810012",   # Fubon Life Insurance               (parent: Fubon Financial 2881)
+    "5836":   "28810006",   # Taipei Fubon Commercial Bank        (parent: Fubon Financial 2881)
+    "5846":   "28820001",   # Cathay Life Insurance              (parent: Cathay Financial 2882)
+    "5835":   "28820004",   # Cathay United Bank                 (parent: Cathay Financial 2882)
     "5852":   "28850007",   # Yuanta Commercial Bank             (parent: Yuanta Financial 2885)
     "000700": "28860005",   # Mega International Commercial Bank  (parent: Mega Financial 2886)
+    "5843":   "28860005",   # Mega International Commercial Bank  (parent: Mega Financial 2886)
     "5849":   "28900001",   # Bank SinoPac                       (parent: SinoPac Financial 2890)
-    "2833":   "28910001",   # CTBC Bank                          (parent: CTBC Financial 2891)
+    "5841":   "28910001",   # CTBC Bank                          (parent: CTBC Financial 2891)
 }
 
 def _resolve_subsidiary(parent_code: str, subject: str) -> str:
@@ -294,10 +323,7 @@ def _parse_results(response_text: str, stock_code: str) -> list[dict]:
         subject = item.get("SUBJECT", "").replace("\r\n", " ").replace("\n", " ").strip()
         rows.append({
             "date": item.get("CDATE", ""),
-            "time": item.get("CTIME", ""),
             "stock_code": item.get("COMPANY_ID", stock_code),
-            "company_name": item.get("COMPANY_NAME", ""),
-            "announcement_item": item.get("AN_CODE", ""),
             "subject": subject,
             "url": item.get("HYPERLINK", ""),
         })
@@ -520,8 +546,7 @@ async def scrape_people_moves(stock_code: str, sdate: str = None) -> list[dict]:
             narrative = _NARRATIVE_ABBREV_RE.sub(
                 "", _build_narrative(stock_code, role_title,
                                      new_holder_clean, prev_holder_clean,
-                                     change_type, effective_date,
-                                     reason=reason)
+                                     change_type, effective_date)
             ).strip()
             resolved_code = _resolve_subsidiary(stock_code, row["subject"])
             _, bs_date = _get_latest_aum(resolved_code)
@@ -553,7 +578,7 @@ async def scrape_people_moves(stock_code: str, sdate: str = None) -> list[dict]:
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 _NARRATIVE_ABBREV_RE = re.compile(
-    r",?\s*\bCo\.,?\s*Ltd\.?|,?\s*\bLtd\.?|,?\s*\bInc\.?|,?\s*\bCorp\.?",
+    r",?\s*\bCo\.,?\s*Ltd\.?(?!\w)|,?\s*\bLtd\.?(?!\w)|,?\s*\bInc\.?(?!\w)|,?\s*\bCorp\.?(?!\w)",
     re.IGNORECASE,
 )
 
@@ -574,11 +599,11 @@ _LEGAL_SUFFIX_RE = re.compile(
 )
 
 def _clean_fund_name(name: str) -> str:
-    """Strip trailing legal entity suffixes (L.P., Ltd., SCSp, SICAV-RAIF, etc.)."""
+    """Strip trailing legal entity suffixes (L.P., Ltd., SCSp, SICAV-RAIF, etc.) and punctuation."""
     prev = None
     while prev != name:
         prev = name
-        name = _LEGAL_SUFFIX_RE.sub("", name).strip().rstrip(",").strip()
+        name = _LEGAL_SUFFIX_RE.sub("", name).strip().rstrip(".,").strip()
     return name
 
 def _extract_tracked_role(text: str) -> str:
@@ -732,16 +757,26 @@ async def _format_commitment_amount(amount_raw: str, orig_currency: str) -> tupl
         return f"TWD {twd_millions:,.0f} million ({orig_str})", fx_url
     return orig_str, fx_url
 
+def _firm_display_name(stock_code: str) -> str:
+    """Return the public display name for a stock code, handling subsidiaries."""
+    entry = _WATCHLIST_MAP.get(stock_code)
+    if entry:
+        return entry.get("name_en", stock_code)
+    stub = next((s for s in _SUBSIDIARY_STUBS if s["stock_code"] == stock_code), None)
+    return stub["company_name_en"] if stub else stock_code
+
 def _build_fund_headline(stock_code, fund_name, formatted_amount, fund_type=""):
+    firm_name = _firm_display_name(stock_code)
     aum, _ = _get_latest_aum(stock_code)
+    ft_lower = fund_type.lower() if fund_type else "alternative"
+    title = f"{firm_name} commits to new {ft_lower} fund"
     ref = f"The {aum} [firm type]" if aum else "[firm type]"
     committed = f"has committed {formatted_amount} to" if formatted_amount else "has committed to"
     body = f"{ref} {committed} {fund_name}."
-    abbrev = _FUND_TYPE_ABBREV.get(fund_type, fund_type or "Fund")
-    return f"[{abbrev}]\n\n{body}"
+    return f"{title}\n\n{body}"
 
-def _build_narrative(stock_code, role, new_holder, prev_holder, change_type,
-                     effective_date, reason=""):
+def _build_narrative(stock_code, role, new_holder, prev_holder, change_type, effective_date):
+    firm_name = _firm_display_name(stock_code)
     aum, _ = _get_latest_aum(stock_code)
     company_ref = f"The {aum} [firm type]" if aum else "[firm type]"
     date_str = _format_date(effective_date)
@@ -752,24 +787,28 @@ def _build_narrative(stock_code, role, new_holder, prev_holder, change_type,
     ct = change_type or ""
 
     if has_new:
+        title = f"{firm_name} appoints new {role}"
         body = f"{company_ref} has appointed {new_holder} as {role}{eff}."
         if has_prev:
             surname = new_holder.split()[-1]
             body += f" {surname} will succeed {prev_holder}."
-    elif "position adjustment" in ct and not has_new:
+    elif "position adjustment" in ct:
+        title = f"{firm_name} {role} position eliminated"
         body = f"{company_ref}'s {role} position has been eliminated{eff}."
         if has_prev:
             body += f" {prev_holder} vacated the role."
     elif has_prev:
         if "retirement" in ct:
+            title = f"{firm_name}'s {role} retires"
             body = f"{prev_holder} stepped down from {role} due to retirement{eff}."
         else:
+            title = f"{firm_name}'s {role} steps down"
             body = f"{company_ref}'s {role}, {prev_holder}, has stepped down{eff}."
     else:
+        title = f"{firm_name} announces {role} change"
         body = f"{company_ref} has announced a change in its {role}{eff}."
 
-    abbrev = _abbrev_role(role)
-    return f"[{abbrev}]\n\n{body}"
+    return f"{title}\n\n{body}"
 
 def _get_latest_aum(stock_code: str) -> tuple[str, str]:
     """Returns (aum_string, balance_sheet_period) from quarterly FS balance history.
@@ -791,8 +830,7 @@ def _get_latest_aum(stock_code: str) -> tuple[str, str]:
                 continue
             period = rec.get("period", "")
             total = total_k * 1000  # NT$K → NT$
-            if total >= 1e12:
-                return f"TWD {total/1e12:,.0f} trillion", period
+            # AUM expressed in billions maximum (never trillions)
             if total >= 1e9:
                 return f"TWD {total/1e9:,.0f} billion", period
             if total >= 1e6:
@@ -1059,13 +1097,14 @@ def _parse_e02_period(subject: str, date_str: str) -> tuple[int | None, int | No
 def _pick_ai_link(links: list[tuple], season: int,
                   prefer_consolidated: bool = False) -> tuple | None:
     """Select the best AI link for the given season.
-    prefer_consolidated=True  (Financial Holdings): prefer AI1 > AIA > AI3.
+    prefer_consolidated=True  (Financial Holdings): AI1 > AIA only; never fall back to AI3.
     prefer_consolidated=False (all others):         prefer AI3; fall back to AI1 for Q4 only."""
     if prefer_consolidated:
-        for rt in ("AI1", "AIA", "AI3"):
+        for rt in ("AI1", "AIA"):
             hit = [t for t in links if t[4] == season and t[5] == rt]
             if hit:
                 return hit[0]
+        return None
     else:
         ai3 = [t for t in links if t[4] == season and t[5] == "AI3"]
         if ai3:
@@ -1135,22 +1174,22 @@ async def _get_ai3_for_period(
 
 async def scrape_quarterly_reports(stock_code: str, roc_years: int = 2,
                                    subsidiary_name_en: str = "",
+                                   subsidiaries: list | None = None,
                                    use_consolidated: bool = False) -> list[dict]:
-    """Quarterly AUM extraction — follows the 7-step flow:
-    1. Search PRO_ITEM=E02 (lang=TW) to discover available filing periods
-    2. Navigate doc.twse.com.tw/t57sb01 for the parent company
-    3. Find subsidiary internal co_id (e.g. 5865 for Fubon Life, ≠ display code 28810012)
-    4. Navigate to subsidiary page showing IFRSs個別財報 (AI3) PDF links
-    5. Download AI3 PDF
-    6. Extract 資産總計 from pages 4–8
-    7. Save PDF labelled '{subsidiary_name} Individual Financial Report {season} {year}.pdf'
+    """Quarterly AUM extraction — downloads individual (AI3) PDFs for each listed subsidiary.
+    subsidiaries: list of {"display_code": "28810012", "name_en": "Fubon Life Insurance"}.
+    If omitted, falls back to single-subsidiary behaviour using f26_display_code / subsidiary_name_en.
+    State key format: "{display_code}|{period_label}" to support multiple subsidiaries per period.
     """
     state_path = STATE_DIR / f"{stock_code}_balance_history.json"
     existing: dict[str, dict] = {}
     if state_path.exists():
         try:
             for r in json.loads(state_path.read_text(encoding="utf-8")):
-                existing[r["period"]] = r
+                # Migrate old period-only keys to compound {display_code}|{period} keys
+                sub_code = str(r.get("subsidiary_code") or "")
+                disp = _FS_SUBSIDIARY_CODE_MAP.get(sub_code, r.get("stock_code", stock_code))
+                existing[f"{disp}|{r['period']}"] = r
         except Exception:
             pass
 
@@ -1161,66 +1200,97 @@ async def scrape_quarterly_reports(stock_code: str, roc_years: int = 2,
         _flush_balance_history(state_path, existing)
         return list(existing.values())
 
-    entry    = _WATCHLIST_MAP.get(stock_code, {})
-    sub_label = subsidiary_name_en or entry.get("f26_name_en") or entry.get("name_en", stock_code)
-    target_display_code = entry.get("f26_display_code")
-    pdf_dir   = PDF_DIR / stock_code
+    entry = _WATCHLIST_MAP.get(stock_code, {})
+
+    # Build target list: each entry is {"display_code": ..., "name_en": ...}
+    if subsidiaries:
+        targets = subsidiaries
+        prefer_consolidated = False   # individual reports for each subsidiary
+    else:
+        tdc   = entry.get("f26_display_code") or None
+        tname = subsidiary_name_en or entry.get("f26_name_en") or entry.get("name_en", stock_code)
+        targets = [{"display_code": tdc, "name_en": tname}]
+        prefer_consolidated = use_consolidated
+
+    pdf_dir = PDF_DIR / stock_code
 
     async with httpx.AsyncClient(headers=_TWSE_DOC_HEADERS, timeout=60,
                                   verify=False, follow_redirects=True) as client:
         for roc_year, season in filing_periods:
             period_label = f"{roc_year + 1911}/{_SEASON_LABEL.get(season, f'S{season}')}"
-            prev = existing.get(period_label, {})
-            # Skip if already successfully extracted with a local PDF; retry if failed or PDF missing
-            if period_label in existing and not prev.get("extraction_failed") and prev.get("pdf_path"):
-                continue
-            try:
-                season_str = _SEASON_LABEL.get(season, f"S{season}")
-                year_str   = str(roc_year + 1911)
+            season_str   = _SEASON_LABEL.get(season, f"S{season}")
+            year_str     = str(roc_year + 1911)
 
-                # If re-trying a failed extraction and PDF is cached, skip download
-                prev_pdf = Path(prev["pdf_path"]) if prev.get("pdf_path") else None
-                if prev.get("extraction_failed") and prev_pdf and prev_pdf.exists():
-                    pdf_dest      = prev_pdf
-                    pdf_url       = prev.get("filing_url", "")
-                    sub_co_id     = prev.get("subsidiary_code", stock_code)
-                    is_consolidated = prev.get("is_consolidated", False)
-                    logger.info("Re-trying extraction from cached PDF: %s", pdf_dest.name)
-                else:
-                    # Steps 2–4: navigate t57sb01, find subsidiary, get AI PDF info
-                    result = await _get_ai3_for_period(client, stock_code, roc_year, season,
-                                                        target_display_code=target_display_code,
-                                                        prefer_consolidated=use_consolidated)
-                    if not result:
-                        logger.info("No AI PDF found [%s] %s", stock_code, period_label)
+            for target in targets:
+                target_dc = target.get("display_code") or None
+                sub_label = target.get("name_en") or entry.get("name_en", stock_code)
+                ckey = f"{target_dc or stock_code}|{period_label}"
+                prev = existing.get(ckey, {})
+
+                try:
+                    # If re-trying a failed extraction and PDF is cached, skip download
+                    prev_pdf = Path(prev["pdf_path"]) if prev.get("pdf_path") else None
+                    if prev.get("extraction_failed") and prev_pdf and prev_pdf.exists():
+                        pdf_dest        = prev_pdf
+                        pdf_url         = prev.get("filing_url", "")
+                        sub_co_id       = prev.get("subsidiary_code", stock_code)
+                        is_consolidated = prev.get("is_consolidated", False)
+                        logger.info("Re-trying extraction from cached PDF: %s", pdf_dest.name)
+                    else:
+                        # Steps 2–4: navigate t57sb01, find subsidiary, get AI PDF info
+                        result = await _get_ai3_for_period(
+                            client, stock_code, roc_year, season,
+                            target_display_code=target_dc,
+                            prefer_consolidated=prefer_consolidated,
+                        )
+                        if not result:
+                            logger.info("No AI PDF found [%s/%s] %s", stock_code, target_dc, period_label)
+                            continue
+                        pdf_url, orig_filename, sub_co_id = result
+
+                        _orig_m = re.search(r"_(AI[13]|AIA)\.", orig_filename, re.I)
+                        report_type     = _orig_m.group(1).upper() if _orig_m else "AI3"
+                        is_consolidated = report_type in ("AI1", "AIA")
+                        report_kind     = "Consolidated" if is_consolidated else "Individual"
+                        pdf_name = f"{sub_label} {report_kind} Financial Report {season_str} {year_str}.pdf"
+                        pdf_dest = pdf_dir / pdf_name
+
+                        pdf_dir.mkdir(parents=True, exist_ok=True)
+                        await asyncio.sleep(1.5)
+                        pr = await client.get(pdf_url)
+                        ct = pr.headers.get("content-type", "")
+                        if pr.status_code != 200 or "pdf" not in ct:
+                            logger.warning("PDF unavailable [%s/%s %s]: %d %s",
+                                           stock_code, target_dc, period_label, pr.status_code, ct[:40])
+                            continue
+                        pdf_dest.write_bytes(pr.content)
+                        logger.info("PDF saved: %s", pdf_dest.name)
+
+                    # Step 6: extract 資産總計
+                    total_assets = _extract_total_assets_from_pdf(pdf_dest)
+                    if total_assets is None:
+                        logger.warning("No 資産總計 in %s — flagged for manual check", pdf_dest.name)
+                        existing[ckey] = {
+                            "stock_code":                 stock_code,
+                            "subsidiary_code":            sub_co_id,
+                            "subsidiary_name_en":         sub_label,
+                            "period":                     period_label,
+                            "roc_year":                   roc_year,
+                            "season":                     season,
+                            "is_consolidated":            is_consolidated,
+                            "currency":                   "TWD (thousands)",
+                            "total_assets_raw":           "",
+                            "total_assets_numeric":       None,
+                            "investment_property_raw":    "",
+                            "investment_property_numeric": None,
+                            "pdf_path":                   str(pdf_dest),
+                            "filing_url":                 pdf_url,
+                            "scraped_at":                 datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+                            "extraction_failed":          True,
+                        }
                         continue
-                    pdf_url, orig_filename, sub_co_id = result
 
-                    # Detect consolidated/individual from original TWSE filename
-                    _orig_m = re.search(r"_(AI[13]|AIA)\.", orig_filename, re.I)
-                    report_type = _orig_m.group(1).upper() if _orig_m else "AI3"
-                    is_consolidated = report_type in ("AI1", "AIA")
-                    report_kind = "Consolidated" if is_consolidated else "Individual"
-                    pdf_name = f"{sub_label} {report_kind} Financial Report {season_str} {year_str}.pdf"
-                    pdf_dest = pdf_dir / pdf_name
-
-                    # Step 5: download PDF (create folder only now, not upfront)
-                    pdf_dir.mkdir(parents=True, exist_ok=True)
-                    await asyncio.sleep(1.5)
-                    pr = await client.get(pdf_url)
-                    ct = pr.headers.get("content-type", "")
-                    if pr.status_code != 200 or "pdf" not in ct:
-                        logger.warning("PDF unavailable [%s %s]: %d %s", stock_code, period_label,
-                                       pr.status_code, ct[:40])
-                        continue
-                    pdf_dest.write_bytes(pr.content)
-                    logger.info("PDF saved: %s", pdf_dest.name)
-
-                # Step 6: extract 資産總計
-                total_assets = _extract_total_assets_from_pdf(pdf_dest)
-                if total_assets is None:
-                    logger.warning("No 資産總計 in %s — flagged for manual check", pdf_dest.name)
-                    existing[period_label] = {
+                    existing[ckey] = {
                         "stock_code":                 stock_code,
                         "subsidiary_code":            sub_co_id,
                         "subsidiary_name_en":         sub_label,
@@ -1229,40 +1299,20 @@ async def scrape_quarterly_reports(stock_code: str, roc_years: int = 2,
                         "season":                     season,
                         "is_consolidated":            is_consolidated,
                         "currency":                   "TWD (thousands)",
-                        "total_assets_raw":           "",
-                        "total_assets_numeric":       None,
+                        "total_assets_raw":           f"NT${total_assets:,}K",
+                        "total_assets_numeric":       total_assets,
                         "investment_property_raw":    "",
                         "investment_property_numeric": None,
                         "pdf_path":                   str(pdf_dest),
                         "filing_url":                 pdf_url,
                         "scraped_at":                 datetime.now(timezone.utc).strftime("%Y-%m-%d"),
-                        "extraction_failed":          True,
                     }
-                    continue
+                    logger.info("Quarterly BS [%s/%s] %s → NT$%s K",
+                                stock_code, sub_label, period_label, f"{total_assets:,}")
 
-                record = {
-                    "stock_code":                 stock_code,
-                    "subsidiary_code":            sub_co_id,
-                    "subsidiary_name_en":         sub_label,
-                    "period":                     period_label,
-                    "roc_year":                   roc_year,
-                    "season":                     season,
-                    "is_consolidated":            is_consolidated,
-                    "currency":                   "TWD (thousands)",
-                    "total_assets_raw":           f"NT${total_assets:,}K",
-                    "total_assets_numeric":       total_assets,
-                    "investment_property_raw":    "",
-                    "investment_property_numeric": None,
-                    "pdf_path":                   str(pdf_dest),
-                    "filing_url":                 pdf_url,
-                    "scraped_at":                 datetime.now(timezone.utc).strftime("%Y-%m-%d"),
-                }
-                existing[period_label] = record
-                logger.info("Quarterly BS [%s] %s → NT$%s K",
-                            stock_code, period_label, f"{total_assets:,}")
-
-            except Exception as e:
-                logger.warning("Quarterly reports [%s] %s: %s", stock_code, period_label, e)
+                except Exception as e:
+                    logger.warning("Quarterly reports [%s/%s] %s: %s",
+                                   stock_code, target_dc, period_label, e)
 
     _flush_balance_history(state_path, existing)
     return sorted(existing.values(),
@@ -1554,6 +1604,8 @@ def _clean_company_name(name: str) -> str:
     while prev != name:
         prev = name
         name = _CO_SUFFIX_RE.sub('', name).strip().rstrip(',').strip()
+    if name == name.upper():
+        name = name.title()
     return name
 
 def _format_tw_phone(phone: str) -> str:
@@ -1660,6 +1712,15 @@ function fmtHeadline(hl){if(!hl)return '';const parts=hl.split('\n\n');if(parts.
 function chkGet(key){try{return JSON.parse(localStorage.getItem(key)||'null');}catch{return null;}}
 function chkSet(key,state,name){localStorage.setItem(key,JSON.stringify({state,name,ts:new Date().toISOString()}));}
 function fmtTs(iso){if(!iso)return '';try{const d=new Date(iso);return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})+' '+d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});}catch{return '';}}
+function copyNotes(btn,encoded){
+  const text=decodeURIComponent(encoded);
+  (navigator.clipboard?navigator.clipboard.writeText(text):Promise.reject()).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
+    document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+  }).then(()=>{}).catch(()=>{});
+  btn.textContent='Copied!';btn.classList.add('copied');
+  setTimeout(()=>{btn.textContent='Copy notes';btn.classList.remove('copied');},2000);
+}
 function chkBtn(key){
   const d=chkGet(key)||{};const st=d.state||'pending';
   const lbl={pending:'Pending',checked:'Checked ✓',irrelevant:'Irrelevant'};
@@ -1721,14 +1782,15 @@ function renderFS(rows){
   document.querySelector('#fs-table tbody').innerHTML=rows.map(r=>{
     const base=r.name_en||COMPANIES[r.stock_code]||r.stock_code;
     const co=r.delisted?`${base} <span style="color:#c0392b;font-weight:600">(Delisted)</span>`:base;
-    const src=r.source==='quarterly'?'PDFs - Unconsolidated FS':r.source==='quarterly_consolidated'?'PDFs - Consolidated FS':'Balance Sheet';
+    const src=r.stub_only?'':r.source==='quarterly'?'PDFs - Unconsolidated FS':r.source==='quarterly_consolidated'?'PDFs - Consolidated FS':'Balance Sheet';
     const ck=`chk_fs_${r.stock_code}_${(r.period||'').replace(/\W+/g,'_')}`;
-    const filing=r.filing_url?`<a href="${r.filing_url}" target="_blank">View ↗</a>`:'—';
+    const filing=r.source==='annual'&&r.filing_url?`<a href="${r.filing_url}" target="_blank">View ↗</a>`:(r.pdf_filename||'—');
     const taCell=r.extraction_failed
       ?`<span style="color:#e67e22;font-weight:600" title="PDF downloaded but text could not be extracted (likely image-based). Manual review required.">⚠ Manual check needed</span>`
       :(r.total_assets_raw||'—');
     const rowCls=r.extraction_failed?'style="background:#fff8f0"':'';
-    const notes=(r.internal_notes||'').replace(/\n/g,'<br>');
+    const rawNotes=r.internal_notes||'';
+    const notes=rawNotes?`<button class="copy-btn" onclick="copyNotes(this,'${encodeURIComponent(rawNotes)}')">Copy notes</button>${rawNotes.replace(/\n/g,'<br>')}`:''
     return `<tr ${rowCls} data-co="${r.stock_code}" data-period="${(r.period||'').toLowerCase()}"><td>${r.stock_code}</td><td></td><td>${co}</td><td></td><td>${r.period||'—'}</td><td>${src}</td><td>${taCell}</td><td>${r.investment_property_raw||'—'}</td><td>${fmtScraped(r.scraped_at)}</td><td>${filing}</td><td class="headline">${notes}</td><td>${chkBtn(ck)}</td></tr>`;
   }).join('');
   document.getElementById('fs-count').textContent=rows.length+' records';
@@ -1740,7 +1802,8 @@ function renderFC(rows){
     const amt=r.commitment_amount_raw?(r.fx_url?`<a href="${r.fx_url}" target="_blank">${r.commitment_amount_raw}</a>`:r.commitment_amount_raw):'—';
     const ck=`chk_fc_${r.stock_code}_${(r.fund_name||'').replace(/\W+/g,'_')}_${r.commitment_date}`;
     const firm=COMPANIES[r.stock_code]||r.stock_code;
-    const notes=(r.internal_notes||'').replace(/\n/g,'<br>');
+    const rawNotes=r.internal_notes||'';
+    const notes=rawNotes?`<button class="copy-btn" onclick="copyNotes(this,'${encodeURIComponent(rawNotes)}')">Copy notes</button>${rawNotes.replace(/\n/g,'<br>')}`:''
     return `<tr class="row-${st.toLowerCase()}" data-co="${r.stock_code}" data-ft="${(r.fund_type||'').toLowerCase()}" data-st="${st.toLowerCase()}" data-yr="${yr}" data-date="${normDate(r.announcement_date||'')}"><td>${r.stock_code}</td><td></td><td>${firm}</td><td></td><td>${r.announcement_date}</td><td>${nm}</td><td>${r.fund_type||'—'}</td><td>${r.commitment_date}</td><td>${amt}</td><td class="headline">${fmtHeadline(r.headline||'')}</td><td class="headline">${r.key_events||''}</td><td>${r.bs_date}</td><td>${fmtScraped(r.scraped_at)}</td><td class="headline">${notes}</td><td>${chkBtn(ck)}</td></tr>`;
   }).join('');
   document.getElementById('fc-count').textContent=rows.length+' records';
@@ -1752,7 +1815,8 @@ function renderPM(rows){
     const lnk=r.url?`<a href="${r.url}" target="_blank">View</a>`:'';
     const ck=`chk_pm_${r.stock_code}_${r.announcement_date}_${(r.new_holder||'').replace(/\W+/g,'_')}`;
     const firmNm=COMPANIES[r.stock_code]||r.stock_code;
-    const notes=(r.internal_notes||'').replace(/\n/g,'<br>');
+    const rawNotes=r.internal_notes||'';
+    const notes=rawNotes?`<button class="copy-btn" onclick="copyNotes(this,'${encodeURIComponent(rawNotes)}')">Copy notes</button>${rawNotes.replace(/\n/g,'<br>')}`:''
     return `<tr class="row-${st.toLowerCase()}" data-co="${r.stock_code}" data-st="${st.toLowerCase()}" data-yr="${yr}" data-date="${normDate(r.announcement_date||'')}"><td>${r.stock_code}</td><td></td><td>${firmNm}</td><td></td><td>${r.announcement_date}</td><td>${role||'—'}</td><td>${r.new_holder||'—'}</td><td>${r.previous_holder||'—'}</td><td>${r.effective_date}</td><td class="headline">${fmtHeadline(r.narrative_en||'')}</td><td class="headline">${r.key_events||''}</td><td>${r.bs_date||'—'}</td><td>${lnk}</td><td>${fmtScraped(r.scraped_at)}</td><td class="headline">${notes}</td><td>${chkBtn(ck)}</td></tr>`;
   }).join('');
   document.getElementById('pm-count').textContent=rows.length+' records';
@@ -1870,6 +1934,8 @@ renderRun(0);
   .chk-pend{{background:#FFD700;color:#5a4000;}}.chk-done{{background:#C6EFCE;color:#276221;}}.chk-irrel{{background:#D3D3D3;color:#555;}}
   .chk-ts{{font-size:.65rem;color:#888;white-space:nowrap;}}
   .chk-name{{width:100%;padding:2px 4px;border:1px solid #ddd;border-radius:3px;font-size:.72rem;box-sizing:border-box;}}
+  .copy-btn{{padding:2px 7px;border:1px solid #ccc;border-radius:3px;font-size:.68rem;cursor:pointer;background:#f5f5f5;color:#555;white-space:nowrap;margin-bottom:4px;display:block;}}
+  .copy-btn:hover{{background:#e8e8e8;}}.copy-btn.copied{{background:#C6EFCE;color:#276221;border-color:#9fd49f;}}
   a{{color:#FF6633;}}.count{{font-size:.78rem;color:#666;margin-bottom:8px;}}
 </style>
 </head>
@@ -1890,10 +1956,10 @@ renderRun(0);
   <div class="metric"><div class="num" id="m-new-pm">—</div><div class="lbl">New People Moves</div></div>
 </div>
 <div class="tabs">
-  <div class="tab active" onclick="showTab('em',this)">🏢 Company Profiles</div>
-  <div class="tab"        onclick="showTab('fs',this)">📊 Financial Statements</div>
-  <div class="tab"        onclick="showTab('fc',this)">💼 Fund Commitments</div>
-  <div class="tab"        onclick="showTab('pm',this)">👤 People Moves</div>
+  <div class="tab active" onclick="showTab('em',this)">Company Profiles</div>
+  <div class="tab"        onclick="showTab('fs',this)">Financial Statements</div>
+  <div class="tab"        onclick="showTab('fc',this)">Fund Commitments</div>
+  <div class="tab"        onclick="showTab('pm',this)">People Moves</div>
 </div>
 <div id="em" class="panel active">
   <div class="filters">
@@ -1967,8 +2033,9 @@ def write_excel(fund_commitments, people_moves, emops_data=None, balance_history
                sum(1 for r in people_moves if r.get("status") == "CHANGED")])
     _autofit(ws)
 
-    # Fund Commitments — mirrors HTML FC table
     _co_map = {w["stock_code"]: w["name_en"] for w in WATCHLIST}
+
+    # Fund Commitments — mirrors HTML FC table
     ws = wb.create_sheet("FundCommitments")
     _FC_COLS = ["Stock Code", "Firm ID", "Firm Name", "Firm Type", "Published Date", "Fund Name",
                 "Fund Type", "Commit Date", "Amount", "Headlines", "Key Events", "AUM as of",
@@ -2056,19 +2123,20 @@ def write_excel(fund_commitments, people_moves, emops_data=None, balance_history
                     "Total Assets (TWD, mn)", "Inv. Property (TWD, mn)", "Scraped At", "Filing",
                     "Internal Notes"]
         _header(ws, _FS_COLS)
-        _fs_co_map  = {w["stock_code"]: w["name_en"] for w in WATCHLIST}
         _filing_col = _FS_COLS.index("Filing") + 1
         _ta_col     = _FS_COLS.index("Total Assets (TWD, mn)") + 1
         _fs_note_col = _FS_COLS.index("Internal Notes") + 1
         _warn_fill  = PatternFill("solid", fgColor="FFF3E0")
         _warn_font  = Font(color="E65100", bold=True)
         for i, r in enumerate(balance_history or [], 2):
-            base_name = r.get("name_en") or _fs_co_map.get(r.get("stock_code", ""), "")
+            base_name = r.get("name_en") or _co_map.get(r.get("stock_code", ""), "")
             co_name = f"{base_name} (Delisted)" if r.get("delisted") else base_name
             ta_val = "⚠ Manual check needed" if r.get("extraction_failed") else r.get("total_assets_raw")
-            src_label = ("Balance Sheet" if r.get("source") == "annual"
+            src_label = ("" if r.get("stub_only")
+                         else "Balance Sheet" if r.get("source") == "annual"
                          else "PDFs - Consolidated FS" if r.get("source") == "quarterly_consolidated"
                          else "PDFs - Unconsolidated FS")
+            filing_val = "View" if (r.get("source") == "annual" and r.get("filing_url")) else r.get("pdf_filename", "")
             ws.append([r.get("stock_code"),
                        "",
                        co_name,
@@ -2078,18 +2146,17 @@ def write_excel(fund_commitments, people_moves, emops_data=None, balance_history
                        ta_val,
                        r.get("investment_property_raw"),
                        (r.get("scraped_at") or "")[:10].replace("-", "/"),
-                       r.get("filing_url", ""),
+                       filing_val,
                        r.get("internal_notes", "")])
             if r.get("extraction_failed"):
                 ws.cell(i, _ta_col).font  = _warn_font
                 ws.cell(i, _ta_col).fill  = _warn_fill
-            if r.get("internal_notes"):
-                ws.cell(i, _fs_note_col).alignment = Alignment(wrap_text=True, vertical="top")
-            if r.get("filing_url"):
+            if r.get("source") == "annual" and r.get("filing_url"):
                 cell = ws.cell(i, _filing_col)
                 cell.hyperlink = r["filing_url"]
-                cell.value = "View"
                 cell.font = _link_font
+            if r.get("internal_notes"):
+                ws.cell(i, _fs_note_col).alignment = Alignment(wrap_text=True, vertical="top")
         _autofit(ws)
 
     wb.save(path)
@@ -2112,7 +2179,6 @@ def _status_fill(ws, row, status):
 _WIDE_COLS = {"Headline", "Headlines", "Narrative", "Key Events", "Internal Notes"}
 
 def _autofit(ws):
-    header_row = [c.value for c in ws[1]]
     for col in ws.columns:
         letter = get_column_letter(col[0].column)
         col_name = col[0].value or ""
@@ -2247,18 +2313,6 @@ _ROLE_FULL_TO_ABBREV = {
     "Global Head of Alternatives": "Global Head of Alts",
 }
 
-_FUND_TYPE_ABBREV = {
-    "Private Equity": "PE",
-    "Real Estate": "RE",
-    "Hedge Funds": "HF",
-    "Infrastructure": "Infra",
-    "Private Debt": "PD",
-    "Natural Resources": "NR",
-}
-
-def _abbrev_role(role: str) -> str:
-    return _ROLE_FULL_TO_ABBREV.get(role, role)
-
 def _date_to_period_str(date_str: str) -> str:
     """Convert date string to period label like 'Q1 2025'."""
     m = re.match(r"(\d{4})[/-](\d{2})", date_str or "")
@@ -2273,8 +2327,7 @@ def _date_to_period_str(date_str: str) -> str:
 
 def _build_fc_key_event(stock_code: str, date: str, fund_name: str,
                         formatted_amount: str, fund_type: str) -> str:
-    entry = _WATCHLIST_MAP.get(stock_code, {})
-    firm_name = entry.get("name_en", stock_code)
+    firm_name = _firm_display_name(stock_code)
     period = _date_to_period_str(date)
     amount_part = f"committed {formatted_amount} to" if formatted_amount else "committed to"
     type_part = f", a {fund_type.lower()} fund" if fund_type else ""
@@ -2282,8 +2335,7 @@ def _build_fc_key_event(stock_code: str, date: str, fund_name: str,
 
 def _build_pm_key_event(stock_code: str, role: str, new_holder: str,
                         prev_holder: str, date: str, change_type: str) -> str:
-    entry = _WATCHLIST_MAP.get(stock_code, {})
-    firm_name = entry.get("name_en", stock_code)
+    firm_name = _firm_display_name(stock_code)
     period = _date_to_period_str(date)
     has_new  = bool(new_holder  and new_holder.lower()  not in ("none", "nil", "n/a", "na", ""))
     has_prev = bool(prev_holder and prev_holder.lower() not in ("none", "nil", "n/a", "na", ""))
@@ -2296,34 +2348,54 @@ def _build_pm_key_event(stock_code: str, role: str, new_holder: str,
         return f"In {period}, {prev_holder} resigned as {role} of {firm_name}."
     return f"In {period}, {firm_name} announced a change in its {role}."
 
+_SEP = "=" * 55
+
 def _build_fc_internal_notes(r: dict) -> str:
-    entry = _WATCHLIST_MAP.get(r.get("stock_code", ""), {})
-    firm_name = entry.get("name_en", r.get("stock_code", ""))
-    fund_name = r.get("fund_name", "")
-    fund_type = r.get("fund_type", "")
-    amount = r.get("commitment_amount_raw", "")
-    date = r.get("commitment_date", "") or r.get("announcement_date", "")
-    type_str = f" ({fund_type})" if fund_type else ""
-    return (f"[Draft] New fund commitment by {firm_name}.\n"
-            f"Fund: {fund_name}{type_str}\n"
-            f"Amount: {amount}\n"
-            f"Commitment date: {date}")
+    headline   = r.get("headline", "")
+    key_events = r.get("key_events", "")
+    amount     = r.get("commitment_amount_raw", "")
+    fund_type  = r.get("fund_type", "")
+    commit_date = r.get("commitment_date", "") or r.get("announcement_date", "")
+    url        = r.get("url", "")
+    meta_line = " | ".join(p for p in [commit_date, amount, fund_type] if p)
+    hl_part  = f"Headlines: {headline}"  if headline   else ""
+    ke_part  = f"Key Events: {key_events}" if key_events else ""
+    fc_line  = " | ".join(p for p in [meta_line, hl_part, ke_part] if p)
+    src_line = "https://mopsov.twse.com.tw/mops/web/ezsearch"
+    if url:
+        src_line += f" | {url}"
+    return (f"PARTIAL UPDATE- Fund Commitment\n{_SEP}\n"
+            f"Summary: \n{_SEP}\n"
+            f"Fund Commitment: {fc_line}\n{_SEP}\n"
+            f"Source: {src_line}\n{_SEP}")
 
 def _build_pm_internal_notes(r: dict) -> str:
-    entry = _WATCHLIST_MAP.get(r.get("stock_code", ""), {})
-    firm_name = entry.get("name_en", r.get("stock_code", ""))
-    role = r.get("role_title", "") or r.get("role_type", "")
-    new_h  = r.get("new_holder", "")
-    prev_h = r.get("previous_holder", "")
-    effective = r.get("effective_date", "")
-    parts = []
-    if new_h:  parts.append(f"New: {new_h}")
-    if prev_h: parts.append(f"Prev: {prev_h}")
-    people_str = " | ".join(parts)
-    eff_str = f"\nEffective: {effective}" if effective else ""
-    return (f"[Draft] New people move at {firm_name}.\n"
-            f"{role}\n"
-            f"{people_str}{eff_str}")
+    role            = r.get("role_title", "") or r.get("role_type", "")
+    announcement_date = r.get("announcement_date", "")
+    effective_date  = r.get("effective_date", "")
+    headline        = r.get("narrative_en", "")
+    key_events      = r.get("key_events", "")
+    url             = r.get("url", "")
+    meta_line = " | ".join(p for p in [announcement_date, role, effective_date] if p)
+    hl_part  = f"Headlines: {headline}"    if headline   else ""
+    ke_part  = f"Key Events: {key_events}" if key_events else ""
+    pm_line  = " | ".join(p for p in [meta_line, hl_part, ke_part] if p)
+    src_line = "https://mopsov.twse.com.tw/mops/web/ezsearch"
+    if url:
+        src_line += f" | {url}"
+    return (f"PARTIAL UPDATE- People Moves\n{_SEP}\n"
+            f"Summary: \n{_SEP}\n"
+            f"People Moves: {pm_line}\n{_SEP}\n"
+            f"Source: {src_line}\n{_SEP}")
+
+def _build_fs_internal_notes(ta: str, inv: str, period: str, pdf_filename: str) -> str:
+    alloc_line = f"Updated AUM: {ta} || Real Estate: {inv} | Date of allocation: {period}"
+    doc_line   = f"Added {pdf_filename}" if pdf_filename else ""
+    return (f"PARTIAL UPDATE-AUM\n{_SEP}\n"
+            f"Summary: \n{_SEP}\n"
+            f"Current portfolio allocation: {alloc_line}\n{_SEP}\n"
+            f"Document: {doc_line}\n{_SEP}\n"
+            f"Source: https://mopsov.twse.com.tw/mops/web/ezsearch\n{_SEP}")
 
 def _fs_filing_url(stock_code: str, period: str) -> str:
     """Return the MOPS iXBRL financial statement URL for a given company and period."""
@@ -2360,11 +2432,9 @@ def _build_fs_data(emops_data: list[dict], balance_history: list[dict],
                 continue
         entry = _WATCHLIST_MAP.get(r["stock_code"], {})
         is_new = bool(new_since_norm and period and period.replace("/", "-")[:10] >= new_since_norm)
-        ta = _fmt_millions(r.get("total_assets_numeric")) or "—"
-        internal_notes = (
-            f"[Draft] New financial data.\nPeriod: {period} | Source: Balance Sheet\nTotal Assets: {ta} TWD mn"
-            if is_new else ""
-        )
+        ta  = _fmt_millions(r.get("total_assets_numeric")) or "—"
+        inv = _fmt_millions(r.get("inv_property_numeric")) or "—"
+        internal_notes = _build_fs_internal_notes(ta, inv, period, "") if is_new else ""
         rows.append({
             "stock_code":              r["stock_code"],
             "name_en":                 r["name_en"],
@@ -2377,6 +2447,7 @@ def _build_fs_data(emops_data: list[dict], balance_history: list[dict],
             "source":                  "annual",
             "filing_url":              _fs_filing_url(r["stock_code"], period),
             "pdf_path":                "",
+            "pdf_filename":            "",
             "internal_notes":          internal_notes,
         })
 
@@ -2391,8 +2462,6 @@ def _build_fs_data(emops_data: list[dict], balance_history: list[dict],
         yr     = r.get("roc_year", 0)
         period_end = (f"{yr + 1911}/{_FS_SEASON_DATE.get(season, '12/31')}"
                       if yr else r.get("period", ""))
-        period = (f"{yr + 1911}/{_SEASON_LABEL.get(season, f'S{season}')}"
-                  if yr else r.get("period", ""))
 
         if since_norm and period_end:
             if period_end.replace("/", "-")[:10] < since_norm:
@@ -2408,37 +2477,78 @@ def _build_fs_data(emops_data: list[dict], balance_history: list[dict],
                     or _name_map.get(display_code, display_code))
         source = "quarterly_consolidated" if r.get("is_consolidated") else "quarterly"
         is_new = bool(new_since_norm and period_end and period_end.replace("/", "-")[:10] >= new_since_norm)
-        if is_new:
-            src_label = "PDFs - Consolidated FS" if r.get("is_consolidated") else "PDFs - Unconsolidated FS"
-            ta = _fmt_millions(r.get("total_assets_numeric")) or "—"
-            pdf_filename = Path(r.get("pdf_path", "")).name if r.get("pdf_path") else ""
-            doc_line = f"\nDocument: {pdf_filename}" if pdf_filename else ""
-            internal_notes = (f"[Draft] New financial data.\nPeriod: {period} | Source: {src_label}"
-                              f"\nTotal Assets: {ta} TWD mn{doc_line}")
-        else:
-            internal_notes = ""
+        pdf_filename = Path(r.get("pdf_path", "")).name if r.get("pdf_path") else ""
+        ta  = _fmt_millions(r.get("total_assets_numeric")) or "—"
+        inv = _fmt_millions(r.get("investment_property_numeric")) or "—"
+        internal_notes = _build_fs_internal_notes(ta, inv, period_end, pdf_filename) if is_new else ""
 
         rows.append({
             "stock_code":              display_code,
             "name_en":                 sub_name,
-            "period":                  period,
+            "period":                  period_end,
             "currency":                "TWD",
             "total_assets_raw":        _fmt_millions(r.get("total_assets_numeric")),
             "investment_property_raw": _fmt_millions(r.get("investment_property_numeric")),
             "scraped_at":              (r.get("scraped_at") or "")[:10],
             "delisted":                entry.get("delisted", False),
             "source":                  source,
-            "filing_url":              r.get("filing_url", ""),
+            "filing_url":              "",
             "pdf_path":                r.get("pdf_path", ""),
+            "pdf_filename":            pdf_filename,
             "extraction_failed":       r.get("extraction_failed", False),
             "internal_notes":          internal_notes,
         })
+
+    # Deduplicate quarterly rows (duplicate state entries can arise when the same PDF is stored
+    # under two different keys). Keep the first record that has total_assets_numeric; else first seen.
+    seen_qtr: dict[tuple, dict] = {}
+    deduped = []
+    for r in rows:
+        if r.get("source", "").startswith("quarterly"):
+            key = (r["stock_code"], r["period"])
+            if key not in seen_qtr:
+                seen_qtr[key] = r
+                deduped.append(r)
+            elif r.get("total_assets_numeric") and not seen_qtr[key].get("total_assets_numeric"):
+                # Replace with the record that actually has data
+                deduped[deduped.index(seen_qtr[key])] = r
+                seen_qtr[key] = r
+        else:
+            deduped.append(r)
+    rows = deduped
 
     # Deduplicate: if annual and quarterly share the same (stock_code, period, name_en), keep annual.
     # name_en is included so subsidiary rows (e.g. Fubon Life under 2881) are not dropped.
     annual_keys = {(r["stock_code"], r["period"], r["name_en"]) for r in rows if r["source"] == "annual"}
     rows = [r for r in rows if r["source"] == "annual"
             or (r["stock_code"], r["period"], r["name_en"]) not in annual_keys]
+
+    # Add stub rows for ALL WATCHLIST + _SUBSIDIARY_STUBS entries that have no FS data at all,
+    # so every tracked company always appears in the FS tab.
+    present_codes = {r["stock_code"] for r in rows}
+    all_tracked = (
+        [(w["stock_code"], w["name_en"], w.get("delisted", False)) for w in WATCHLIST]
+        + [(s["stock_code"], s["company_name_en"], False) for s in _SUBSIDIARY_STUBS]
+    )
+    for code, name, delisted in all_tracked:
+        if code not in present_codes:
+            rows.append({
+                "stock_code":              code,
+                "name_en":                 name,
+                "period":                  "",
+                "currency":                "TWD",
+                "total_assets_raw":        "",
+                "investment_property_raw": "",
+                "scraped_at":              "",
+                "delisted":                delisted,
+                "source":                  "",
+                "filing_url":              "",
+                "pdf_path":                "",
+                "pdf_filename":            "",
+                "extraction_failed":       False,
+                "internal_notes":          "",
+                "stub_only":               True,
+            })
 
     return rows
 
@@ -2476,10 +2586,12 @@ async def run(companies=None, export_excel=True, mode="full", since=None, new_si
                         code, profile.get("address") or "—", bs.get("period") or "—",
                         bs.get("total_assets_raw") or "—")
 
+            subs = entry.get("f26_subsidiaries") or None
             bs_history = await scrape_quarterly_reports(
                 code,
                 subsidiary_name_en=entry.get("f26_name_en", ""),
-                use_consolidated=bool(_HOLDING_RE.search(entry.get("name_en", ""))),
+                subsidiaries=subs,
+                use_consolidated=bool(_HOLDING_RE.search(entry.get("name_en", ""))) and not subs,
             )
             all_balance_history.extend(bs_history)
 
@@ -2524,7 +2636,6 @@ async def run(companies=None, export_excel=True, mode="full", since=None, new_si
                                 r["stock_code"], r.get("role_title", ""),
                                 r["new_holder"], r["previous_holder"],
                                 r.get("change_type", ""), r.get("effective_date", ""),
-                                reason=r.get("reason", ""),
                             )
                         ).strip()
                         r["key_events"] = _build_pm_key_event(
@@ -2539,6 +2650,7 @@ async def run(companies=None, export_excel=True, mode="full", since=None, new_si
         # Re-compute fund_type, subsidiary codes, formatted amounts, headlines, and key_events for FC
         for r in all_funds:
             r["stock_code"] = _resolve_subsidiary(r["stock_code"], r.get("subject", ""))
+            r["fund_name"] = _clean_fund_name(r.get("fund_name", ""))
             r["fund_type"] = _normalize_fund_type(r.get("fund_type", ""), r.get("fund_name", ""))
             formatted, fx = await _format_commitment_amount(
                 r.get("commitment_amount_raw", ""), r.get("commitment_currency", "")
