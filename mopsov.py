@@ -195,7 +195,9 @@ _FUND_EXCLUDE_RE = re.compile(
     r"\bdisposal\b|"
     r"common (?:share|stock)|ordinary share|preferred (?:share|stock)|"
     r"\bdebenture|\bcorporate bonds?|\bbond issue|\bnote issue|"
+    r"\bfinancial bonds?|\bsecured bonds?|"
     r"\bshares\b|"
+    r"RMB structured deposit|structured deposit|"
     r"(?<!private )(?<!growth )\bequity\b",
     re.IGNORECASE
 )
@@ -474,7 +476,7 @@ async def scrape_fund_commitments(stock_code: str, sdate: str = None) -> list[di
         amount_raw = re.sub(r"\s*\(updated\)", "", amount_raw, flags=re.IGNORECASE).strip()
         # Deduplicate leading currency ticker (e.g. "EUR EUR 50,000,000" → "EUR 50,000,000")
         amount_raw = re.sub(r"^([A-Z]{3})\s+\1\b", r"\1", amount_raw)
-        currency_match = re.search(r"\b(USD|EUR|GBP|JPY|TWD|HKD|SGD|AUD|CAD)\b", amount_raw)
+        currency_match = re.search(r"\b(USD|EUR|GBP|JPY|CNY|RMB|TWD|HKD|SGD|AUD|CAD)\b", amount_raw)
 
         searchable = fund_name + " " + raw_fund_type + " " + row["subject"] + " " + statement
         if not _FUND_ALLOWLIST_RE.search(searchable):
@@ -483,7 +485,10 @@ async def scrape_fund_commitments(stock_code: str, sdate: str = None) -> list[di
             continue
 
         _, bs_date = _get_latest_aum(stock_code)
-        formatted_amount, fx_url = await _format_commitment_amount(amount_raw, currency_match.group(1) if currency_match else "")
+        raw_currency = currency_match.group(1) if currency_match else ""
+        if raw_currency == "RMB":
+            raw_currency = "CNY"
+        formatted_amount, fx_url = await _format_commitment_amount(amount_raw, raw_currency)
         fund_type = _normalize_fund_type(raw_fund_type, fund_name)
         headline = _build_fund_headline(stock_code, fund_name, formatted_amount, fund_type) if fund_type else ""
         twd_match = re.search(r"TWD ([\d,]+) million", formatted_amount)
@@ -505,7 +510,7 @@ async def scrape_fund_commitments(stock_code: str, sdate: str = None) -> list[di
             "commitment_date": commit_date,
             "commitment_amount_raw": amount_raw,
             "twd_amount_mn": twd_amount_mn,
-            "commitment_currency": currency_match.group(1) if currency_match else "",
+            "commitment_currency": raw_currency,
             "commitment_amount_numeric": _parse_amount(amount_raw),
             "fx_url": fx_url,
             "bs_date": bs_date,
