@@ -473,7 +473,7 @@ def _pm_table(records: list) -> str:
     return f'<table><thead>{head}</thead><tbody>{"".join(rows)}</tbody></table>'
 
 def _fs_filing_cell(r: dict) -> str:
-    if r.get("source") == "annual" and r.get("filing_url"):
+    if r.get("source") in ("annual", "mops_ixbrl") and r.get("filing_url"):
         return f'<a href="{_h(r["filing_url"])}" target="_blank">View ↗</a>'
     fname = r.get("pdf_filename", "") or ""
     return _h(fname) if fname else "—"
@@ -492,6 +492,7 @@ def _fs_table(records: list) -> str:
         src  = ("PDFs - Unconsolidated FS" if r.get("source") == "quarterly"
                 else "PDFs - Consolidated FS" if r.get("source") == "quarterly_consolidated"
                 else "Balance Sheet"          if r.get("source") == "annual"
+                else "MOPS iXBRL"             if r.get("source") == "mops_ixbrl"
                 else "—")
         if r.get("stub_only"):
             rows.append(
@@ -718,6 +719,7 @@ def _page_css() -> None:
 .mops-card .lbl { font-size: .76rem; color: #666; margin-top: 3px; }
 
 /* Tabs */
+[data-testid="stTabs"] { padding-left: 28px !important; }
 .stTabs [data-baseweb="tab-list"] { background: #fff !important; gap: 0 !important; }
 .stTabs [data-baseweb="tab"] {
     padding: 9px 20px !important; font-weight: 600 !important;

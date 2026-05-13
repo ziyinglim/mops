@@ -1301,7 +1301,30 @@ async def scrape_quarterly_reports(stock_code: str, roc_years: int = 2,
                             prefer_consolidated=prefer_consolidated,
                         )
                         if not result:
-                            logger.info("No AI PDF found [%s/%s] %s", stock_code, target_dc, period_label)
+                            # For standalone companies (no specific subsidiary target) try MOPS iXBRL
+                            if target_dc is None:
+                                ixbrl = await _scrape_mops_ixbrl_quarterly(stock_code, roc_year, season)
+                                if ixbrl:
+                                    existing[ckey] = {
+                                        "stock_code":                  stock_code,
+                                        "subsidiary_code":             stock_code,
+                                        "subsidiary_name_en":          sub_label,
+                                        "period":                      ixbrl["period"],
+                                        "roc_year":                    roc_year,
+                                        "season":                      season,
+                                        "is_consolidated":             ixbrl.get("is_consolidated", False),
+                                        "currency":                    ixbrl.get("currency", "TWD"),
+                                        "total_assets_raw":            ixbrl.get("total_assets_raw", ""),
+                                        "total_assets_numeric":        ixbrl.get("total_assets_numeric"),
+                                        "investment_property_raw":     ixbrl.get("investment_property_raw", ""),
+                                        "investment_property_numeric": ixbrl.get("investment_property_numeric"),
+                                        "source":                      "mops_ixbrl",
+                                        "filing_url":                  ixbrl.get("filing_url", ""),
+                                        "scraped_at":                  datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+                                    }
+                                    logger.info("iXBRL fallback stored [%s] %s", stock_code, period_label)
+                            else:
+                                logger.info("No AI PDF found [%s/%s] %s", stock_code, target_dc, period_label)
                             continue
                         pdf_url, orig_filename, sub_co_id = result
 
@@ -1542,6 +1565,50 @@ def _find_balance_value(soup: BeautifulSoup, labels: list) -> str:
                 if val:
                     return val
     return ""
+
+
+async def _scrape_mops_ixbrl_quarterly(
+    stock_code: str, roc_year: int, season: int
+) -> dict | None:
+    """Fallback quarterly balance sheet via MOPS t164sb01 iXBRL viewer.
+    Used when no AI3/AI1 PDF exists on TWSE doc (e.g. companies that file iXBRL-only on MOPS).
+    Tries consolidated (REPORT_ID=C) then individual (REPORT_ID=A)."""
+    gregorian_year = roc_year + 1911
+    period_label   = f"{gregorian_year}/{_SEASON_LABEL.get(season, f'S{season}')}"
+    filing_url     = (f"https://mopsov.twse.com.tw/server-java/t164sb01"
+                      f"?step=1&CO_ID={stock_code}&SYEAR={gregorian_year}"
+                      f"&SSEASON={season}&REPORT_ID=C")
+    for report_id in ("C", "A"):
+        html = await _post_emops(
+            "/server-java/t164sb01",
+            stock_code,
+            {"step": "1", "SYEAR": str(gregorian_year), "SSEASON": str(season),
+             "REPORT_ID": report_id},
+        )
+        if not html:
+            continue
+        soup   = BeautifulSoup(html, "lxml")
+        ta_raw = _find_balance_value(soup, ["Total assets", "Total Assets", "資產總計"])
+        if not ta_raw:
+            continue
+        ip_raw   = _find_balance_value(soup, ["Investment property, net", "Investment property",
+                                               "投資性不動產淨額", "投資性不動產"])
+        period   = _extract_consolidated_period(soup) or period_label
+        currency = "TWD (thousands)" if "千元" in soup.get_text() else "TWD"
+        logger.info("iXBRL fallback [%s] %s → 資產總計=%s (REPORT_ID=%s)",
+                    stock_code, period_label, ta_raw, report_id)
+        return {
+            "period":                      period,
+            "is_consolidated":             report_id == "C",
+            "currency":                    currency,
+            "total_assets_raw":            ta_raw,
+            "total_assets_numeric":        _parse_amount(ta_raw),
+            "investment_property_raw":     ip_raw,
+            "investment_property_numeric": _parse_amount(ip_raw),
+            "filing_url":                  filing_url,
+        }
+    logger.info("iXBRL fallback [%s] %s → no data found", stock_code, period_label)
+    return None
 
 
 async def scrape_emops_balance_sheet(stock_code: str) -> dict:
@@ -2494,7 +2561,7 @@ def _build_fs_data(emops_data: list[dict], balance_history: list[dict],
     _stub_name_map = {s["stock_code"]: s["company_name_en"] for s in _SUBSIDIARY_STUBS}
     for r in balance_history:
         season = r.get("season", 4)
-        if not r.get("pdf_path"):
+        if not r.get("pdf_path") and r.get("source") != "mops_ixbrl":
             continue
         entry  = _WATCHLIST_MAP.get(r["stock_code"], {})
         yr     = r.get("roc_year", 0)
@@ -2513,7 +2580,8 @@ def _build_fs_data(emops_data: list[dict], balance_history: list[dict],
                     or r.get("subsidiary_name_en")
                     or entry.get("f26_name_en")
                     or _name_map.get(display_code, display_code))
-        source = "quarterly_consolidated" if r.get("is_consolidated") else "quarterly"
+        source = (r.get("source") if r.get("source") == "mops_ixbrl"
+                  else "quarterly_consolidated" if r.get("is_consolidated") else "quarterly")
         is_new = bool(new_since_norm and period_end and period_end.replace("/", "-")[:10] >= new_since_norm)
         pdf_filename = Path(r.get("pdf_path", "")).name if r.get("pdf_path") else ""
         ta  = _fmt_millions(r.get("total_assets_numeric")) or "—"
@@ -2530,7 +2598,7 @@ def _build_fs_data(emops_data: list[dict], balance_history: list[dict],
             "scraped_at":              (r.get("scraped_at") or "")[:10],
             "delisted":                entry.get("delisted", False),
             "source":                  source,
-            "filing_url":              "",
+            "filing_url":              r.get("filing_url", "") if source == "mops_ixbrl" else "",
             "pdf_path":                r.get("pdf_path", ""),
             "pdf_filename":            pdf_filename,
             "extraction_failed":       r.get("extraction_failed", False),
@@ -2542,7 +2610,7 @@ def _build_fs_data(emops_data: list[dict], balance_history: list[dict],
     seen_qtr: dict[tuple, dict] = {}
     deduped = []
     for r in rows:
-        if r.get("source", "").startswith("quarterly"):
+        if r.get("source", "").startswith("quarterly") or r.get("source") == "mops_ixbrl":
             key = (r["stock_code"], r["period"])
             if key not in seen_qtr:
                 seen_qtr[key] = r
