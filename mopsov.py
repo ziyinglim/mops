@@ -263,6 +263,25 @@ _ROLE_ABBREV = {
     "CTO": "Chief Technology Officer", "CSO": "Chief Strategy Officer",
 }
 
+_ROLE_FULL_TO_ABBREV = {
+    "Chief Executive Officer": "CEO",
+    "Chief Financial Officer": "CFO",
+    "Chief Finance Officer": "CFO",
+    "Chief Investment Officer": "CIO",
+    "Chief Operating Officer": "COO",
+    "Chief Operations Officer": "COO",
+    "Chief Technology Officer": "CTO",
+    "Chief Strategy Officer": "CSO",
+    "Chairman": "Chair",
+    "General Manager": "GM",
+    "Head of Alternative Investments": "Head of Alts",
+    "Head of Alternative Assets": "Head of Alts",
+    "Head of Alternatives": "Head of Alts",
+    "Global Head of Alternative Investments": "Global Head of Alts",
+    "Global Head of Alternative Assets": "Global Head of Alts",
+    "Global Head of Alternatives": "Global Head of Alts",
+}
+
 _TRACKED_ROLES_RE = re.compile(
     "|".join(re.escape(r) for r in TRACKED_ROLES) + r"|\b(CEO|CFO|CIO|COO|CTO|CSO)\b",
     re.IGNORECASE,
@@ -781,38 +800,73 @@ def _build_narrative(stock_code, role, new_holder, prev_holder, change_type, eff
     company_ref = f"The {aum} [firm type]" if aum else "[firm type]"
     date_str = _format_date(effective_date)
     eff = f", effective {date_str}" if date_str else ""
+    role_abbrev = _ROLE_FULL_TO_ABBREV.get(role, role)
 
     has_new  = bool(new_holder  and new_holder.lower()  not in ("none", "nil", "n/a", "na", ""))
     has_prev = bool(prev_holder and prev_holder.lower() not in ("none", "nil", "n/a", "na", ""))
     ct = change_type or ""
 
     if has_new:
-        title = f"{firm_name} appoints new {role}"
+        title = f"{firm_name} appoints new {role_abbrev}"
         body = f"{company_ref} has appointed {new_holder} as {role}{eff}."
         if has_prev:
             surname = new_holder.split()[-1]
             body += f" {surname} will succeed {prev_holder}."
     elif "position adjustment" in ct:
-        title = f"{firm_name} {role} position eliminated"
+        title = f"{firm_name} {role_abbrev} position eliminated"
         body = f"{company_ref}'s {role} position has been eliminated{eff}."
         if has_prev:
             body += f" {prev_holder} vacated the role."
     elif has_prev:
         if "retirement" in ct:
-            title = f"{firm_name}'s {role} retires"
+            title = f"{firm_name}'s {role_abbrev} retires"
             body = f"{prev_holder} stepped down from {role} due to retirement{eff}."
         else:
-            title = f"{firm_name}'s {role} steps down"
+            title = f"{firm_name}'s {role_abbrev} steps down"
             body = f"{company_ref}'s {role}, {prev_holder}, has stepped down{eff}."
     else:
-        title = f"{firm_name} announces {role} change"
+        title = f"{firm_name} announces {role_abbrev} change"
         body = f"{company_ref} has announced a change in its {role}{eff}."
 
     return f"{title}\n\n{body}"
 
+_AUM_CACHE: dict[str, tuple[str, str]] = {}
+
+def _populate_aum_cache(balance_history: list[dict]) -> None:
+    """Build _AUM_CACHE from in-memory balance history (avoids redundant file I/O)."""
+    by_key: dict[str, list[dict]] = {}
+    for rec in balance_history:
+        sub_code = rec.get("subsidiary_code", "")
+        display_code = _FS_SUBSIDIARY_CODE_MAP.get(sub_code) or rec.get("stock_code", "")
+        parent_code = rec.get("stock_code", "")
+        for key in {display_code, parent_code}:
+            if key:
+                by_key.setdefault(key, []).append(rec)
+    for key, records in by_key.items():
+        records.sort(key=lambda r: (r.get("roc_year", 0), r.get("season", 0)), reverse=True)
+        for rec in records:
+            total_k = rec.get("total_assets_numeric")
+            if total_k is None:
+                continue
+            total = total_k * 1000
+            if total >= 1e9:
+                _AUM_CACHE[key] = (f"TWD {total/1e9:,.0f} billion", rec.get("period", ""))
+            elif total >= 1e6:
+                _AUM_CACHE[key] = (f"TWD {total/1e6:,.0f} million", rec.get("period", ""))
+            break
+
 def _get_latest_aum(stock_code: str) -> tuple[str, str]:
     """Returns (aum_string, balance_sheet_period) from quarterly FS balance history.
-    Falls back to parent company balance history for subsidiary codes."""
+    Checks in-memory cache first; falls back to file-based lookup when cache is empty."""
+    if _AUM_CACHE:
+        result = _AUM_CACHE.get(stock_code)
+        if result:
+            return result
+        parent = _SUBSIDIARY_TO_PARENT.get(stock_code)
+        if parent:
+            return _AUM_CACHE.get(parent, ("", ""))
+        return "", ""
+    # File-based fallback (used before cache is populated)
     path = STATE_DIR / f"{stock_code}_balance_history.json"
     if not path.exists():
         parent = _SUBSIDIARY_TO_PARENT.get(stock_code)
@@ -829,8 +883,7 @@ def _get_latest_aum(stock_code: str) -> tuple[str, str]:
             if total_k is None:
                 continue
             period = rec.get("period", "")
-            total = total_k * 1000  # NT$K → NT$
-            # AUM expressed in billions maximum (never trillions)
+            total = total_k * 1000
             if total >= 1e9:
                 return f"TWD {total/1e9:,.0f} billion", period
             if total >= 1e6:
@@ -1212,8 +1265,6 @@ async def scrape_quarterly_reports(stock_code: str, roc_years: int = 2,
         targets = [{"display_code": tdc, "name_en": tname}]
         prefer_consolidated = use_consolidated
 
-    pdf_dir = PDF_DIR / stock_code
-
     async with httpx.AsyncClient(headers=_TWSE_DOC_HEADERS, timeout=60,
                                   verify=False, follow_redirects=True) as client:
         for roc_year, season in filing_periods:
@@ -1226,6 +1277,7 @@ async def scrape_quarterly_reports(stock_code: str, roc_years: int = 2,
                 sub_label = target.get("name_en") or entry.get("name_en", stock_code)
                 ckey = f"{target_dc or stock_code}|{period_label}"
                 prev = existing.get(ckey, {})
+                sub_pdf_dir = PDF_DIR / (target_dc or stock_code)
 
                 try:
                     # If re-trying a failed extraction and PDF is cached, skip download
@@ -1253,9 +1305,9 @@ async def scrape_quarterly_reports(stock_code: str, roc_years: int = 2,
                         is_consolidated = report_type in ("AI1", "AIA")
                         report_kind     = "Consolidated" if is_consolidated else "Individual"
                         pdf_name = f"{sub_label} {report_kind} Financial Report {season_str} {year_str}.pdf"
-                        pdf_dest = pdf_dir / pdf_name
+                        pdf_dest = sub_pdf_dir / pdf_name
 
-                        pdf_dir.mkdir(parents=True, exist_ok=True)
+                        sub_pdf_dir.mkdir(parents=True, exist_ok=True)
                         await asyncio.sleep(1.5)
                         pr = await client.get(pdf_url)
                         ct = pr.headers.get("content-type", "")
@@ -1712,8 +1764,8 @@ function fmtHeadline(hl){if(!hl)return '';const parts=hl.split('\n\n');if(parts.
 function chkGet(key){try{return JSON.parse(localStorage.getItem(key)||'null');}catch{return null;}}
 function chkSet(key,state,name){localStorage.setItem(key,JSON.stringify({state,name,ts:new Date().toISOString()}));}
 function fmtTs(iso){if(!iso)return '';try{const d=new Date(iso);return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})+' '+d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});}catch{return '';}}
-function copyNotes(btn,encoded){
-  const text=decodeURIComponent(encoded);
+function copyNotes(btn){
+  const text=decodeURIComponent(escape(atob(btn.dataset.n||'')));
   (navigator.clipboard?navigator.clipboard.writeText(text):Promise.reject()).catch(()=>{
     const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
     document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
@@ -1790,7 +1842,7 @@ function renderFS(rows){
       :(r.total_assets_raw||'—');
     const rowCls=r.extraction_failed?'style="background:#fff8f0"':'';
     const rawNotes=r.internal_notes||'';
-    const notes=rawNotes?`<button class="copy-btn" onclick="copyNotes(this,'${encodeURIComponent(rawNotes)}')">Copy notes</button>${rawNotes.replace(/\n/g,'<br>')}`:''
+    const notes=rawNotes?`<button class="copy-btn" data-n="${btoa(unescape(encodeURIComponent(rawNotes)))}" onclick="copyNotes(this)">Copy notes</button>${rawNotes.replace(/\n/g,'<br>')}`:''
     return `<tr ${rowCls} data-co="${r.stock_code}" data-period="${(r.period||'').toLowerCase()}"><td>${r.stock_code}</td><td></td><td>${co}</td><td></td><td>${r.period||'—'}</td><td>${src}</td><td>${taCell}</td><td>${r.investment_property_raw||'—'}</td><td>${fmtScraped(r.scraped_at)}</td><td>${filing}</td><td class="headline">${notes}</td><td>${chkBtn(ck)}</td></tr>`;
   }).join('');
   document.getElementById('fs-count').textContent=rows.length+' records';
@@ -1803,7 +1855,7 @@ function renderFC(rows){
     const ck=`chk_fc_${r.stock_code}_${(r.fund_name||'').replace(/\W+/g,'_')}_${r.commitment_date}`;
     const firm=COMPANIES[r.stock_code]||r.stock_code;
     const rawNotes=r.internal_notes||'';
-    const notes=rawNotes?`<button class="copy-btn" onclick="copyNotes(this,'${encodeURIComponent(rawNotes)}')">Copy notes</button>${rawNotes.replace(/\n/g,'<br>')}`:''
+    const notes=rawNotes?`<button class="copy-btn" data-n="${btoa(unescape(encodeURIComponent(rawNotes)))}" onclick="copyNotes(this)">Copy notes</button>${rawNotes.replace(/\n/g,'<br>')}`:''
     return `<tr class="row-${st.toLowerCase()}" data-co="${r.stock_code}" data-ft="${(r.fund_type||'').toLowerCase()}" data-st="${st.toLowerCase()}" data-yr="${yr}" data-date="${normDate(r.announcement_date||'')}"><td>${r.stock_code}</td><td></td><td>${firm}</td><td></td><td>${r.announcement_date}</td><td>${nm}</td><td>${r.fund_type||'—'}</td><td>${r.commitment_date}</td><td>${amt}</td><td class="headline">${fmtHeadline(r.headline||'')}</td><td class="headline">${r.key_events||''}</td><td>${r.bs_date}</td><td>${fmtScraped(r.scraped_at)}</td><td class="headline">${notes}</td><td>${chkBtn(ck)}</td></tr>`;
   }).join('');
   document.getElementById('fc-count').textContent=rows.length+' records';
@@ -1816,7 +1868,7 @@ function renderPM(rows){
     const ck=`chk_pm_${r.stock_code}_${r.announcement_date}_${(r.new_holder||'').replace(/\W+/g,'_')}`;
     const firmNm=COMPANIES[r.stock_code]||r.stock_code;
     const rawNotes=r.internal_notes||'';
-    const notes=rawNotes?`<button class="copy-btn" onclick="copyNotes(this,'${encodeURIComponent(rawNotes)}')">Copy notes</button>${rawNotes.replace(/\n/g,'<br>')}`:''
+    const notes=rawNotes?`<button class="copy-btn" data-n="${btoa(unescape(encodeURIComponent(rawNotes)))}" onclick="copyNotes(this)">Copy notes</button>${rawNotes.replace(/\n/g,'<br>')}`:''
     return `<tr class="row-${st.toLowerCase()}" data-co="${r.stock_code}" data-st="${st.toLowerCase()}" data-yr="${yr}" data-date="${normDate(r.announcement_date||'')}"><td>${r.stock_code}</td><td></td><td>${firmNm}</td><td></td><td>${r.announcement_date}</td><td>${role||'—'}</td><td>${r.new_holder||'—'}</td><td>${r.previous_holder||'—'}</td><td>${r.effective_date}</td><td class="headline">${fmtHeadline(r.narrative_en||'')}</td><td class="headline">${r.key_events||''}</td><td>${r.bs_date||'—'}</td><td>${lnk}</td><td>${fmtScraped(r.scraped_at)}</td><td class="headline">${notes}</td><td>${chkBtn(ck)}</td></tr>`;
   }).join('');
   document.getElementById('pm-count').textContent=rows.length+' records';
@@ -2294,25 +2346,6 @@ def _fmt_millions(num) -> str:
 
 _PERIOD_SEASON = {"03/31": 1, "06/30": 2, "09/30": 3, "12/31": 4}
 
-_ROLE_FULL_TO_ABBREV = {
-    "Chief Executive Officer": "CEO",
-    "Chief Financial Officer": "CFO",
-    "Chief Finance Officer": "CFO",
-    "Chief Investment Officer": "CIO",
-    "Chief Operating Officer": "COO",
-    "Chief Operations Officer": "COO",
-    "Chief Technology Officer": "CTO",
-    "Chief Strategy Officer": "CSO",
-    "Chairman": "Chair",
-    "General Manager": "GM",
-    "Head of Alternative Investments": "Head of Alts",
-    "Head of Alternative Assets": "Head of Alts",
-    "Head of Alternatives": "Head of Alts",
-    "Global Head of Alternative Investments": "Global Head of Alts",
-    "Global Head of Alternative Assets": "Global Head of Alts",
-    "Global Head of Alternatives": "Global Head of Alts",
-}
-
 def _date_to_period_str(date_str: str) -> str:
     """Convert date string to period label like 'Q1 2025'."""
     m = re.match(r"(\d{4})[/-](\d{2})", date_str or "")
@@ -2612,6 +2645,7 @@ async def run(companies=None, export_excel=True, mode="full", since=None, new_si
 
     # Always build FS from state files so partial runs (--companies X) still show all companies
     all_balance_history = _load_all_balance_history()
+    _populate_aum_cache(all_balance_history)
     # Note: period filtering is now handled inside _build_fs_data using period end dates
 
     # In report-only mode, load FC and PM from latest archive files instead of scraping
