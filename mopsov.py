@@ -2737,14 +2737,23 @@ def _build_pm_internal_notes(r: dict) -> str:
             f"People Moves: {pm_line}\n{_SEP}\n"
             f"Source: {src_line}\n{_SEP}")
 
-def _build_fs_internal_notes(ta: str, inv: str, period: str, pdf_filename: str) -> str:
-    alloc_line = f"Updated AUM: {ta} || Real Estate: {inv} | Date of allocation: {period}"
-    doc_line   = f"Added {pdf_filename}" if pdf_filename else ""
-    return (f"PARTIAL UPDATE-AUM\n{_SEP}\n"
+def _build_fs_internal_notes(ta: str, inv: str, period: str, pdf_filename: str,
+                              firm_name: str = "", stock_code: str = "", url: str = "") -> str:
+    firm_line = " | ".join(p for p in [
+        f"Firm name: {firm_name}" if firm_name else "",
+        f"Stock code: {stock_code}" if stock_code else "",
+    ] if p)
+    aum_line = f"AUM: {ta} | Real Estate: {inv} based on {period} filings"
+    doc_line = f"added {pdf_filename}" if pdf_filename else ""
+    src_line = "https://mopsov.twse.com.tw/mops/web/ezsearch"
+    if url:
+        src_line += f" | {url}"
+    return (f"PARTIAL UPDATE- AUM & AA\n{_SEP}\n"
             f"Summary: \n{_SEP}\n"
-            f"Current portfolio allocation: {alloc_line}\n{_SEP}\n"
+            f"{firm_line}\n"
+            f"{aum_line}\n{_SEP}\n"
             f"Document: {doc_line}\n{_SEP}\n"
-            f"Source: https://mopsov.twse.com.tw/mops/web/ezsearch\n{_SEP}")
+            f"Source: {src_line}\n{_SEP}")
 
 def _fs_filing_url(stock_code: str, period: str) -> str:
     """Return the MOPS iXBRL financial statement URL for a given company and period."""
@@ -2781,7 +2790,11 @@ def _build_fs_data(emops_data: list[dict], balance_history: list[dict],
         is_new = bool(new_since_norm and period and period.replace("/", "-")[:10] >= new_since_norm)
         ta  = _fmt_millions(r.get("total_assets_numeric")) or "—"
         inv = _fmt_millions(r.get("inv_property_numeric")) or "—"
-        internal_notes = _build_fs_internal_notes(ta, inv, period, "") if is_new else ""
+        internal_notes = _build_fs_internal_notes(
+            ta, inv, period, "",
+            firm_name=r["name_en"], stock_code=r["stock_code"],
+            url=_fs_filing_url(r["stock_code"], period),
+        ) if is_new else ""
         rows.append({
             "stock_code":              r["stock_code"],
             "name_en":                 r["name_en"],
@@ -2828,7 +2841,11 @@ def _build_fs_data(emops_data: list[dict], balance_history: list[dict],
         pdf_filename = Path(r.get("pdf_path", "")).name if r.get("pdf_path") else ""
         ta  = _fmt_millions(r.get("total_assets_numeric")) or "—"
         inv = _fmt_millions(r.get("investment_property_numeric")) or "—"
-        internal_notes = _build_fs_internal_notes(ta, inv, period_end, pdf_filename) if is_new else ""
+        internal_notes = _build_fs_internal_notes(
+            ta, inv, period_end, pdf_filename,
+            firm_name=sub_name, stock_code=display_code,
+            url="" if pdf_filename else _fs_filing_url(display_code, period_end),
+        ) if is_new else ""
 
         rows.append({
             "stock_code":              display_code,
