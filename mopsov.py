@@ -2743,7 +2743,7 @@ def _build_fs_internal_notes(ta: str, inv: str, period: str, pdf_filename: str,
         f"Firm name: {firm_name}" if firm_name else "",
         f"Stock code: {stock_code}" if stock_code else "",
     ] if p)
-    aum_line = f"AUM: {ta} | Real Estate: {inv} based on {period} filings"
+    aum_line = f"AUM: {ta} mn | Real Estate: {inv} mn based on {period} filings"
     doc_line = f"added {pdf_filename}" if pdf_filename else ""
     src_line = "https://mopsov.twse.com.tw/mops/web/ezsearch"
     if url:
