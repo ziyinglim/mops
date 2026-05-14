@@ -633,7 +633,7 @@ async def scrape_fund_commitments(stock_code: str, sdate: str = None) -> list[di
         raw_currency = currency_match.group(1) if currency_match else ""
         if raw_currency == "RMB":
             raw_currency = "CNY"
-        formatted_amount, fx_url = await _format_commitment_amount(amount_raw, raw_currency)
+        formatted_amount = await _format_commitment_amount(amount_raw, raw_currency)
         fund_type = _normalize_fund_type(raw_fund_type, fund_name)
         headline = _build_fund_headline(resolved_code, fund_name, formatted_amount, fund_type) if fund_type else ""
         twd_match = re.search(r"TWD ([\d,]+) million", formatted_amount)
@@ -657,7 +657,6 @@ async def scrape_fund_commitments(stock_code: str, sdate: str = None) -> list[di
             "twd_amount_mn": twd_amount_mn,
             "commitment_currency": raw_currency,
             "commitment_amount_numeric": _parse_amount(amount_raw),
-            "fx_url": fx_url,
             "bs_date": bs_date,
             "url": row["url"],
         })
@@ -890,12 +889,10 @@ async def _get_fx_rates(base: str) -> dict[str, float]:
         logger.warning("FX fetch failed [%s]: %s", base, exc)
     return {}
 
-async def _format_commitment_amount(amount_raw: str, orig_currency: str) -> tuple[str, str]:
-    """Returns (formatted_amount_str, fx_url).
-    formatted_amount like 'TWD 1,846 million (EUR 50 million)'.
-    fx_url is an XE.com link for the conversion, empty if no conversion needed."""
+async def _format_commitment_amount(amount_raw: str, orig_currency: str) -> str:
+    """Returns formatted amount string like 'TWD 1,846 million (EUR 50 million)'."""
     if not amount_raw or re.match(r"^N/?A\b", amount_raw, re.I):
-        return "", ""
+        return ""
     # Infer currency from symbol if not explicitly provided (e.g. "US$" → USD, "€" → EUR)
     if not orig_currency:
         sym_map = {"US$": "USD", "NT$": "TWD", "€": "EUR", "£": "GBP", "¥": "JPY", "HK$": "HKD", "A$": "AUD", "S$": "SGD", "C$": "CAD"}
@@ -905,7 +902,7 @@ async def _format_commitment_amount(amount_raw: str, orig_currency: str) -> tupl
                 break
     num_match = re.search(r"\d[\d,]*(?:\.\d+)?", amount_raw.replace(" ", ""))
     if not num_match:
-        return amount_raw, ""
+        return amount_raw
     amount = float(num_match.group().replace(",", ""))
     # Adjust for amounts already expressed in millions/billions
     if re.search(r"\bbillion\b", amount_raw, re.I):
@@ -915,16 +912,15 @@ async def _format_commitment_amount(amount_raw: str, orig_currency: str) -> tupl
     orig_millions = amount / 1e6
 
     if not orig_currency or orig_currency == "TWD":
-        return f"TWD {orig_millions:,.0f} million", ""
+        return f"TWD {orig_millions:,.0f} million"
 
     orig_str = f"{orig_currency} {orig_millions:,.0f} million"
-    fx_url = f"https://www.xe.com/currencyconverter/convert/?Amount={amount:,.0f}&From={orig_currency}&To=TWD"
     rates = await _get_fx_rates(orig_currency)
     twd_rate = rates.get("TWD", 0)
     if twd_rate:
         twd_millions = (amount * twd_rate) / 1e6
-        return f"TWD {twd_millions:,.0f} million ({orig_str})", fx_url
-    return orig_str, fx_url
+        return f"TWD {twd_millions:,.0f} million ({orig_str})"
+    return orig_str
 
 def _firm_display_name(stock_code: str) -> str:
     """Return the public display name for a stock code, handling subsidiaries."""
@@ -1965,7 +1961,7 @@ def _save_run_to_history(fund_commitments, people_moves, emops_data, since, new_
 
     fc_keys = ["stock_code","announcement_date","fund_name","fund_type","commitment_date",
                "commitment_amount_raw","headline","key_events","internal_notes",
-               "bs_date","status","scraped_at","url","fx_url"]
+               "bs_date","status","scraped_at","url"]
     pm_keys = ["stock_code","announcement_date","role_type","role_title","new_holder","previous_holder",
                "change_type","reason","effective_date","narrative_en","key_events","internal_notes",
                "bs_date","status","scraped_at","url"]
@@ -2175,7 +2171,7 @@ function renderFC(rows){
   document.querySelector('#fc-table tbody').innerHTML=rows.map(r=>{
     const st=r.status||'';const yr=(r.announcement_date||'').slice(0,4);
     const nm=r.url?`<a href="${r.url}" target="_blank">${r.fund_name}</a>`:(r.fund_name||'');
-    const amt=r.commitment_amount_raw?(r.fx_url?`<a href="${r.fx_url}" target="_blank">${r.commitment_amount_raw}</a>`:r.commitment_amount_raw):'—';
+    const amt=r.commitment_amount_raw||'—';
     const ck=`chk_fc_${r.stock_code}_${(r.fund_name||'').replace(/\W+/g,'_')}_${r.commitment_date}`;
     const firm=COMPANIES[r.stock_code]||r.stock_code;
     const rawNotes=r.internal_notes||'';
@@ -2446,8 +2442,6 @@ def write_excel(fund_commitments, people_moves, emops_data=None, balance_history
             cell = ws.cell(i, _firm_col); cell.hyperlink = firm_url; cell.font = _link_font
         if r.get("url"):
             cell = ws.cell(i, _name_col); cell.hyperlink = r["url"]; cell.font = _link_font
-        if r.get("fx_url"):
-            cell = ws.cell(i, _amt_col); cell.hyperlink = r["fx_url"]; cell.font = _link_font
         _status_fill(ws, i, r.get("status"))
     _autofit(ws)
 
@@ -3038,14 +3032,13 @@ async def run(companies=None, export_excel=True, mode="full", since=None, new_si
             r["stock_code"] = _fc_resolve_code(r["stock_code"], r.get("subject", ""))
             r["fund_name"] = _clean_fund_name(r.get("fund_name", ""))
             r["fund_type"] = _normalize_fund_type(r.get("fund_type", ""), r.get("fund_name", ""))
-            formatted, fx = await _format_commitment_amount(
+            formatted = await _format_commitment_amount(
                 r.get("commitment_amount_raw", ""), r.get("commitment_currency", "")
             )
             amt = formatted or r.get("commitment_amount_raw", "")
             if formatted:
                 twd_m = re.search(r"TWD ([\d,]+) million", formatted)
                 r["twd_amount_mn"] = twd_m.group(1) if twd_m else r.get("twd_amount_mn", "")
-                r["fx_url"] = fx
             if r.get("fund_type"):
                 r["headline"] = _build_fund_headline(
                     r["stock_code"], r.get("fund_name", ""), amt, r.get("fund_type", ""))
