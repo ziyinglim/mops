@@ -707,9 +707,9 @@ def _page_css() -> None:
 }
 .stApp { background: #f5f6fa !important; }
 
-.mops-hdr { background: #FF6633; color: #fff; padding: 14px 0;
+.mops-hdr { background: #FF6633; color: #fff; padding: 8px 28px;
             font-family: 'Segoe UI', sans-serif; }
-.mops-hdr h1 { font-size: 1.2rem; font-weight: 700; margin: 0; }
+.mops-hdr h1 { font-size: 1rem; font-weight: 700; margin: 0; }
 
 .mops-metrics { display: flex; gap: 14px; padding: 14px 0 10px;
                 background: #f5f6fa; font-family: 'Segoe UI', sans-serif; }
