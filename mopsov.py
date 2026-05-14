@@ -838,7 +838,14 @@ def _build_narrative(stock_code, role, new_holder, prev_holder, change_type, eff
 _AUM_CACHE: dict[str, tuple[str, str]] = {}
 
 def _populate_aum_cache(balance_history: list[dict]) -> None:
-    """Build _AUM_CACHE from in-memory balance history (avoids redundant file I/O)."""
+    """Build _AUM_CACHE from in-memory balance history (avoids redundant file I/O).
+
+    For financial holding companies the AUM must reflect the group's *consolidated*
+    total assets, not a single subsidiary's figure.  Consolidated records are
+    identified by subsidiary_code == parent stock_code (the holding company filed
+    the report under its own TWSE doc code, usually for Q1 and Q3).  These are
+    prioritised; subsidiary individual records are only used as a fallback.
+    """
     by_key: dict[str, list[dict]] = {}
     for rec in balance_history:
         sub_code = rec.get("subsidiary_code", "")
@@ -847,9 +854,29 @@ def _populate_aum_cache(balance_history: list[dict]) -> None:
         for key in {display_code, parent_code}:
             if key:
                 by_key.setdefault(key, []).append(rec)
+
     for key, records in by_key.items():
-        records.sort(key=lambda r: (r.get("roc_year", 0), r.get("season", 0)), reverse=True)
-        for rec in records:
+        entry = _WATCHLIST_MAP.get(key, {})
+        is_fhc = bool(_HOLDING_RE.search(entry.get("name_en", "")))
+
+        if is_fhc:
+            # Prefer consolidated records (those where the holding company filed
+            # under its own stock code: subsidiary_code == parent stock_code).
+            # These records may pre-date the roc_year/season fields, so sort by
+            # period string which is lexicographically correct (e.g. "2025/Q3").
+            own = [r for r in records if str(r.get("subsidiary_code", "")) == key]
+            if own:
+                own.sort(key=lambda r: r.get("period", ""), reverse=True)
+                use = own
+            else:
+                # No consolidated record available — fall back to subsidiary data
+                records.sort(key=lambda r: (r.get("roc_year", 0), r.get("season", 0)), reverse=True)
+                use = records
+        else:
+            records.sort(key=lambda r: (r.get("roc_year", 0), r.get("season", 0)), reverse=True)
+            use = records
+
+        for rec in use:
             total_k = rec.get("total_assets_numeric")
             if total_k is None:
                 continue
