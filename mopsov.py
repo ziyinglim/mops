@@ -1986,7 +1986,7 @@ function renderEM(rows){
     const webUrl=r.web_address?(r.web_address.match(/^https?:\/\//)?r.web_address:'https://'+r.web_address):'';
     const webCell=webUrl?`<a href="${webUrl}" target="_blank">${r.web_address}</a>`:(r.web_address||'—');
     const ck=`chk_em_${r.stock_code}`;
-    return `<tr data-co="${r.stock_code}" data-date="${normDate(r.scraped_at||'')}"><td>${r.stock_code}</td><td>${FIRM_IDS[r.stock_code]||''}</td><td>${firmCell(r.stock_code,r.company_name_en||r.name_en||'—')}</td><td>${FIRM_TYPES[r.stock_code]||''}</td><td>${r.period||'—'}</td><td>${r.telephone||'—'}</td><td>${webCell}</td><td>${r.address||'—'}</td><td>${fmtScraped(r.scraped_at)}</td><td>${chkBtn(ck)}</td></tr>`;
+    return `<tr data-co="${r.stock_code}" data-date="${normDate(r.scraped_at||'')}"><td>${r.stock_code}</td><td>${FIRM_IDS[r.stock_code]||''}</td><td>${firmCell(r.stock_code,r.name_en||r.company_name_en||'—')}</td><td>${FIRM_TYPES[r.stock_code]||''}</td><td>${r.period||'—'}</td><td>${r.telephone||'—'}</td><td>${webCell}</td><td>${r.address||'—'}</td><td>${fmtScraped(r.scraped_at)}</td><td>${chkBtn(ck)}</td></tr>`;
   }).join('');
   document.getElementById('em-count').textContent=rows.length+' companies';
 }
@@ -2329,7 +2329,7 @@ def write_excel(fund_commitments, people_moves, emops_data=None, balance_history
             else:
                 scraped = (r.get("scraped_at") or "")[:10].replace("-", "/")
                 ws.append([code, _id_map.get(code, ""),
-                           r.get("company_name_en") or r.get("name_en"),
+                           r.get("name_en") or r.get("company_name_en"),
                            _type_map.get(code, ""), r.get("period"),
                            r.get("telephone"), r.get("web_address"),
                            r.get("address"), scraped, ""])
