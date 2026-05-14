@@ -888,25 +888,16 @@ def _populate_aum_cache(balance_history: list[dict]) -> None:
             break
 
 def _get_latest_aum(stock_code: str) -> tuple[str, str]:
-    """Returns (aum_string, balance_sheet_period) from quarterly FS balance history.
-    Checks in-memory cache first; falls back to file-based lookup when cache is empty."""
+    """Returns (aum_string, balance_sheet_period) for the given stock code.
+    Each entity is looked up by its own code only — no parent fallback.
+    If the subsidiary's AUM is missing or unreadable, returns ('', '') so
+    headlines omit the figure rather than inheriting a wrong parent value."""
     if _AUM_CACHE:
-        result = _AUM_CACHE.get(stock_code)
-        if result:
-            return result
-        parent = _SUBSIDIARY_TO_PARENT.get(stock_code)
-        if parent:
-            return _AUM_CACHE.get(parent, ("", ""))
-        return "", ""
-    # File-based fallback (used before cache is populated)
+        return _AUM_CACHE.get(stock_code, ("", ""))
+    # File-based fallback used before cache is populated (standalone run)
     path = STATE_DIR / f"{stock_code}_balance_history.json"
     if not path.exists():
-        parent = _SUBSIDIARY_TO_PARENT.get(stock_code)
-        if not parent:
-            return "", ""
-        path = STATE_DIR / f"{parent}_balance_history.json"
-        if not path.exists():
-            return "", ""
+        return "", ""
     try:
         records = json.loads(path.read_text(encoding="utf-8"))
         records.sort(key=lambda r: (r.get("roc_year", 0), r.get("season", 0)), reverse=True)
@@ -915,7 +906,7 @@ def _get_latest_aum(stock_code: str) -> tuple[str, str]:
             if total_k is None:
                 continue
             period = rec.get("period", "")
-            total = total_k * 1000
+            total  = total_k * 1000
             if total >= 1e9:
                 return f"TWD {total/1e9:,.0f} billion", period
             if total >= 1e6:
