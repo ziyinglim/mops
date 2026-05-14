@@ -930,12 +930,23 @@ def _firm_display_name(stock_code: str) -> str:
     stub = next((s for s in _SUBSIDIARY_STUBS if s["stock_code"] == stock_code), None)
     return stub["company_name_en"] if stub else stock_code
 
+def _firm_type(stock_code: str) -> str:
+    """Return company_type for stock_code, falling back to parent for subsidiaries."""
+    entry = _WATCHLIST_MAP.get(stock_code)
+    if entry:
+        return entry.get("company_type", "firm")
+    parent_code = _SUBSIDIARY_TO_PARENT.get(stock_code)
+    if parent_code:
+        return _WATCHLIST_MAP.get(parent_code, {}).get("company_type", "firm")
+    return "firm"
+
+
 def _build_fund_headline(stock_code, fund_name, formatted_amount, fund_type=""):
     firm_name = _firm_display_name(stock_code)
     aum, _ = _get_latest_aum(stock_code)
     ft_lower = fund_type.lower() if fund_type else "alternative"
     title = f"{firm_name} commits to new {ft_lower} fund"
-    ref = f"The {aum} [firm type]" if aum else "[firm type]"
+    ref = f"The {aum} {_firm_type(stock_code)}" if aum else f"The {_firm_type(stock_code)}"
     committed = f"has committed {formatted_amount} to" if formatted_amount else "has committed to"
     body = f"{ref} {committed} {fund_name}."
     return f"{title}\n\n{body}"
@@ -943,7 +954,7 @@ def _build_fund_headline(stock_code, fund_name, formatted_amount, fund_type=""):
 def _build_narrative(stock_code, role, new_holder, prev_holder, change_type, effective_date):
     firm_name = _firm_display_name(stock_code)
     aum, _ = _get_latest_aum(stock_code)
-    company_ref = f"The {aum} [firm type]" if aum else "[firm type]"
+    company_ref = f"The {aum} {_firm_type(stock_code)}" if aum else f"The {_firm_type(stock_code)}"
     date_str = _format_date(effective_date)
     eff = f", effective {date_str}" if date_str else ""
     role_abbrev = _ROLE_FULL_TO_ABBREV.get(role, role)
