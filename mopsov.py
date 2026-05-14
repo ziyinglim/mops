@@ -11,7 +11,9 @@ import json
 import logging
 import re
 import sys
+import threading
 import warnings
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
 sys.stdout.reconfigure(encoding="utf-8")
 from datetime import datetime, timezone, timedelta
@@ -41,10 +43,98 @@ _EMOPS_PROFILE_HEADERS = {
     "Content-Type": "application/x-www-form-urlencoded",
 }
 
-OUTPUT_DIR  = Path("output")
-ARCHIVE_DIR = Path("storage/archive")
-STATE_DIR   = Path("storage/state")
-PDF_DIR     = Path("storage/pdfs")
+OUTPUT_DIR        = Path("output")
+ARCHIVE_DIR       = Path("storage/archive")
+STATE_DIR         = Path("storage/state")
+PDF_DIR           = Path("storage/pdfs")
+CHECK_STATE_PATH  = STATE_DIR / "check_states.json"
+API_PORT          = 8502   # port for shared review-state sync; must be open on the host server
+
+# ── Shared review-state API ────────────────────────────────────────────────────
+_file_lock = threading.Lock()
+
+
+def _read_states() -> dict:
+    if not CHECK_STATE_PATH.exists():
+        return {}
+    with _file_lock:
+        try:
+            return json.loads(CHECK_STATE_PATH.read_text(encoding="utf-8"))
+        except Exception:
+            return {}
+
+
+def _write_states(patch: dict) -> None:
+    STATE_DIR.mkdir(parents=True, exist_ok=True)
+    with _file_lock:
+        existing: dict = {}
+        if CHECK_STATE_PATH.exists():
+            try:
+                existing = json.loads(CHECK_STATE_PATH.read_text(encoding="utf-8"))
+            except Exception:
+                pass
+        existing.update(patch)
+        CHECK_STATE_PATH.write_text(
+            json.dumps(existing, indent=2, ensure_ascii=False), encoding="utf-8"
+        )
+
+
+class _CheckHandler(BaseHTTPRequestHandler):
+    def _cors(self) -> None:
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+
+    def do_OPTIONS(self) -> None:
+        self.send_response(204); self._cors(); self.end_headers()
+
+    def do_GET(self) -> None:
+        if self.path.rstrip("/") not in ("/api/checks", ""):
+            self.send_response(404); self.end_headers(); return
+        body = json.dumps(_read_states(), ensure_ascii=False).encode("utf-8")
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json")
+        self._cors(); self.end_headers(); self.wfile.write(body)
+
+    def do_POST(self) -> None:
+        length = int(self.headers.get("Content-Length", 0))
+        try:
+            payload = json.loads(self.rfile.read(length))
+            _write_states(payload)
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self._cors(); self.end_headers(); self.wfile.write(b'{"ok":true}')
+        except Exception as exc:
+            self.send_response(500); self._cors(); self.end_headers()
+            self.wfile.write(json.dumps({"error": str(exc)}).encode())
+
+    def log_message(self, *args) -> None:
+        pass
+
+
+_api_started = False
+_api_lock    = threading.Lock()
+
+
+def start_api_server(port: int = API_PORT) -> None:
+    """Start the check-state sync server in a background daemon thread.
+
+    Safe to call multiple times — only one server is ever started per process.
+    Call this from your Streamlit app.py (or any wrapper) before serving the report:
+
+        import mopsov
+        mopsov.start_api_server()
+    """
+    global _api_started
+    with _api_lock:
+        if _api_started:
+            return
+        try:
+            srv = HTTPServer(("0.0.0.0", port), _CheckHandler)
+            threading.Thread(target=srv.serve_forever, daemon=True).start()
+            _api_started = True
+        except OSError:
+            _api_started = True  # already bound (hot-reload)
 
 # Default date range — 2 years back to today
 SDATE = (datetime.now() - timedelta(days=730)).strftime("%Y/%m/%d")
@@ -1913,7 +2003,7 @@ def write_html_report(fund_commitments, people_moves, emops_data=None, balance_h
 
     # JS is a plain string (not f-string) so template literals work without escaping
     js = (
-        f"<script>\nconst COMPANIES={companies_js};\nconst FIRM_IDS={firm_ids_js};\nconst FIRM_TYPES={firm_types_js};\nconst FIRM_URLS={firm_urls_js};\nconst HISTORY = "
+        f"<script>\nconst COMPANIES={companies_js};\nconst FIRM_IDS={firm_ids_js};\nconst FIRM_TYPES={firm_types_js};\nconst FIRM_URLS={firm_urls_js};\nconst _API_PORT={API_PORT};\nconst HISTORY = "
         + history_json
         + f";\nconst BALANCE_HISTORY = "
         + balance_history_json
@@ -1923,8 +2013,50 @@ function badge(st){const m={NEW:'new',HISTORICAL:'his',CHANGED:'chg',UNCHANGED:'
 function fv(val,changed){return changed?`<span class="field-chg" title="Changed since last run">${val||'—'}</span>`:(val||'—');}
 function fmtHeadline(hl){if(!hl)return '';const parts=hl.split('\n\n');if(parts.length<2)return hl;return `<strong>${parts[0]}</strong><br><span style="font-style:italic">${parts.slice(1).join('<br>')}</span>`;}
 function firmCell(code,name){const u=FIRM_URLS[code];return u?`<a href="${u}" target="_blank">${name}</a>`:name;}
-function chkGet(key){try{return JSON.parse(localStorage.getItem(key)||'null');}catch{return null;}}
-function chkSet(key,state,name){localStorage.setItem(key,JSON.stringify({state,name,ts:new Date().toISOString()}));}
+// Review-state sync: uses shared API when reachable, falls back to localStorage per-browser.
+// API server is started by calling mopsov.start_api_server() from your app wrapper.
+(function(){
+  var _h='';
+  try{_h=window.parent.location.hostname;}catch(e){}
+  if(!_h)try{_h=window.location.hostname;}catch(e){}
+  if(!_h)_h='localhost';
+  var _api=window.location.protocol+'//'+_h+':'+_API_PORT+'/api/checks';
+  var _mem={};var _useApi=false;
+  window.chkGet=function(key){return _mem[key]||null;};
+  window.chkSet=function(key,state,name){
+    var d={state:state,name:name,ts:new Date().toISOString()};
+    _mem[key]=d;
+    if(_useApi){
+      fetch(_api,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({[key]:d})}).catch(function(){});
+    }else{try{localStorage.setItem(key,JSON.stringify(d));}catch(e){}}
+  };
+  function _applyAll(){
+    document.querySelectorAll('.chk-wrap').forEach(function(wrap){
+      var btn=wrap.querySelector('.chk-btn');if(!btn)return;
+      var m=(btn.getAttribute('onclick')||'').match(/toggleCheck\(this,'([^']+)'\)/);if(!m)return;
+      var key=m[1];var d=_mem[key]||{};var st=d.state||'pending';
+      var lbl={pending:'Pending',checked:'Checked ✓',irrelevant:'Irrelevant'};
+      var cls={pending:'chk-pend',checked:'chk-done',irrelevant:'chk-irrel'};
+      btn.textContent=lbl[st]||'Pending';btn.className='chk-btn '+(cls[st]||'chk-pend');
+      var inp=wrap.querySelector('.chk-name');if(inp&&d.name)inp.value=d.name;
+      var tsEl=wrap.querySelector('.chk-ts');if(tsEl&&d.ts&&typeof fmtTs==='function')tsEl.textContent=fmtTs(d.ts);
+    });
+  }
+  function _sync(){
+    fetch(_api).then(function(r){return r.json();}).then(function(data){
+      _useApi=true;Object.assign(_mem,data);_applyAll();
+    }).catch(function(){
+      if(!_useApi){
+        try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);
+          try{var v=JSON.parse(localStorage.getItem(k));if(v&&v.state)_mem[k]=v;}catch(e){}}
+          _applyAll();
+        }catch(e){}
+      }
+    });
+  }
+  document.addEventListener('DOMContentLoaded',function(){setTimeout(_sync,250);});
+  setInterval(_sync,30000);
+})();
 function fmtTs(iso){if(!iso)return '';try{const d=new Date(iso);return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})+' '+d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});}catch{return '';}}
 function copyNotes(btn){
   const text=decodeURIComponent(escape(atob(btn.dataset.n||'')));
