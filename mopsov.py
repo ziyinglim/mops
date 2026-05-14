@@ -2794,34 +2794,39 @@ async def run(companies=None, export_excel=True, mode="full", since=None, new_si
             formatted, fx = await _format_commitment_amount(
                 r.get("commitment_amount_raw", ""), r.get("commitment_currency", "")
             )
+            amt = formatted or r.get("commitment_amount_raw", "")
             if formatted:
                 twd_m = re.search(r"TWD ([\d,]+) million", formatted)
                 r["twd_amount_mn"] = twd_m.group(1) if twd_m else r.get("twd_amount_mn", "")
                 r["fx_url"] = fx
-                r["headline"] = (
-                    _build_fund_headline(r["stock_code"], r.get("fund_name", ""), formatted,
-                                         r.get("fund_type", ""))
-                    if r.get("fund_type") else ""
-                )
-                r["key_events"] = (
-                    _build_fc_key_event(r["stock_code"],
-                                        r.get("commitment_date", "") or r.get("announcement_date", ""),
-                                        r.get("fund_name", ""), formatted, r.get("fund_type", ""))
-                    if r.get("fund_type") else ""
-                )
+            if r.get("fund_type"):
+                r["headline"] = _build_fund_headline(
+                    r["stock_code"], r.get("fund_name", ""), amt, r.get("fund_type", ""))
+                r["key_events"] = _build_fc_key_event(
+                    r["stock_code"],
+                    r.get("commitment_date", "") or r.get("announcement_date", ""),
+                    r.get("fund_name", ""), amt, r.get("fund_type", ""))
 
-    # Add internal_notes for NEW records
+    # Re-apply date-based status so internal_notes fire for every record inside
+    # the --new-since window, regardless of mode or whether the record existed in
+    # a prior run.  In report-only mode _apply_date_status was never called, so
+    # this is the primary gate.  In full mode it is a harmless re-application.
+    all_funds  = _apply_date_status(all_funds,  new_since, "announcement_date")
+    all_people = _apply_date_status(all_people, new_since, "announcement_date")
+
+    # Generate internal_notes for every NEW record (always regenerate, never rely
+    # on a cached value from a prior archive so the text reflects the latest AUM).
     for r in all_funds:
         if r.get("status") == "NEW":
             r["internal_notes"] = _build_fc_internal_notes(r)
         else:
-            r.setdefault("internal_notes", "")
+            r["internal_notes"] = ""
 
     for r in all_people:
         if r.get("status") == "NEW":
             r["internal_notes"] = _build_pm_internal_notes(r)
         else:
-            r.setdefault("internal_notes", "")
+            r["internal_notes"] = ""
 
     print_results(all_funds, all_people)
     if export_excel:
