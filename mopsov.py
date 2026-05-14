@@ -1873,7 +1873,16 @@ def _clean_address(addr: str) -> str:
         return addr
     addr = _MOJIBAKE_RE.sub(', ', addr)
     addr = addr.replace('、', ', ').replace('，', ', ')
+    # Remove duplicate commas
     addr = re.sub(r',\s*,', ', ', addr)
+    # Ensure exactly one space after every comma
+    addr = re.sub(r',\s*', ', ', addr)
+    # Add period+space after road abbreviations directly followed by a letter/digit with no space
+    # e.g. "RdTaipei" → "Rd. Taipei", "Rd.Taipei" → "Rd. Taipei"
+    addr = re.sub(r'\b(Rd|St|Ave|Blvd|Ln|Dr|Sec)\.?([A-Z\d])', r'\1. \2', addr)
+    # Ensure space after No./Sec./F. before a digit: "No.100" → "No. 100"
+    addr = re.sub(r'\b(No|Sec|Fl?)\.(\S)', r'\1. \2', addr)
+    # Collapse multiple spaces
     addr = re.sub(r'\s+', ' ', addr).strip()
     # Normalise to title case only if the string is mostly uppercase
     if addr == addr.upper():
@@ -1909,22 +1918,29 @@ def _clean_company_name(name: str) -> str:
     return name
 
 def _format_tw_phone(phone: str) -> str:
+    """Normalize any Taiwan phone format to +886-X-XXXX-XXXX (landline) or +886-9XX-XXX-XXX (mobile).
+    Always outputs exactly 3 dashes regardless of input separators."""
     if not phone:
         return phone
-    if phone.startswith('+'):
+    digits = re.sub(r'\D', '', phone)
+    if not digits:
         return phone
-    clean = re.sub(r'[()（）\s]', '', phone)
-    if clean.startswith('886'):
-        return '+' + clean
-    if clean.startswith('0'):
-        if clean.startswith('09'):
-            return '+886-' + clean[1:]
-        m = re.match(r'^0(\d+?)[-]?(.*)', clean)
-        if m:
-            return f'+886-{m.group(1)}-{m.group(2)}'
-        return '+886-' + clean[1:]
-    if len(re.sub(r'\D', '', clean)) == 8:
-        return f'+886-2-{clean}'
+    # Strip country code then leading zero — always work from bare local digits
+    if digits.startswith('886'):
+        digits = digits[3:]
+    if digits.startswith('0'):
+        digits = digits[1:]
+    n = len(digits)
+    if n == 9:
+        if digits[0] == '9':
+            # Mobile (09X-XXX-XXX): +886-9XX-XXX-XXX
+            return f'+886-{digits[:3]}-{digits[3:6]}-{digits[6:]}'
+        else:
+            # Landline (0X-XXXX-XXXX): +886-X-XXXX-XXXX
+            return f'+886-{digits[0]}-{digits[1:5]}-{digits[5:]}'
+    if n == 8:
+        # 8-digit Taipei local without area code: +886-2-XXXX-XXXX
+        return f'+886-2-{digits[:4]}-{digits[4:]}'
     return phone
 
 # ── Excel Output ──────────────────────────────────────────────────────────────
