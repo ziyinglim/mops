@@ -54,55 +54,81 @@ _SEASON_LABEL   = {1: "Q1", 2: "H1", 3: "Q3", 4: "Q4"}
 _FS_SEASON_DATE = {1: "03/31", 2: "06/30", 3: "09/30", 4: "12/31"}
 
 WATCHLIST = [
+    # ── firm_id: replace with your internal numeric ID (4-6 digits) ────────────
+    # ── firm_url: replace with your internal profile/CRM link ──────────────────
     {"stock_code": "2881", "name_en": "Fubon Financial Holding",                "company_type": "financial holding company",
+     "firm_id": "10001", "firm_url": "https://example.com",
      "f26_name_en": "Fubon Life Insurance", "f26_display_code": "28810012",
      "f26_subsidiaries": [
          {"display_code": "28810012", "name_en": "Fubon Life Insurance"},
          {"display_code": "28810006", "name_en": "Taipei Fubon Commercial Bank"},
      ]},
     {"stock_code": "2882", "name_en": "Cathay Financial Holdings",               "company_type": "financial holding company",
+     "firm_id": "10002", "firm_url": "https://example.com",
      "f26_subsidiaries": [
          {"display_code": "28820001", "name_en": "Cathay Life Insurance"},
          {"display_code": "28820004", "name_en": "Cathay United Bank"},
      ]},
     {"stock_code": "2891", "name_en": "CTBC Financial Holdings",                 "company_type": "financial holding company",
+     "firm_id": "10003", "firm_url": "https://example.com",
      "f26_name_en": "CTBC Bank",
      "f26_subsidiaries": [
          {"display_code": "28910001", "name_en": "CTBC Bank"},
      ]},
-    {"stock_code": "2330", "name_en": "Taiwan Semiconductor Manufacturing Company", "company_type": "semiconductor company"},
-    {"stock_code": "5874", "name_en": "Nan Shan Life Insurance",                 "company_type": "insurance company"},
-    {"stock_code": "2317", "name_en": "Foxconn Technology Group",                "company_type": "technology company"},
+    {"stock_code": "2330", "name_en": "Taiwan Semiconductor Manufacturing Company", "company_type": "semiconductor company",
+     "firm_id": "10004", "firm_url": "https://example.com"},
+    {"stock_code": "5874", "name_en": "Nan Shan Life Insurance",                 "company_type": "insurance company",
+     "firm_id": "10005", "firm_url": "https://example.com"},
+    {"stock_code": "2317", "name_en": "Foxconn Technology Group",                "company_type": "technology company",
+     "firm_id": "10006", "firm_url": "https://example.com"},
     {"stock_code": "2886", "name_en": "Mega Financial Holdings",                 "company_type": "financial holding company",
+     "firm_id": "10007", "firm_url": "https://example.com",
      "f26_name_en": "Mega International Commercial Bank",
      "f26_subsidiaries": [
          {"display_code": "28860005", "name_en": "Mega International Commercial Bank"},
      ]},
-    {"stock_code": "2880", "name_en": "Hua Nan Commercial Bank",                 "company_type": "commercial bank"},
-    {"stock_code": "5857", "name_en": "Land Bank of Taiwan",                     "company_type": "state-owned bank"},
-    {"stock_code": "2888", "name_en": "Shin Kong Life Insurance",                "company_type": "insurance company", "delisted": True},
-    {"stock_code": "2801", "name_en": "Chang Hwa Bank",                          "company_type": "commercial bank"},
+    {"stock_code": "2880", "name_en": "Hua Nan Commercial Bank",                 "company_type": "commercial bank",
+     "firm_id": "10008", "firm_url": "https://example.com"},
+    {"stock_code": "5857", "name_en": "Land Bank of Taiwan",                     "company_type": "state-owned bank",
+     "firm_id": "10009", "firm_url": "https://example.com"},
+    {"stock_code": "2888", "name_en": "Shin Kong Life Insurance",                "company_type": "insurance company",
+     "firm_id": "10010", "firm_url": "https://example.com", "delisted": True},
+    {"stock_code": "2801", "name_en": "Chang Hwa Bank",                          "company_type": "commercial bank",
+     "firm_id": "10011", "firm_url": "https://example.com"},
     {"stock_code": "2890", "name_en": "SinoPac Financial Holdings",               "company_type": "financial holding company",
+     "firm_id": "10012", "firm_url": "https://example.com",
      "f26_name_en": "Bank SinoPac",
      "f26_subsidiaries": [
          {"display_code": "28900001", "name_en": "Bank SinoPac"},
      ]},
-    {"stock_code": "5876", "name_en": "Shanghai Commercial & Savings Bank",      "company_type": "commercial bank"},
+    {"stock_code": "5876", "name_en": "Shanghai Commercial & Savings Bank",      "company_type": "commercial bank",
+     "firm_id": "10013", "firm_url": "https://example.com"},
     {"stock_code": "2885", "name_en": "Yuanta Financial Holdings",               "company_type": "financial holding company",
+     "firm_id": "10014", "firm_url": "https://example.com",
      "f26_name_en": "Yuanta Commercial Bank",
      "f26_subsidiaries": [
          {"display_code": "28850007", "name_en": "Yuanta Commercial Bank"},
      ]},
-    {"stock_code": "2833", "name_en": "Taiwan Life Insurance",                   "company_type": "insurance company"},
-    {"stock_code": "2867", "name_en": "Mercuries Life Insurance",                "company_type": "insurance company"},
-    {"stock_code": "5873", "name_en": "TransGlobe Life Insurance",               "company_type": "insurance company"},
-    {"stock_code": "2382", "name_en": "Quanta Computer",                         "company_type": "technology company"},
-    {"stock_code": "3231", "name_en": "Wistron Corporation",                     "company_type": "technology company"},
-    {"stock_code": "3711", "name_en": "ASE Technology Holding",                  "company_type": "semiconductor company"},
-    {"stock_code": "5859", "name_en": "Farglory Life Insurance",                 "company_type": "insurance company"},
-    {"stock_code": "2454", "name_en": "MediaTek",                                "company_type": "semiconductor company"},
-    {"stock_code": "2897", "name_en": "O-Bank",                                  "company_type": "digital bank"},
-    {"stock_code": "2002", "name_en": "China Steel Corporation",                 "company_type": "steel company"},
+    {"stock_code": "2833", "name_en": "Taiwan Life Insurance",                   "company_type": "insurance company",
+     "firm_id": "10015", "firm_url": "https://example.com"},
+    {"stock_code": "2867", "name_en": "Mercuries Life Insurance",                "company_type": "insurance company",
+     "firm_id": "10016", "firm_url": "https://example.com"},
+    {"stock_code": "5873", "name_en": "TransGlobe Life Insurance",               "company_type": "insurance company",
+     "firm_id": "10017", "firm_url": "https://example.com"},
+    {"stock_code": "2382", "name_en": "Quanta Computer",                         "company_type": "technology company",
+     "firm_id": "10018", "firm_url": "https://example.com"},
+    {"stock_code": "3231", "name_en": "Wistron Corporation",                     "company_type": "technology company",
+     "firm_id": "10019", "firm_url": "https://example.com"},
+    {"stock_code": "3711", "name_en": "ASE Technology Holding",                  "company_type": "semiconductor company",
+     "firm_id": "10020", "firm_url": "https://example.com"},
+    {"stock_code": "5859", "name_en": "Farglory Life Insurance",                 "company_type": "insurance company",
+     "firm_id": "10021", "firm_url": "https://example.com"},
+    {"stock_code": "2454", "name_en": "MediaTek",                                "company_type": "semiconductor company",
+     "firm_id": "10022", "firm_url": "https://example.com"},
+    {"stock_code": "2897", "name_en": "O-Bank",                                  "company_type": "digital bank",
+     "firm_id": "10023", "firm_url": "https://example.com"},
+    {"stock_code": "2002", "name_en": "China Steel Corporation",                 "company_type": "steel company",
+     "firm_id": "10024", "firm_url": "https://example.com"},
 ]
 _WATCHLIST_MAP = {w["stock_code"]: w for w in WATCHLIST}
 
@@ -1881,10 +1907,13 @@ def write_html_report(fund_commitments, people_moves, emops_data=None, balance_h
     ) + "," + ",".join(
         f'"{s["stock_code"]}":"{s["company_name_en"]}"' for s in _SUBSIDIARY_STUBS
     ) + "}"
+    firm_ids_js   = "{" + ",".join(f'"{w["stock_code"]}":"{w.get("firm_id","")}"'      for w in WATCHLIST) + "}"
+    firm_types_js = "{" + ",".join(f'"{w["stock_code"]}":"{w.get("company_type","")}"' for w in WATCHLIST) + "}"
+    firm_urls_js  = "{" + ",".join(f'"{w["stock_code"]}":"{w.get("firm_url","")}"'     for w in WATCHLIST) + "}"
 
     # JS is a plain string (not f-string) so template literals work without escaping
     js = (
-        f"<script>\nconst COMPANIES={companies_js};\nconst HISTORY = "
+        f"<script>\nconst COMPANIES={companies_js};\nconst FIRM_IDS={firm_ids_js};\nconst FIRM_TYPES={firm_types_js};\nconst FIRM_URLS={firm_urls_js};\nconst HISTORY = "
         + history_json
         + f";\nconst BALANCE_HISTORY = "
         + balance_history_json
@@ -1893,6 +1922,7 @@ def write_html_report(fund_commitments, people_moves, emops_data=None, balance_h
 function badge(st){const m={NEW:'new',HISTORICAL:'his',CHANGED:'chg',UNCHANGED:''};const c=m[st]||'';return c?`<span class="badge ${c}">${st}</span>`:(st||'');}
 function fv(val,changed){return changed?`<span class="field-chg" title="Changed since last run">${val||'—'}</span>`:(val||'—');}
 function fmtHeadline(hl){if(!hl)return '';const parts=hl.split('\n\n');if(parts.length<2)return hl;return `<strong>${parts[0]}</strong><br><span style="font-style:italic">${parts.slice(1).join('<br>')}</span>`;}
+function firmCell(code,name){const u=FIRM_URLS[code];return u?`<a href="${u}" target="_blank">${name}</a>`:name;}
 function chkGet(key){try{return JSON.parse(localStorage.getItem(key)||'null');}catch{return null;}}
 function chkSet(key,state,name){localStorage.setItem(key,JSON.stringify({state,name,ts:new Date().toISOString()}));}
 function fmtTs(iso){if(!iso)return '';try{const d=new Date(iso);return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})+' '+d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});}catch{return '';}}
@@ -1951,12 +1981,12 @@ function renderRun(idx){
 function renderEM(rows){
   document.querySelector('#em-table tbody').innerHTML=rows.map(r=>{
     if(r.no_filing_data){
-      return `<tr data-co="${r.stock_code}" data-date=""><td>${r.stock_code}</td><td></td><td>${r.company_name_en}</td><td colspan="7" style="color:#888;font-style:italic;">Information not available on filings — please refer to firm website</td><td></td></tr>`;
+      return `<tr data-co="${r.stock_code}" data-date=""><td>${r.stock_code}</td><td>${FIRM_IDS[r.stock_code]||''}</td><td>${firmCell(r.stock_code,r.company_name_en)}</td><td colspan="7" style="color:#888;font-style:italic;">Information not available on filings — please refer to firm website</td><td></td></tr>`;
     }
     const webUrl=r.web_address?(r.web_address.match(/^https?:\/\//)?r.web_address:'https://'+r.web_address):'';
     const webCell=webUrl?`<a href="${webUrl}" target="_blank">${r.web_address}</a>`:(r.web_address||'—');
     const ck=`chk_em_${r.stock_code}`;
-    return `<tr data-co="${r.stock_code}" data-date="${normDate(r.scraped_at||'')}"><td>${r.stock_code}</td><td></td><td>${r.company_name_en||r.name_en||'—'}</td><td></td><td>${r.period||'—'}</td><td>${r.telephone||'—'}</td><td>${webCell}</td><td>${r.address||'—'}</td><td>${fmtScraped(r.scraped_at)}</td><td>${chkBtn(ck)}</td></tr>`;
+    return `<tr data-co="${r.stock_code}" data-date="${normDate(r.scraped_at||'')}"><td>${r.stock_code}</td><td>${FIRM_IDS[r.stock_code]||''}</td><td>${firmCell(r.stock_code,r.company_name_en||r.name_en||'—')}</td><td>${FIRM_TYPES[r.stock_code]||''}</td><td>${r.period||'—'}</td><td>${r.telephone||'—'}</td><td>${webCell}</td><td>${r.address||'—'}</td><td>${fmtScraped(r.scraped_at)}</td><td>${chkBtn(ck)}</td></tr>`;
   }).join('');
   document.getElementById('em-count').textContent=rows.length+' companies';
 }
@@ -1975,7 +2005,7 @@ function renderFS(rows){
     const rowCls=r.extraction_failed?'style="background:#fff8f0"':'';
     const rawNotes=r.internal_notes||'';
     const notes=rawNotes?`<button class="copy-btn" data-n="${btoa(unescape(encodeURIComponent(rawNotes)))}" onclick="copyNotes(this)">Copy notes</button>${rawNotes.replace(/\n/g,'<br>')}`:''
-    return `<tr ${rowCls} data-co="${r.stock_code}" data-period="${(r.period||'').toLowerCase()}"><td>${r.stock_code}</td><td></td><td>${co}</td><td></td><td>${r.period||'—'}</td><td>${src}</td><td>${taCell}</td><td>${r.investment_property_raw||'—'}</td><td>${fmtScraped(r.scraped_at)}</td><td>${filing}</td><td class="headline">${notes}</td><td>${chkBtn(ck)}</td></tr>`;
+    return `<tr ${rowCls} data-co="${r.stock_code}" data-period="${(r.period||'').toLowerCase()}"><td>${r.stock_code}</td><td>${FIRM_IDS[r.stock_code]||''}</td><td>${firmCell(r.stock_code,co)}</td><td>${FIRM_TYPES[r.stock_code]||''}</td><td>${r.period||'—'}</td><td>${src}</td><td>${taCell}</td><td>${r.investment_property_raw||'—'}</td><td>${fmtScraped(r.scraped_at)}</td><td>${filing}</td><td class="headline">${notes}</td><td>${chkBtn(ck)}</td></tr>`;
   }).join('');
   document.getElementById('fs-count').textContent=rows.length+' records';
 }
@@ -1988,7 +2018,7 @@ function renderFC(rows){
     const firm=COMPANIES[r.stock_code]||r.stock_code;
     const rawNotes=r.internal_notes||'';
     const notes=rawNotes?`<button class="copy-btn" data-n="${btoa(unescape(encodeURIComponent(rawNotes)))}" onclick="copyNotes(this)">Copy notes</button>${rawNotes.replace(/\n/g,'<br>')}`:''
-    return `<tr class="row-${st.toLowerCase()}" data-co="${r.stock_code}" data-ft="${(r.fund_type||'').toLowerCase()}" data-st="${st.toLowerCase()}" data-yr="${yr}" data-date="${normDate(r.announcement_date||'')}"><td>${r.stock_code}</td><td></td><td>${firm}</td><td></td><td>${r.announcement_date}</td><td>${nm}</td><td>${r.fund_type||'—'}</td><td>${r.commitment_date}</td><td>${amt}</td><td class="headline">${fmtHeadline(r.headline||'')}</td><td class="headline">${r.key_events||''}</td><td>${r.bs_date}</td><td>${fmtScraped(r.scraped_at)}</td><td class="headline">${notes}</td><td>${chkBtn(ck)}</td></tr>`;
+    return `<tr class="row-${st.toLowerCase()}" data-co="${r.stock_code}" data-ft="${(r.fund_type||'').toLowerCase()}" data-st="${st.toLowerCase()}" data-yr="${yr}" data-date="${normDate(r.announcement_date||'')}"><td>${r.stock_code}</td><td>${FIRM_IDS[r.stock_code]||''}</td><td>${firmCell(r.stock_code,firm)}</td><td>${FIRM_TYPES[r.stock_code]||''}</td><td>${r.announcement_date}</td><td>${nm}</td><td>${r.fund_type||'—'}</td><td>${r.commitment_date}</td><td>${amt}</td><td class="headline">${fmtHeadline(r.headline||'')}</td><td class="headline">${r.key_events||''}</td><td>${r.bs_date}</td><td>${fmtScraped(r.scraped_at)}</td><td class="headline">${notes}</td><td>${chkBtn(ck)}</td></tr>`;
   }).join('');
   document.getElementById('fc-count').textContent=rows.length+' records';
 }
@@ -2001,7 +2031,7 @@ function renderPM(rows){
     const firmNm=COMPANIES[r.stock_code]||r.stock_code;
     const rawNotes=r.internal_notes||'';
     const notes=rawNotes?`<button class="copy-btn" data-n="${btoa(unescape(encodeURIComponent(rawNotes)))}" onclick="copyNotes(this)">Copy notes</button>${rawNotes.replace(/\n/g,'<br>')}`:''
-    return `<tr class="row-${st.toLowerCase()}" data-co="${r.stock_code}" data-st="${st.toLowerCase()}" data-yr="${yr}" data-date="${normDate(r.announcement_date||'')}"><td>${r.stock_code}</td><td></td><td>${firmNm}</td><td></td><td>${r.announcement_date}</td><td>${role||'—'}</td><td>${r.new_holder||'—'}</td><td>${r.previous_holder||'—'}</td><td>${r.effective_date}</td><td class="headline">${fmtHeadline(r.narrative_en||'')}</td><td class="headline">${r.key_events||''}</td><td>${r.bs_date||'—'}</td><td>${lnk}</td><td>${fmtScraped(r.scraped_at)}</td><td class="headline">${notes}</td><td>${chkBtn(ck)}</td></tr>`;
+    return `<tr class="row-${st.toLowerCase()}" data-co="${r.stock_code}" data-st="${st.toLowerCase()}" data-yr="${yr}" data-date="${normDate(r.announcement_date||'')}"><td>${r.stock_code}</td><td>${FIRM_IDS[r.stock_code]||''}</td><td>${firmCell(r.stock_code,firmNm)}</td><td>${FIRM_TYPES[r.stock_code]||''}</td><td>${r.announcement_date}</td><td>${role||'—'}</td><td>${r.new_holder||'—'}</td><td>${r.previous_holder||'—'}</td><td>${r.effective_date}</td><td class="headline">${fmtHeadline(r.narrative_en||'')}</td><td class="headline">${r.key_events||''}</td><td>${r.bs_date||'—'}</td><td>${lnk}</td><td>${fmtScraped(r.scraped_at)}</td><td class="headline">${notes}</td><td>${chkBtn(ck)}</td></tr>`;
   }).join('');
   document.getElementById('pm-count').textContent=rows.length+' records';
 }
@@ -2217,8 +2247,12 @@ def write_excel(fund_commitments, people_moves, emops_data=None, balance_history
                sum(1 for r in people_moves if r.get("status") == "CHANGED")])
     _autofit(ws)
 
-    _co_map = {w["stock_code"]: w["name_en"] for w in WATCHLIST}
+    _co_map    = {w["stock_code"]: w["name_en"]          for w in WATCHLIST}
     _co_map.update({s["stock_code"]: s["company_name_en"] for s in _SUBSIDIARY_STUBS})
+    _id_map    = {w["stock_code"]: w.get("firm_id", "")   for w in WATCHLIST}
+    _type_map  = {w["stock_code"]: w.get("company_type", "") for w in WATCHLIST}
+    _url_map   = {w["stock_code"]: w.get("firm_url", "")  for w in WATCHLIST}
+    _firm_col  = 3   # Firm Name is column 3 in every sheet — carries the firm_url hyperlink
 
     # Fund Commitments — mirrors HTML FC table
     ws = wb.create_sheet("FundCommitments")
@@ -2230,22 +2264,22 @@ def write_excel(fund_commitments, people_moves, emops_data=None, balance_history
     _amt_col   = _FC_COLS.index("Amount") + 1
     _fc_hl_col = _FC_COLS.index("Headlines") + 1
     for i, r in enumerate(fund_commitments, 2):
-        firm = _co_map.get(r.get("stock_code", ""), "")
+        code = r.get("stock_code", "")
+        firm = _co_map.get(code, "")
         scraped = (r.get("scraped_at") or "")[:10].replace("-", "/")
-        ws.append([r.get("stock_code"), "", firm, "", r.get("announcement_date"), r.get("fund_name"),
+        ws.append([code, _id_map.get(code, ""), firm, _type_map.get(code, ""),
+                   r.get("announcement_date"), r.get("fund_name"),
                    r.get("fund_type"), r.get("commitment_date"), r.get("commitment_amount_raw"),
                    r.get("headline"), r.get("key_events"), r.get("bs_date"), scraped,
                    r.get("internal_notes", "")])
-        # Wrap text for headline so Title\n\nBody is readable
         ws.cell(i, _fc_hl_col).alignment = Alignment(wrap_text=True, vertical="top")
+        firm_url = _url_map.get(code, "")
+        if firm_url:
+            cell = ws.cell(i, _firm_col); cell.hyperlink = firm_url; cell.font = _link_font
         if r.get("url"):
-            cell = ws.cell(i, _name_col)
-            cell.hyperlink = r["url"]
-            cell.font = _link_font
+            cell = ws.cell(i, _name_col); cell.hyperlink = r["url"]; cell.font = _link_font
         if r.get("fx_url"):
-            cell = ws.cell(i, _amt_col)
-            cell.hyperlink = r["fx_url"]
-            cell.font = _link_font
+            cell = ws.cell(i, _amt_col); cell.hyperlink = r["fx_url"]; cell.font = _link_font
         _status_fill(ws, i, r.get("status"))
     _autofit(ws)
 
@@ -2258,19 +2292,22 @@ def write_excel(fund_commitments, people_moves, emops_data=None, balance_history
     _url_col   = _PM_COLS.index("URL") + 1
     _pm_hl_col = _PM_COLS.index("Headlines") + 1
     for i, r in enumerate(people_moves, 2):
+        code = r.get("stock_code", "")
         role = r.get("role_title") or r.get("role_type") or ""
-        firm = _co_map.get(r.get("stock_code", ""), "")
+        firm = _co_map.get(code, "")
         scraped = (r.get("scraped_at") or "")[:10].replace("-", "/")
-        ws.append([r.get("stock_code"), "", firm, "", r.get("announcement_date"), role,
+        ws.append([code, _id_map.get(code, ""), firm, _type_map.get(code, ""),
+                   r.get("announcement_date"), role,
                    r.get("new_holder"), r.get("previous_holder"),
                    r.get("effective_date"), r.get("narrative_en"), r.get("key_events"),
                    r.get("bs_date", ""), r.get("url"), r.get("status"), scraped,
                    r.get("internal_notes", "")])
         ws.cell(i, _pm_hl_col).alignment = Alignment(wrap_text=True, vertical="top")
+        firm_url = _url_map.get(code, "")
+        if firm_url:
+            cell = ws.cell(i, _firm_col); cell.hyperlink = firm_url; cell.font = _link_font
         if r.get("url"):
-            cell = ws.cell(i, _url_col)
-            cell.hyperlink = r["url"]
-            cell.font = _link_font
+            cell = ws.cell(i, _url_col); cell.hyperlink = r["url"]; cell.font = _link_font
         _status_fill(ws, i, r.get("status"))
     _autofit(ws)
 
@@ -2283,23 +2320,26 @@ def write_excel(fund_commitments, people_moves, emops_data=None, balance_history
         _web_col   = _EM_COLS.index("Website") + 1
         _notes_col = _EM_COLS.index("Notes") + 1
         for i, r in enumerate(emops_data, 2):
+            code = r.get("stock_code", "")
             if r.get("no_filing_data"):
-                ws.append([r.get("stock_code"), "", r.get("company_name_en"),
-                           "", "", "", "", "", "",
+                ws.append([code, _id_map.get(code, ""), r.get("company_name_en"),
+                           _type_map.get(code, ""), "", "", "", "", "",
                            "Information not available on filings — please refer to firm website"])
                 ws.cell(i, _notes_col).font = Font(italic=True, color="888888")
-                continue
-            scraped = (r.get("scraped_at") or "")[:10].replace("-", "/")
-            ws.append([r.get("stock_code"), "", r.get("company_name_en") or r.get("name_en"),
-                       "", r.get("period"),
-                       r.get("telephone"), r.get("web_address"),
-                       r.get("address"), scraped, ""])
-            web = r.get("web_address", "")
-            if web:
-                url = web if web.startswith("http") else "https://" + web
-                cell = ws.cell(i, _web_col)
-                cell.hyperlink = url
-                cell.font = _link_font
+            else:
+                scraped = (r.get("scraped_at") or "")[:10].replace("-", "/")
+                ws.append([code, _id_map.get(code, ""),
+                           r.get("company_name_en") or r.get("name_en"),
+                           _type_map.get(code, ""), r.get("period"),
+                           r.get("telephone"), r.get("web_address"),
+                           r.get("address"), scraped, ""])
+                web = r.get("web_address", "")
+                if web:
+                    url = web if web.startswith("http") else "https://" + web
+                    cell = ws.cell(i, _web_col); cell.hyperlink = url; cell.font = _link_font
+            firm_url = _url_map.get(code, "")
+            if firm_url:
+                cell = ws.cell(i, _firm_col); cell.hyperlink = firm_url; cell.font = _link_font
         _autofit(ws)
 
         # Financial Statements — annual (EMOPS) + quarterly (F26) balance sheet data
@@ -2308,13 +2348,14 @@ def write_excel(fund_commitments, people_moves, emops_data=None, balance_history
                     "Total Assets (TWD, mn)", "Inv. Property (TWD, mn)", "Scraped At", "Filing",
                     "Internal Notes"]
         _header(ws, _FS_COLS)
-        _filing_col = _FS_COLS.index("Filing") + 1
-        _ta_col     = _FS_COLS.index("Total Assets (TWD, mn)") + 1
+        _filing_col  = _FS_COLS.index("Filing") + 1
+        _ta_col      = _FS_COLS.index("Total Assets (TWD, mn)") + 1
         _fs_note_col = _FS_COLS.index("Internal Notes") + 1
-        _warn_fill  = PatternFill("solid", fgColor="FFF3E0")
-        _warn_font  = Font(color="E65100", bold=True)
+        _warn_fill   = PatternFill("solid", fgColor="FFF3E0")
+        _warn_font   = Font(color="E65100", bold=True)
         for i, r in enumerate(balance_history or [], 2):
-            base_name = r.get("name_en") or _co_map.get(r.get("stock_code", ""), "")
+            code = r.get("stock_code", "")
+            base_name = r.get("name_en") or _co_map.get(code, "")
             co_name = f"{base_name} (Delisted)" if r.get("delisted") else base_name
             ta_val = "⚠ Manual check needed" if r.get("extraction_failed") else r.get("total_assets_raw")
             src_label = ("" if r.get("stub_only")
@@ -2322,26 +2363,20 @@ def write_excel(fund_commitments, people_moves, emops_data=None, balance_history
                          else "PDFs - Consolidated FS" if r.get("source") == "quarterly_consolidated"
                          else "PDFs - Unconsolidated FS")
             filing_val = "View" if (r.get("source") == "annual" and r.get("filing_url")) else r.get("pdf_filename", "")
-            ws.append([r.get("stock_code"),
-                       "",
-                       co_name,
-                       "",
-                       r.get("period"),
-                       src_label,
-                       ta_val,
+            ws.append([code, _id_map.get(code, ""), co_name, _type_map.get(code, ""),
+                       r.get("period"), src_label, ta_val,
                        r.get("investment_property_raw"),
                        (r.get("scraped_at") or "")[:10].replace("-", "/"),
-                       filing_val,
-                       r.get("internal_notes", "")])
+                       filing_val, r.get("internal_notes", "")])
             if r.get("extraction_failed"):
-                ws.cell(i, _ta_col).font  = _warn_font
-                ws.cell(i, _ta_col).fill  = _warn_fill
+                ws.cell(i, _ta_col).font = _warn_font; ws.cell(i, _ta_col).fill = _warn_fill
             if r.get("source") == "annual" and r.get("filing_url"):
-                cell = ws.cell(i, _filing_col)
-                cell.hyperlink = r["filing_url"]
-                cell.font = _link_font
+                cell = ws.cell(i, _filing_col); cell.hyperlink = r["filing_url"]; cell.font = _link_font
             if r.get("internal_notes"):
                 ws.cell(i, _fs_note_col).alignment = Alignment(wrap_text=True, vertical="top")
+            firm_url = _url_map.get(code, "")
+            if firm_url:
+                cell = ws.cell(i, _firm_col); cell.hyperlink = firm_url; cell.font = _link_font
         _autofit(ws)
 
     wb.save(path)
