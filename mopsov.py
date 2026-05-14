@@ -195,7 +195,8 @@ _FUND_EXCLUDE_RE = re.compile(
     r"\bdisposal\b|"
     r"common (?:share|stock)|ordinary share|preferred (?:share|stock)|"
     r"\bdebenture|\bcorporate bonds?|\bbond issue|\bnote issue|"
-    r"\bfinancial bonds?|\bsecured bonds?|"
+    r"\bfinancial bonds?|\bsecured bonds?|\bunsecured bonds?\b|"
+    r"\bfixed.income\b|\bfinancial products?\b|\bcertificate of deposit\b|"
     r"\bshares\b|"
     r"RMB structured deposit|structured deposit|"
     r"(?<!private )(?<!growth )\bequity\b",
@@ -476,7 +477,7 @@ async def scrape_fund_commitments(stock_code: str, sdate: str = None) -> list[di
         amount_raw = re.sub(r"\s*\(updated\)", "", amount_raw, flags=re.IGNORECASE).strip()
         # Deduplicate leading currency ticker (e.g. "EUR EUR 50,000,000" → "EUR 50,000,000")
         amount_raw = re.sub(r"^([A-Z]{3})\s+\1\b", r"\1", amount_raw)
-        currency_match = re.search(r"\b(USD|EUR|GBP|JPY|CNY|RMB|TWD|HKD|SGD|AUD|CAD)\b", amount_raw)
+        currency_match = re.search(r"(?<![A-Za-z])(USD|EUR|GBP|JPY|CNY|RMB|TWD|HKD|SGD|AUD|CAD)(?![A-Za-z])", amount_raw)
 
         searchable = fund_name + " " + raw_fund_type + " " + row["subject"] + " " + statement
         if not _FUND_ALLOWLIST_RE.search(searchable):
@@ -754,7 +755,7 @@ async def _format_commitment_amount(amount_raw: str, orig_currency: str) -> tupl
         return "", ""
     # Infer currency from symbol if not explicitly provided (e.g. "US$" → USD, "€" → EUR)
     if not orig_currency:
-        sym_map = {"US$": "USD", "€": "EUR", "£": "GBP", "¥": "JPY", "HK$": "HKD", "A$": "AUD", "S$": "SGD", "C$": "CAD"}
+        sym_map = {"US$": "USD", "NT$": "TWD", "€": "EUR", "£": "GBP", "¥": "JPY", "HK$": "HKD", "A$": "AUD", "S$": "SGD", "C$": "CAD"}
         for sym, cur in sym_map.items():
             if sym in amount_raw:
                 orig_currency = cur
