@@ -2013,9 +2013,23 @@ def write_html_report(fund_commitments, people_moves, emops_data=None, balance_h
     ) + "," + ",".join(
         f'"{s["stock_code"]}":"{s["company_name_en"]}"' for s in _SUBSIDIARY_STUBS
     ) + "}"
-    firm_ids_js   = "{" + ",".join(f'"{w["stock_code"]}":"{w.get("firm_id","")}"'      for w in WATCHLIST) + "}"
-    firm_types_js = "{" + ",".join(f'"{w["stock_code"]}":"{w.get("company_type","")}"' for w in WATCHLIST) + "}"
-    firm_urls_js  = "{" + ",".join(f'"{w["stock_code"]}":"{w.get("firm_url","")}"'     for w in WATCHLIST) + "}"
+    # Extend firm metadata to subsidiary codes (mapped to their parent's values)
+    _sub_meta = [
+        (sub_code, _WATCHLIST_MAP.get(parent_code, {}))
+        for sub_code, parent_code in _SUBSIDIARY_TO_PARENT.items()
+    ]
+    firm_ids_js   = "{" + ",".join(
+        [f'"{w["stock_code"]}":"{w.get("firm_id","")}"'      for w in WATCHLIST] +
+        [f'"{sc}":"{p.get("firm_id","")}"'                    for sc, p in _sub_meta]
+    ) + "}"
+    firm_types_js = "{" + ",".join(
+        [f'"{w["stock_code"]}":"{w.get("company_type","")}"' for w in WATCHLIST] +
+        [f'"{sc}":"{p.get("company_type","")}"'               for sc, p in _sub_meta]
+    ) + "}"
+    firm_urls_js  = "{" + ",".join(
+        [f'"{w["stock_code"]}":"{w.get("firm_url","")}"'     for w in WATCHLIST] +
+        [f'"{sc}":"{p.get("firm_url","")}"'                   for sc, p in _sub_meta]
+    ) + "}"
 
     # JS is a plain string (not f-string) so template literals work without escaping
     js = (
@@ -2397,9 +2411,15 @@ def write_excel(fund_commitments, people_moves, emops_data=None, balance_history
 
     _co_map    = {w["stock_code"]: w["name_en"]          for w in WATCHLIST}
     _co_map.update({s["stock_code"]: s["company_name_en"] for s in _SUBSIDIARY_STUBS})
-    _id_map    = {w["stock_code"]: w.get("firm_id", "")   for w in WATCHLIST}
-    _type_map  = {w["stock_code"]: w.get("company_type", "") for w in WATCHLIST}
-    _url_map   = {w["stock_code"]: w.get("firm_url", "")  for w in WATCHLIST}
+    _id_map   = {w["stock_code"]: w.get("firm_id", "")      for w in WATCHLIST}
+    _type_map = {w["stock_code"]: w.get("company_type", "") for w in WATCHLIST}
+    _url_map  = {w["stock_code"]: w.get("firm_url", "")     for w in WATCHLIST}
+    # Extend to subsidiary codes using parent values
+    for sub_code, parent_code in _SUBSIDIARY_TO_PARENT.items():
+        _p = _WATCHLIST_MAP.get(parent_code, {})
+        _id_map.setdefault(sub_code,   _p.get("firm_id", ""))
+        _type_map.setdefault(sub_code, _p.get("company_type", ""))
+        _url_map.setdefault(sub_code,  _p.get("firm_url", ""))
     _firm_col  = 3   # Firm Name is column 3 in every sheet — carries the firm_url hyperlink
 
     # Fund Commitments — mirrors HTML FC table
