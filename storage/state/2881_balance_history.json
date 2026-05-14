@@ -6,14 +6,32 @@
     "period": "2025/Q4",
     "roc_year": 114,
     "season": 4,
+    "is_consolidated": false,
     "currency": "TWD (thousands)",
     "total_assets_raw": "NT$5,903,010,803K",
     "total_assets_numeric": 5903010803,
     "investment_property_raw": "",
     "investment_property_numeric": null,
     "pdf_path": "storage\\pdfs\\2881\\Fubon Life Insurance Individual Financial Report Q4 2025.pdf",
-    "filing_url": "https://doc.twse.com.tw/pdf/202504_5865_AI3_20260509_201022.pdf",
-    "scraped_at": "2026-05-09"
+    "filing_url": "https://doc.twse.com.tw/pdf/202504_5865_AI3_20260512_205035.pdf",
+    "scraped_at": "2026-05-12"
+  },
+  {
+    "stock_code": "2881",
+    "subsidiary_code": "5836",
+    "subsidiary_name_en": "Taipei Fubon Commercial Bank",
+    "period": "2025/Q4",
+    "roc_year": 114,
+    "season": 4,
+    "is_consolidated": false,
+    "currency": "TWD (thousands)",
+    "total_assets_raw": "NT$4,544,138,804K",
+    "total_assets_numeric": 4544138804,
+    "investment_property_raw": "",
+    "investment_property_numeric": null,
+    "pdf_path": "storage\\pdfs\\2881\\Taipei Fubon Commercial Bank Individual Financial Report Q4 2025.pdf",
+    "filing_url": "https://doc.twse.com.tw/pdf/202504_5836_AI3_20260512_205117.pdf",
+    "scraped_at": "2026-05-12"
   },
   {
     "stock_code": "2881",
@@ -22,14 +40,15 @@
     "period": "2025/H1",
     "roc_year": 114,
     "season": 2,
+    "is_consolidated": false,
     "currency": "TWD (thousands)",
     "total_assets_raw": "NT$5,514,994,854K",
     "total_assets_numeric": 5514994854,
     "investment_property_raw": "",
     "investment_property_numeric": null,
     "pdf_path": "storage\\pdfs\\2881\\Fubon Life Insurance Individual Financial Report H1 2025.pdf",
-    "filing_url": "https://doc.twse.com.tw/pdf/202502_5865_AI3_20260509_201037.pdf",
-    "scraped_at": "2026-05-09"
+    "filing_url": "https://doc.twse.com.tw/pdf/202502_5865_AI3_20260512_205137.pdf",
+    "scraped_at": "2026-05-12"
   },
   {
     "stock_code": "2881",

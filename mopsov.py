@@ -155,6 +155,31 @@ def _resolve_subsidiary(parent_code: str, subject: str) -> str:
             return sub_code
     return parent_code
 
+
+def _fc_resolve_code(stock_code: str, subject: str) -> str:
+    """Like _resolve_subsidiary but for fund commitments.
+
+    If the subject can't identify a specific subsidiary and the parent is a
+    holding company with a single default investing entity, fall back to that
+    entity so FC headlines name the correct fund-investing subsidiary rather
+    than the FHC itself.
+    """
+    resolved = _resolve_subsidiary(stock_code, subject)
+    if resolved != stock_code:
+        return resolved
+    entry = _WATCHLIST_MAP.get(stock_code, {})
+    if not _HOLDING_RE.search(entry.get("name_en", "")):
+        return resolved
+    # Prefer f26_display_code (explicitly designated primary investing entity)
+    if entry.get("f26_display_code"):
+        return entry["f26_display_code"]
+    # Fall back to sole subsidiary display_code
+    subs = entry.get("f26_subsidiaries", [])
+    if len(subs) == 1:
+        return subs[0]["display_code"]
+    return resolved  # Multiple subsidiaries — can't pick a default
+
+
 # Reverse lookup: subsidiary display code → parent WATCHLIST stock_code
 _SUBSIDIARY_TO_PARENT: dict[str, str] = {
     sub_code: parent
@@ -235,6 +260,8 @@ def _normalize_fund_type(raw_type: str, fund_name: str = "") -> str:
         if pattern.search(text):
             return label
     return ""
+
+_HOLDING_RE = re.compile(r"financial.hold", re.I)
 
 # Fund name looks like a date or date-range (not a real fund name)
 _DATE_NAME_RE = re.compile(r"^\d{4}/\d{2}/\d{2}(\s*~\s*\d{4}/\d{2}/\d{2})?$")
@@ -485,7 +512,7 @@ async def scrape_fund_commitments(stock_code: str, sdate: str = None) -> list[di
         if _FUND_EXCLUDE_RE.search(fund_name + " " + raw_fund_type + " " + row["subject"]):
             continue
 
-        resolved_code = _resolve_subsidiary(stock_code, row["subject"])
+        resolved_code = _fc_resolve_code(stock_code, row["subject"])
         _, bs_date = _get_latest_aum(resolved_code)
         raw_currency = currency_match.group(1) if currency_match else ""
         if raw_currency == "RMB":
@@ -2191,6 +2218,7 @@ def write_excel(fund_commitments, people_moves, emops_data=None, balance_history
     _autofit(ws)
 
     _co_map = {w["stock_code"]: w["name_en"] for w in WATCHLIST}
+    _co_map.update({s["stock_code"]: s["company_name_en"] for s in _SUBSIDIARY_STUBS})
 
     # Fund Commitments — mirrors HTML FC table
     ws = wb.create_sheet("FundCommitments")
@@ -2546,8 +2574,6 @@ def _fs_filing_url(stock_code: str, period: str) -> str:
     return (f"https://mopsov.twse.com.tw/server-java/t164sb01"
             f"?step=1&CO_ID={stock_code}&SYEAR={year}&SSEASON={season}&REPORT_ID=C")
 
-_HOLDING_RE = re.compile(r"financial.hold", re.I)
-
 def _build_fs_data(emops_data: list[dict], balance_history: list[dict],
                    since: str | None = None, new_since: str | None = None) -> list[dict]:
     """Combine annual EMOPS rows (financial holdings only) + quarterly PDF rows for the FS tab.
@@ -2789,7 +2815,7 @@ async def run(companies=None, export_excel=True, mode="full", since=None, new_si
 
         # Re-compute fund_type, subsidiary codes, formatted amounts, headlines, and key_events for FC
         for r in all_funds:
-            r["stock_code"] = _resolve_subsidiary(r["stock_code"], r.get("subject", ""))
+            r["stock_code"] = _fc_resolve_code(r["stock_code"], r.get("subject", ""))
             r["fund_name"] = _clean_fund_name(r.get("fund_name", ""))
             r["fund_type"] = _normalize_fund_type(r.get("fund_type", ""), r.get("fund_name", ""))
             formatted, fx = await _format_commitment_amount(

@@ -6,14 +6,15 @@
     "period": "2025/Q4",
     "roc_year": 114,
     "season": 4,
+    "is_consolidated": false,
     "currency": "TWD (thousands)",
     "total_assets_raw": "NT$2,827,257,541K",
     "total_assets_numeric": 2827257541,
     "investment_property_raw": "",
     "investment_property_numeric": null,
     "pdf_path": "storage\\pdfs\\2890\\Bank SinoPac Individual Financial Report Q4 2025.pdf",
-    "filing_url": "https://doc.twse.com.tw/pdf/202504_5849_AI3_20260509_214652.pdf",
-    "scraped_at": "2026-05-09"
+    "filing_url": "https://doc.twse.com.tw/pdf/202504_5849_AI3_20260512_213839.pdf",
+    "scraped_at": "2026-05-12"
   },
   {
     "stock_code": "2890",
@@ -22,14 +23,15 @@
     "period": "2025/H1",
     "roc_year": 114,
     "season": 2,
+    "is_consolidated": false,
     "currency": "TWD (thousands)",
     "total_assets_raw": "NT$2,678,806,103K",
     "total_assets_numeric": 2678806103,
     "investment_property_raw": "",
     "investment_property_numeric": null,
     "pdf_path": "storage\\pdfs\\2890\\Bank SinoPac Individual Financial Report H1 2025.pdf",
-    "filing_url": "https://doc.twse.com.tw/pdf/202502_5849_AI3_20260509_214729.pdf",
-    "scraped_at": "2026-05-09"
+    "filing_url": "https://doc.twse.com.tw/pdf/202502_5849_AI3_20260512_213856.pdf",
+    "scraped_at": "2026-05-12"
   },
   {
     "stock_code": "2890",
@@ -38,14 +40,15 @@
     "period": "2024/Q4",
     "roc_year": 113,
     "season": 4,
+    "is_consolidated": false,
     "currency": "TWD (thousands)",
     "total_assets_raw": "NT$2,686,164,070K",
     "total_assets_numeric": 2686164070,
     "investment_property_raw": "",
     "investment_property_numeric": null,
     "pdf_path": "storage\\pdfs\\2890\\Bank SinoPac Individual Financial Report Q4 2024.pdf",
-    "filing_url": "https://doc.twse.com.tw/pdf/202404_5849_AI3_20260509_214753.pdf",
-    "scraped_at": "2026-05-09"
+    "filing_url": "https://doc.twse.com.tw/pdf/202404_5849_AI3_20260512_213916.pdf",
+    "scraped_at": "2026-05-12"
   },
   {
     "stock_code": "2890",
@@ -54,13 +57,14 @@
     "period": "2024/H1",
     "roc_year": 113,
     "season": 2,
+    "is_consolidated": false,
     "currency": "TWD (thousands)",
     "total_assets_raw": "NT$2,566,510,451K",
     "total_assets_numeric": 2566510451,
     "investment_property_raw": "",
     "investment_property_numeric": null,
     "pdf_path": "storage\\pdfs\\2890\\Bank SinoPac Individual Financial Report H1 2024.pdf",
-    "filing_url": "https://doc.twse.com.tw/pdf/202402_5849_AI3_20260509_214815.pdf",
-    "scraped_at": "2026-05-09"
+    "filing_url": "https://doc.twse.com.tw/pdf/202402_5849_AI3_20260512_213932.pdf",
+    "scraped_at": "2026-05-12"
   }
 ]

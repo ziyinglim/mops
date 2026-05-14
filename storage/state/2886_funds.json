@@ -20,8 +20,8 @@
     "last_seen": "2026-05-07 02:20"
   },
   "2886|Top Taiwan XV Venture Capital Limited Partnership.|2025/01/03": {
-    "hash": "62461a9d4242ce3a0897153adbb000412fa44e7c63b1b145fb1cbb2b5decca76",
-    "last_seen": "2026-05-11 05:21"
+    "hash": "8ca87cd0b8289ab06c618e98eae0991b8b866b0230a8c998bb0dfd21563c3a7e",
+    "last_seen": "2026-05-12 16:45"
   },
   "2886|MFH 1st Unsecured Corporate Bond issued in 2025|2025/10/29": {
     "hash": "1f6b29155319d38dee2cd21744cf5bf4c97fa4e1688e29845d6b50916fdcef9c",
@@ -30,5 +30,9 @@
   "2886|Yuanta Bank 3rd Subordinated Financial\nDebentures in 2025|2025/09/25": {
     "hash": "9576bc38ae9f498e7d379707e39e3beae4e32bd7f4b787307c2407d7b7510bb6",
     "last_seen": "2026-05-10 01:27"
+  },
+  "2886|Top Taiwan XV Venture Capital Limited Partnership|2025/01/03": {
+    "hash": "eb09390c4ebf472a81a90c81784fa6bfec300d1ce096800b1679a56b7cd13b9d",
+    "last_seen": "2026-05-12 21:34"
   }
 }

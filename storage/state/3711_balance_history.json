@@ -6,6 +6,7 @@
     "period": "2025/Q4",
     "roc_year": 114,
     "season": 4,
+    "is_consolidated": false,
     "currency": "TWD (thousands)",
     "total_assets_raw": "",
     "total_assets_numeric": null,
@@ -13,7 +14,7 @@
     "investment_property_numeric": null,
     "pdf_path": "storage\\pdfs\\3711\\ASE Technology Holding Individual Financial Report Q4 2025.pdf",
     "filing_url": "https://doc.twse.com.tw/pdf/202504_3711_AI3_20260509_234654.pdf",
-    "scraped_at": "2026-05-10",
+    "scraped_at": "2026-05-12",
     "extraction_failed": true
   },
   {
@@ -23,6 +24,7 @@
     "period": "2024/Q4",
     "roc_year": 113,
     "season": 4,
+    "is_consolidated": false,
     "currency": "TWD (thousands)",
     "total_assets_raw": "",
     "total_assets_numeric": null,
@@ -30,7 +32,7 @@
     "investment_property_numeric": null,
     "pdf_path": "storage\\pdfs\\3711\\ASE Technology Holding Individual Financial Report Q4 2024.pdf",
     "filing_url": "https://doc.twse.com.tw/pdf/202404_3711_AI3_20260509_234708.pdf",
-    "scraped_at": "2026-05-10",
+    "scraped_at": "2026-05-12",
     "extraction_failed": true
   }
 ]

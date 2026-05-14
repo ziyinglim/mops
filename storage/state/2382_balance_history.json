@@ -6,14 +6,15 @@
     "period": "2025/Q4",
     "roc_year": 114,
     "season": 4,
+    "is_consolidated": false,
     "currency": "TWD (thousands)",
     "total_assets_raw": "NT$1,036,232,086K",
     "total_assets_numeric": 1036232086,
     "investment_property_raw": "",
     "investment_property_numeric": null,
     "pdf_path": "storage\\pdfs\\2382\\Quanta Computer Individual Financial Report Q4 2025.pdf",
-    "filing_url": "https://doc.twse.com.tw/pdf/202504_2382_AI3_20260509_205200.pdf",
-    "scraped_at": "2026-05-09"
+    "filing_url": "https://doc.twse.com.tw/pdf/202504_2382_AI3_20260512_215052.pdf",
+    "scraped_at": "2026-05-12"
   },
   {
     "stock_code": "2382",
@@ -22,14 +23,15 @@
     "period": "2024/Q4",
     "roc_year": 113,
     "season": 4,
+    "is_consolidated": false,
     "currency": "TWD (thousands)",
     "total_assets_raw": "NT$704,999,321K",
     "total_assets_numeric": 704999321,
     "investment_property_raw": "",
     "investment_property_numeric": null,
     "pdf_path": "storage\\pdfs\\2382\\Quanta Computer Individual Financial Report Q4 2024.pdf",
-    "filing_url": "https://doc.twse.com.tw/pdf/202404_2382_AI3_20260509_224240.pdf",
-    "scraped_at": "2026-05-09"
+    "filing_url": "https://doc.twse.com.tw/pdf/202404_2382_AI3_20260512_215108.pdf",
+    "scraped_at": "2026-05-12"
   },
   {
     "stock_code": "2382",

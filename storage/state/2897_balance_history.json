@@ -6,14 +6,15 @@
     "period": "2025/Q4",
     "roc_year": 114,
     "season": 4,
+    "is_consolidated": false,
     "currency": "TWD (thousands)",
     "total_assets_raw": "NT$416,470,845K",
     "total_assets_numeric": 416470845,
     "investment_property_raw": "",
     "investment_property_numeric": null,
     "pdf_path": "storage\\pdfs\\2897\\O-Bank Individual Financial Report Q4 2025.pdf",
-    "filing_url": "https://doc.twse.com.tw/pdf/202504_2897_AI3_20260509_211216.pdf",
-    "scraped_at": "2026-05-09"
+    "filing_url": "https://doc.twse.com.tw/pdf/202504_2897_AI3_20260512_215908.pdf",
+    "scraped_at": "2026-05-12"
   },
   {
     "stock_code": "2897",
@@ -22,14 +23,15 @@
     "period": "2025/H1",
     "roc_year": 114,
     "season": 2,
+    "is_consolidated": false,
     "currency": "TWD (thousands)",
     "total_assets_raw": "NT$409,923,752K",
     "total_assets_numeric": 409923752,
     "investment_property_raw": "",
     "investment_property_numeric": null,
     "pdf_path": "storage\\pdfs\\2897\\O-Bank Individual Financial Report H1 2025.pdf",
-    "filing_url": "https://doc.twse.com.tw/pdf/202502_2897_AI3_20260509_211221.pdf",
-    "scraped_at": "2026-05-09"
+    "filing_url": "https://doc.twse.com.tw/pdf/202502_2897_AI3_20260512_215921.pdf",
+    "scraped_at": "2026-05-12"
   },
   {
     "stock_code": "2897",
@@ -38,14 +40,15 @@
     "period": "2024/Q4",
     "roc_year": 113,
     "season": 4,
+    "is_consolidated": false,
     "currency": "TWD (thousands)",
     "total_assets_raw": "NT$413,628,804K",
     "total_assets_numeric": 413628804,
     "investment_property_raw": "",
     "investment_property_numeric": null,
     "pdf_path": "storage\\pdfs\\2897\\O-Bank Individual Financial Report Q4 2024.pdf",
-    "filing_url": "https://doc.twse.com.tw/pdf/202404_2897_AI3_20260509_211227.pdf",
-    "scraped_at": "2026-05-09"
+    "filing_url": "https://doc.twse.com.tw/pdf/202404_2897_AI3_20260512_215943.pdf",
+    "scraped_at": "2026-05-12"
   },
   {
     "stock_code": "2897",
@@ -54,13 +57,14 @@
     "period": "2024/H1",
     "roc_year": 113,
     "season": 2,
+    "is_consolidated": false,
     "currency": "TWD (thousands)",
     "total_assets_raw": "NT$420,353,150K",
     "total_assets_numeric": 420353150,
     "investment_property_raw": "",
     "investment_property_numeric": null,
     "pdf_path": "storage\\pdfs\\2897\\O-Bank Individual Financial Report H1 2024.pdf",
-    "filing_url": "https://doc.twse.com.tw/pdf/202402_2897_AI3_20260509_211233.pdf",
-    "scraped_at": "2026-05-09"
+    "filing_url": "https://doc.twse.com.tw/pdf/202402_2897_AI3_20260512_215959.pdf",
+    "scraped_at": "2026-05-12"
   }
 ]

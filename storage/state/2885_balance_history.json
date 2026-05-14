@@ -6,14 +6,32 @@
     "period": "2025/Q4",
     "roc_year": 114,
     "season": 4,
+    "is_consolidated": false,
     "currency": "TWD (thousands)",
     "total_assets_raw": "NT$2,364,115,586K",
     "total_assets_numeric": 2364115586,
     "investment_property_raw": "",
     "investment_property_numeric": null,
     "pdf_path": "storage\\pdfs\\2885\\Yuanta Commercial Bank Individual Financial Report Q4 2025.pdf",
-    "filing_url": "https://doc.twse.com.tw/pdf/202504_5852_AI3_20260509_214847.pdf",
-    "scraped_at": "2026-05-09"
+    "filing_url": "https://doc.twse.com.tw/pdf/202504_5852_AI3_20260512_214130.pdf",
+    "scraped_at": "2026-05-12"
+  },
+  {
+    "stock_code": "2885",
+    "subsidiary_code": "5852",
+    "subsidiary_name_en": "Yuanta Commercial Bank",
+    "period": "2025/H1",
+    "roc_year": 114,
+    "season": 2,
+    "is_consolidated": false,
+    "currency": "TWD (thousands)",
+    "total_assets_raw": "NT$2,169,591,733K",
+    "total_assets_numeric": 2169591733,
+    "investment_property_raw": "",
+    "investment_property_numeric": null,
+    "pdf_path": "storage\\pdfs\\2885\\Yuanta Commercial Bank Individual Financial Report H1 2025.pdf",
+    "filing_url": "https://doc.twse.com.tw/pdf/202502_5852_AI3_20260512_214146.pdf",
+    "scraped_at": "2026-05-12"
   },
   {
     "stock_code": "2885",
@@ -22,13 +40,14 @@
     "period": "2024/H1",
     "roc_year": 113,
     "season": 2,
+    "is_consolidated": false,
     "currency": "TWD (thousands)",
     "total_assets_raw": "NT$1,978,372,882K",
     "total_assets_numeric": 1978372882,
     "investment_property_raw": "",
     "investment_property_numeric": null,
     "pdf_path": "storage\\pdfs\\2885\\Yuanta Commercial Bank Individual Financial Report H1 2024.pdf",
-    "filing_url": "https://doc.twse.com.tw/pdf/202402_5852_AI3_20260509_214916.pdf",
-    "scraped_at": "2026-05-09"
+    "filing_url": "https://doc.twse.com.tw/pdf/202402_5852_AI3_20260512_214221.pdf",
+    "scraped_at": "2026-05-12"
   }
 ]

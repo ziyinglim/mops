@@ -6,14 +6,16 @@
     "period": "2025/Q4",
     "roc_year": 114,
     "season": 4,
+    "is_consolidated": false,
     "currency": "TWD (thousands)",
-    "total_assets_raw": "NT$3,878,166,164K",
-    "total_assets_numeric": 3878166164,
+    "total_assets_raw": "",
+    "total_assets_numeric": null,
     "investment_property_raw": "",
     "investment_property_numeric": null,
     "pdf_path": "storage\\pdfs\\2317\\Foxconn Technology Group Individual Financial Report Q4 2025.pdf",
-    "filing_url": "https://doc.twse.com.tw/pdf/202504_2317_AI3_20260509_214336.pdf",
-    "scraped_at": "2026-05-09"
+    "filing_url": "https://doc.twse.com.tw/pdf/202504_2317_AI3_20260512_212922.pdf",
+    "scraped_at": "2026-05-12",
+    "extraction_failed": true
   },
   {
     "stock_code": "2317",
@@ -22,14 +24,16 @@
     "period": "2024/Q4",
     "roc_year": 113,
     "season": 4,
+    "is_consolidated": false,
     "currency": "TWD (thousands)",
-    "total_assets_raw": "NT$3,631,354,000K",
-    "total_assets_numeric": 3631354000,
+    "total_assets_raw": "",
+    "total_assets_numeric": null,
     "investment_property_raw": "",
     "investment_property_numeric": null,
     "pdf_path": "storage\\pdfs\\2317\\Foxconn Technology Group Individual Financial Report Q4 2024.pdf",
-    "filing_url": "https://doc.twse.com.tw/pdf/202404_2317_AI3_20260509_214352.pdf",
-    "scraped_at": "2026-05-09"
+    "filing_url": "https://doc.twse.com.tw/pdf/202404_2317_AI3_20260512_212938.pdf",
+    "scraped_at": "2026-05-12",
+    "extraction_failed": true
   },
   {
     "stock_code": "2317",
