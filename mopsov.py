@@ -484,23 +484,24 @@ async def scrape_fund_commitments(stock_code: str, sdate: str = None) -> list[di
         if _FUND_EXCLUDE_RE.search(fund_name + " " + raw_fund_type + " " + row["subject"]):
             continue
 
-        _, bs_date = _get_latest_aum(stock_code)
+        resolved_code = _resolve_subsidiary(stock_code, row["subject"])
+        _, bs_date = _get_latest_aum(resolved_code)
         raw_currency = currency_match.group(1) if currency_match else ""
         if raw_currency == "RMB":
             raw_currency = "CNY"
         formatted_amount, fx_url = await _format_commitment_amount(amount_raw, raw_currency)
         fund_type = _normalize_fund_type(raw_fund_type, fund_name)
-        headline = _build_fund_headline(stock_code, fund_name, formatted_amount, fund_type) if fund_type else ""
+        headline = _build_fund_headline(resolved_code, fund_name, formatted_amount, fund_type) if fund_type else ""
         twd_match = re.search(r"TWD ([\d,]+) million", formatted_amount)
         twd_amount_mn = twd_match.group(1) if twd_match else ""
         commit_date = date_match.group(0) if date_match else ""
         key_events = _build_fc_key_event(
-            _resolve_subsidiary(stock_code, row["subject"]),
+            resolved_code,
             commit_date or row["date"], fund_name, formatted_amount, fund_type
         ) if fund_type else ""
 
         results.append({
-            "stock_code": _resolve_subsidiary(stock_code, row["subject"]),
+            "stock_code": resolved_code,
             "announcement_date": row["date"],
             "subject": row["subject"],
             "headline": headline,
@@ -567,12 +568,12 @@ async def scrape_people_moves(stock_code: str, sdate: str = None) -> list[dict]:
             new_holder_clean  = _clean_holder_name(new_holder)
             prev_holder_clean = _clean_holder_name(prev_holder)
 
+            resolved_code = _resolve_subsidiary(stock_code, row["subject"])
             narrative = _NARRATIVE_ABBREV_RE.sub(
-                "", _build_narrative(stock_code, role_title,
+                "", _build_narrative(resolved_code, role_title,
                                      new_holder_clean, prev_holder_clean,
                                      change_type, effective_date)
             ).strip()
-            resolved_code = _resolve_subsidiary(stock_code, row["subject"])
             _, bs_date = _get_latest_aum(resolved_code)
             key_events = _build_pm_key_event(
                 resolved_code, role_title, new_holder_clean, prev_holder_clean,
@@ -894,13 +895,26 @@ def _get_latest_aum(stock_code: str) -> tuple[str, str]:
     headlines omit the figure rather than inheriting a wrong parent value."""
     if _AUM_CACHE:
         return _AUM_CACHE.get(stock_code, ("", ""))
-    # File-based fallback used before cache is populated (standalone run)
+    # File-based fallback used before cache is populated (standalone run).
+    # Applies the same FHC-preference logic as _populate_aum_cache so that
+    # parent holding-company codes return the group consolidated figure, not
+    # whichever subsidiary happens to have the highest roc_year/season.
     path = STATE_DIR / f"{stock_code}_balance_history.json"
     if not path.exists():
         return "", ""
     try:
         records = json.loads(path.read_text(encoding="utf-8"))
-        records.sort(key=lambda r: (r.get("roc_year", 0), r.get("season", 0)), reverse=True)
+        entry  = _WATCHLIST_MAP.get(stock_code, {})
+        is_fhc = bool(_HOLDING_RE.search(entry.get("name_en", "")))
+        if is_fhc:
+            own = [r for r in records if str(r.get("subsidiary_code", "")) == stock_code]
+            if own:
+                own.sort(key=lambda r: r.get("period", ""), reverse=True)
+                records = own
+            else:
+                records.sort(key=lambda r: (r.get("roc_year", 0), r.get("season", 0)), reverse=True)
+        else:
+            records.sort(key=lambda r: (r.get("roc_year", 0), r.get("season", 0)), reverse=True)
         for rec in records:
             total_k = rec.get("total_assets_numeric")
             if total_k is None:
