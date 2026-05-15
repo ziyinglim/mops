@@ -388,9 +388,8 @@ TRACKED_ROLES = sorted([
     "Chief Executive Officer",
     "Chief Finance Officer", "Chief Financial Officer",
     "Chief Investment Officer",
-    "Chief Operating Officer", "Chief Operations Officer",
-    "Chief Technology Officer",
-    "Chief Strategy Officer",
+    "Co-Founder",
+    "Founder",
     "General Manager",
     "Global Head of Alternative Assets", "Global Head of Alternative Investments",
     "Global Head of Alternatives", "Global Head of Hedge Funds",
@@ -401,6 +400,7 @@ TRACKED_ROLES = sorted([
     "Head of Alternative Assets", "Head of Alternative Investment",
     "Head of Alternative Investments", "Head of Alternatives",
     "Head of Asset Allocation", "Head of Asset Management",
+    "President",
 ], key=len, reverse=True)
 
 _ROLE_ABBREV = {
@@ -413,6 +413,9 @@ _ROLE_FULL_TO_ABBREV = {
     "Chief Financial Officer": "CFO",
     "Chief Finance Officer": "CFO",
     "Chief Investment Officer": "CIO",
+    "President": "President",
+    "Founder": "Founder",
+    "Co-Founder": "Co-Founder",
     "Chairman": "Chair",
     "General Manager": "GM",
     "Head of Alternative Investments": "Head of Alts",
