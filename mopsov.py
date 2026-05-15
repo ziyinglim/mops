@@ -931,13 +931,13 @@ def _firm_display_name(stock_code: str) -> str:
     return stub["company_name_en"] if stub else stock_code
 
 def _firm_type(stock_code: str) -> str:
-    """Return company_type for stock_code, falling back to parent for subsidiaries."""
+    """Return company_type for stock_code in lowercase, falling back to parent for subsidiaries."""
     entry = _WATCHLIST_MAP.get(stock_code)
     if entry:
-        return entry.get("company_type", "firm")
+        return entry.get("company_type", "firm").lower()
     parent_code = _SUBSIDIARY_TO_PARENT.get(stock_code)
     if parent_code:
-        return _WATCHLIST_MAP.get(parent_code, {}).get("company_type", "firm")
+        return _WATCHLIST_MAP.get(parent_code, {}).get("company_type", "firm").lower()
     return "firm"
 
 
@@ -2971,13 +2971,25 @@ async def run(companies=None, export_excel=True, mode="full", since=None, new_si
                         code, profile.get("address") or "—", bs.get("period") or "—",
                         bs.get("total_assets_raw") or "—")
 
-            subs = entry.get("f26_subsidiaries") or None
+            subs    = entry.get("f26_subsidiaries") or None
+            is_fhc  = bool(_HOLDING_RE.search(entry.get("name_en", "")))
             bs_history = await scrape_quarterly_reports(
                 code,
                 subsidiary_name_en=entry.get("f26_name_en", ""),
                 subsidiaries=subs,
-                use_consolidated=bool(_HOLDING_RE.search(entry.get("name_en", ""))) and not subs,
+                use_consolidated=is_fhc and not subs,
             )
+            # For FHCs with named subsidiaries, also fetch the consolidated report
+            # filed under the parent code itself (e.g. 2882 → storage/pdfs/2882/).
+            # This gives the group-level AUM needed for accurate headline writing.
+            if is_fhc and subs:
+                consolidated = await scrape_quarterly_reports(
+                    code,
+                    subsidiary_name_en=entry.get("name_en", ""),
+                    subsidiaries=None,
+                    use_consolidated=True,
+                )
+                bs_history.extend(consolidated)
             all_balance_history.extend(bs_history)
 
         if scrape_fc_pm:
