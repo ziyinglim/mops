@@ -405,8 +405,7 @@ TRACKED_ROLES = sorted([
 
 _ROLE_ABBREV = {
     "CEO": "Chief Executive Officer", "CFO": "Chief Financial Officer",
-    "CIO": "Chief Investment Officer", "COO": "Chief Operating Officer",
-    "CTO": "Chief Technology Officer", "CSO": "Chief Strategy Officer",
+    "CIO": "Chief Investment Officer",
 }
 
 _ROLE_FULL_TO_ABBREV = {
@@ -414,10 +413,6 @@ _ROLE_FULL_TO_ABBREV = {
     "Chief Financial Officer": "CFO",
     "Chief Finance Officer": "CFO",
     "Chief Investment Officer": "CIO",
-    "Chief Operating Officer": "COO",
-    "Chief Operations Officer": "COO",
-    "Chief Technology Officer": "CTO",
-    "Chief Strategy Officer": "CSO",
     "Chairman": "Chair",
     "General Manager": "GM",
     "Head of Alternative Investments": "Head of Alts",
@@ -429,7 +424,7 @@ _ROLE_FULL_TO_ABBREV = {
 }
 
 _TRACKED_ROLES_RE = re.compile(
-    "|".join(re.escape(r) for r in TRACKED_ROLES) + r"|\b(CEO|CFO|CIO|COO|CTO|CSO)\b",
+    "|".join(re.escape(r) for r in TRACKED_ROLES) + r"|\b(CEO|CFO|CIO)\b",
     re.IGNORECASE,
 )
 
