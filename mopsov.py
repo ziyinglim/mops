@@ -1012,18 +1012,14 @@ def _populate_aum_cache(balance_history: list[dict]) -> None:
         is_fhc = bool(_HOLDING_RE.search(entry.get("name_en", "")))
 
         if is_fhc:
-            # Prefer consolidated records (those where the holding company filed
-            # under its own stock code: subsidiary_code == parent stock_code).
-            # These records may pre-date the roc_year/season fields, so sort by
-            # period string which is lexicographically correct (e.g. "2025/Q3").
+            # Only use consolidated records (subsidiary_code == parent stock_code).
+            # If none exist, skip this key entirely — using a random subsidiary's
+            # figure for the parent code produces misleading AUM in headlines.
             own = [r for r in records if str(r.get("subsidiary_code", "")) == key]
-            if own:
-                own.sort(key=lambda r: r.get("period", ""), reverse=True)
-                use = own
-            else:
-                # No consolidated record available — fall back to subsidiary data
-                records.sort(key=lambda r: (r.get("roc_year", 0), r.get("season", 0)), reverse=True)
-                use = records
+            if not own:
+                continue
+            own.sort(key=lambda r: r.get("period", ""), reverse=True)
+            use = own
         else:
             records.sort(key=lambda r: (r.get("roc_year", 0), r.get("season", 0)), reverse=True)
             use = records
@@ -1059,11 +1055,10 @@ def _get_latest_aum(stock_code: str) -> tuple[str, str]:
         is_fhc = bool(_HOLDING_RE.search(entry.get("name_en", "")))
         if is_fhc:
             own = [r for r in records if str(r.get("subsidiary_code", "")) == stock_code]
-            if own:
-                own.sort(key=lambda r: r.get("period", ""), reverse=True)
-                records = own
-            else:
-                records.sort(key=lambda r: (r.get("roc_year", 0), r.get("season", 0)), reverse=True)
+            if not own:
+                return "", ""  # No consolidated record — don't use subsidiary data for parent
+            own.sort(key=lambda r: r.get("period", ""), reverse=True)
+            records = own
         else:
             records.sort(key=lambda r: (r.get("roc_year", 0), r.get("season", 0)), reverse=True)
         for rec in records:
